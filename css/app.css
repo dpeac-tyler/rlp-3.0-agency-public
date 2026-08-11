@@ -821,7 +821,7 @@ button {
 .icon-key-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 12px 24px;
+  gap: 20px 24px;
 }
 
 .icon-key-item {

@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Applications — RLP Agency Console</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Header (shared chrome) -->
+  <header class="app-header">
+    <a class="app-header__brand" href="index.html">
+      <img class="app-header__logo" src="assets/tyler-t.png" alt="Tenant logo">
+      <span class="app-header__brand-name">Name of Agency</span>
+    </a>
+    <nav class="app-header__links" aria-label="Account">
+      <a href="settings.html">Settings</a>
+      <span class="app-header__divider" aria-hidden="true">|</span>
+      <a href="search.html">Search</a>
+      <span class="app-header__divider" aria-hidden="true">|</span>
+      <a href="#">Help</a>
+      <span class="app-header__divider" aria-hidden="true">|</span>
+      <a href="#">Logout</a>
+    </nav>
+  </header>
+
+  <!-- Customizable toolbar (shared chrome, rendered by js/toolbar.js) -->
+  <div id="toolbar"></div>
+
+  <!-- Page content -->
+  <main class="page-body">
+
+    <ol class="breadcrumb" aria-label="Breadcrumb">
+      <li class="breadcrumb__item"><a href="applications.html">Applications</a></li>
+      <li class="breadcrumb__item"><span class="breadcrumb__current">All Applications</span></li>
+    </ol>
+
+    <h1 class="page-title">All Applications</h1>
+
+    <div class="search-panel" style="margin-top: 16px">
+      <div class="search-panel__top">
+        <div class="search-toggle" role="group" aria-label="Search type">
+          <button type="button" class="search-toggle__segment is-active" data-search-type="constituent">Constituent</button>
+          <button type="button" class="search-toggle__segment" data-search-type="invoice">Invoice</button>
+          <button type="button" class="search-toggle__segment" data-search-type="license">License</button>
+          <button type="button" class="search-toggle__segment" data-search-type="submission">Submission</button>
+        </div>
+        <a class="search-advanced" href="#">Advanced search <i class="fa-solid fa-chevron-down" aria-hidden="true"></i></a>
+      </div>
+      <form class="search-field-row" action="#" onsubmit="return false;">
+        <label class="search-box" for="global-search">
+          <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+          <input type="text" id="global-search" placeholder="Last name, first name, business, DBA, license #, or email…">
+          <span class="search-kbd" aria-hidden="true">⌘K</span>
+        </label>
+        <button type="submit" class="search-btn">Search</button>
+      </form>
+    </div>
+
+    <div class="accordion" style="margin-top: 20px" id="icon-key" hidden>
+      <button type="button" class="accordion__button" id="icon-key-button" aria-expanded="false" aria-controls="icon-key-content">
+        Icon Key
+        <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+      </button>
+      <div class="accordion__content" id="icon-key-content" hidden>
+        <div class="accordion__content-label">Options and Control Types</div>
+        <div class="icon-key-grid" id="icon-key-grid--drafts">
+          <div class="icon-key-item"><img src="assets/discard-icon.png" alt=""> Discard Application</div>
+          <div class="icon-key-item"><img src="assets/edit-icon.png" alt=""> Edit Application</div>
+          <div class="icon-key-item"><img src="assets/publish-icon.png" alt=""> Publish Application</div>
+          <div class="icon-key-item"><img src="assets/test-icon.png" alt=""> Test Application</div>
+        </div>
+        <div class="icon-key-grid" id="icon-key-grid--live" hidden>
+          <div class="icon-key-item"><img src="assets/icon-deactivate.png" alt=""> Deactivate Application</div>
+          <div class="icon-key-item"><img src="assets/eye-icon.png" alt=""> View Application</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px">
+      <a href="#" class="btn btn--primary">Create New Application</a>
+      <div class="filter-tabs" role="group" aria-label="Application status filter" style="margin-top: 0">
+        <button type="button" class="filter-tabs__btn" data-filter="drafts">Drafts</button>
+        <button type="button" class="filter-tabs__btn" data-filter="live">Live</button>
+        <button type="button" class="filter-tabs__btn" data-filter="archived">Archived</button>
+      </div>
+    </div>
+
+    <!-- All view (default — no Controls column) -->
+    <div id="all-view" style="margin-top: 24px">
+      <div class="table-controls">
+        <div class="table-controls__count">Showing 1 - 5 of 5 Entries</div>
+        <div class="table-controls__right">
+          <label for="applications-column-select-button">Columns</label>
+          <div class="multiselect table-controls__column-select">
+            <button type="button" class="multiselect-trigger" id="applications-column-select-button" aria-haspopup="listbox" aria-expanded="false">
+              <span class="multiselect-trigger-text">All Columns</span>
+              <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+            </button>
+            <div class="multiselect-panel" id="applications-column-select-panel" hidden>
+              <input type="text" class="multiselect-filter" id="applications-column-filter-input" placeholder="Filter columns…" autocomplete="off">
+              <label class="multiselect-option"><input type="checkbox" class="column-checkbox" data-column="0" checked><span>Form Number</span></label>
+              <label class="multiselect-option"><input type="checkbox" class="column-checkbox" data-column="1" checked><span>Application Name</span></label>
+              <label class="multiselect-option"><input type="checkbox" class="column-checkbox" data-column="2" checked><span>Application Type</span></label>
+              <label class="multiselect-option"><input type="checkbox" class="column-checkbox" data-column="3" checked><span>Deactivation Date</span></label>
+              <label class="multiselect-option"><input type="checkbox" class="column-checkbox" data-column="4" checked><span>Modified By</span></label>
+              <label class="multiselect-option"><input type="checkbox" class="column-checkbox" data-column="5" checked><span>Application Status</span></label>
+            </div>
+          </div>
+          <label for="entries-per-page-applications">Show</label>
+          <select id="entries-per-page-applications">
+            <option value="100" selected>100</option>
+            <option value="50">50</option>
+            <option value="25">25</option>
+            <option value="10">10</option>
+          </select>
+        </div>
+      </div>
+
+      <p class="empty-state" id="applications-empty-state" hidden>No applications found.</p>
+
+      <table class="data-table" id="applications-table">
+        <thead>
+          <tr>
+            <th>Form Number <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Application Name <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Application Type <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Deactivation Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Modified By <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Application Status <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>ABC123</td>
+            <td>Nursing License Original</td>
+            <td>Nursing License Original (One), Authenticated, Individual, Certificate</td>
+            <td>—</td>
+            <td>Admin Account</td>
+            <td class="status-text--live">Live</td>
+          </tr>
+          <tr>
+            <td>DEF456</td>
+            <td>Cosmetology License Renewal</td>
+            <td>Cosmetology License Renewal (One), Notarized, Individual, License</td>
+            <td>—</td>
+            <td>Sarah Johnson</td>
+            <td class="status-text--live">Live</td>
+          </tr>
+          <tr>
+            <td>GHI789</td>
+            <td>Contractor License Original</td>
+            <td>Contractor License Original (One), Authenticated, Business, Certificate</td>
+            <td>09/12/2026</td>
+            <td>Michael Chen</td>
+            <td class="status-text--draft">Draft</td>
+          </tr>
+          <tr>
+            <td>JKL012</td>
+            <td>Liquor License Transfer</td>
+            <td>Liquor License Transfer (Many), Notarized, Business, License</td>
+            <td>03/04/2026</td>
+            <td>Jennifer Williams</td>
+            <td class="status-text--archived">Archived</td>
+          </tr>
+          <tr>
+            <td>MNO345</td>
+            <td>Professional Engineer License Reinstatement</td>
+            <td>Professional Engineer License Reinstatement (One), Authenticated, Individual, Certificate</td>
+            <td>—</td>
+            <td>David Martinez</td>
+            <td class="status-text--draft">Draft</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <nav aria-label="Pagination" id="applications-pagination">
+        <ul class="pagination">
+          <li><a href="#" class="pagination__arrow" aria-label="Previous page">‹ Previous</a></li>
+          <li><a href="#" class="is-current" aria-label="Page 1" aria-current="page">1</a></li>
+          <li><a href="#" class="pagination__arrow" aria-label="Next page">Next ›</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <!-- Drafts view -->
+    <div id="drafts-view" style="margin-top: 24px" hidden>
+      <div class="table-controls">
+        <div class="table-controls__count">Showing 1 - 3 of 3 Entries</div>
+        <div class="table-controls__right">
+          <label for="drafts-entries-per-page">Show</label>
+          <select id="drafts-entries-per-page">
+            <option value="100" selected>100</option>
+            <option value="50">50</option>
+            <option value="25">25</option>
+            <option value="10">10</option>
+          </select>
+        </div>
+      </div>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Form Number <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Application Name <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Deactivation Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Modified By <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Modified Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Published Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Controls</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>PQR678</td>
+            <td>Cosmetology License Renewal</td>
+            <td>—</td>
+            <td>Maria Garcia</td>
+            <td>09/10/2026</td>
+            <td>—</td>
+            <td class="controls-cell">
+              <a href="#" class="icon-btn" aria-label="Discard Application"><img src="assets/discard-icon.png" alt="" width="30" height="30"></a>
+              <a href="#" class="icon-btn" aria-label="Edit Application"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>
+              <a href="#" class="icon-btn" aria-label="Publish Application"><img src="assets/publish-icon.png" alt="" width="30" height="30"></a>
+              <a href="#" class="icon-btn" aria-label="Test Application"><img src="assets/test-icon.png" alt="" width="30" height="30"></a>
+            </td>
+          </tr>
+          <tr>
+            <td>STU901</td>
+            <td>Business License Original</td>
+            <td>11/20/2026</td>
+            <td>Robert Williams</td>
+            <td>09/15/2026</td>
+            <td>—</td>
+            <td class="controls-cell">
+              <a href="#" class="icon-btn" aria-label="Discard Application"><img src="assets/discard-icon.png" alt="" width="30" height="30"></a>
+              <a href="#" class="icon-btn" aria-label="Edit Application"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>
+              <a href="#" class="icon-btn" aria-label="Publish Application"><img src="assets/publish-icon.png" alt="" width="30" height="30"></a>
+              <a href="#" class="icon-btn" aria-label="Test Application"><img src="assets/test-icon.png" alt="" width="30" height="30"></a>
+            </td>
+          </tr>
+          <tr>
+            <td>VWX234</td>
+            <td>Contractor License Maintenance/Update</td>
+            <td>—</td>
+            <td>Thomas Wilson</td>
+            <td>09/18/2026</td>
+            <td>—</td>
+            <td class="controls-cell">
+              <a href="#" class="icon-btn" aria-label="Discard Application"><img src="assets/discard-icon.png" alt="" width="30" height="30"></a>
+              <a href="#" class="icon-btn" aria-label="Edit Application"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>
+              <a href="#" class="icon-btn" aria-label="Publish Application"><img src="assets/publish-icon.png" alt="" width="30" height="30"></a>
+              <a href="#" class="icon-btn" aria-label="Test Application"><img src="assets/test-icon.png" alt="" width="30" height="30"></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <nav aria-label="Pagination">
+        <ul class="pagination">
+          <li><a href="#" class="pagination__arrow" aria-label="Previous page">‹ Previous</a></li>
+          <li><a href="#" class="is-current" aria-label="Page 1" aria-current="page">1</a></li>
+          <li><a href="#" class="pagination__arrow" aria-label="Next page">Next ›</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <!-- Live view -->
+    <div id="live-view" style="margin-top: 24px" hidden>
+      <div class="table-controls">
+        <div class="table-controls__count">Showing 1 - 3 of 3 Entries</div>
+        <div class="table-controls__right">
+          <label for="live-entries-per-page">Show</label>
+          <select id="live-entries-per-page">
+            <option value="100" selected>100</option>
+            <option value="50">50</option>
+            <option value="25">25</option>
+            <option value="10">10</option>
+          </select>
+        </div>
+      </div>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Form Number <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Application Name <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Deactivation Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Modified By <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Application URL <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Controls</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>YZA567</td>
+            <td>Liquor License Original</td>
+            <td>—</td>
+            <td>Alan Jones</td>
+            <td><a href="#" class="copy-url-btn" data-url="https://apply.agency.gov/applications/YZA567">Copy URL</a></td>
+            <td class="controls-cell">
+              <a href="#" class="icon-btn" aria-label="Deactivate Application"><img src="assets/icon-deactivate.png" alt="" width="30" height="30"></a>
+              <a href="#" class="icon-btn" aria-label="View Application"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+            </td>
+          </tr>
+          <tr>
+            <td>BCD890</td>
+            <td>Professional Engineer License Renewal</td>
+            <td>—</td>
+            <td>Lisa Thompson</td>
+            <td><a href="#" class="copy-url-btn" data-url="https://apply.agency.gov/applications/BCD890">Copy URL</a></td>
+            <td class="controls-cell">
+              <a href="#" class="icon-btn" aria-label="Deactivate Application"><img src="assets/icon-deactivate.png" alt="" width="30" height="30"></a>
+              <a href="#" class="icon-btn" aria-label="View Application"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+            </td>
+          </tr>
+          <tr>
+            <td>EFG123</td>
+            <td>Nursing License Renewal</td>
+            <td>12/01/2026</td>
+            <td>Kevin Martinez</td>
+            <td><a href="#" class="copy-url-btn" data-url="https://apply.agency.gov/applications/EFG123">Copy URL</a></td>
+            <td class="controls-cell">
+              <a href="#" class="icon-btn" aria-label="Deactivate Application"><img src="assets/icon-deactivate.png" alt="" width="30" height="30"></a>
+              <a href="#" class="icon-btn" aria-label="View Application"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <nav aria-label="Pagination">
+        <ul class="pagination">
+          <li><a href="#" class="pagination__arrow" aria-label="Previous page">‹ Previous</a></li>
+          <li><a href="#" class="is-current" aria-label="Page 1" aria-current="page">1</a></li>
+          <li><a href="#" class="pagination__arrow" aria-label="Next page">Next ›</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <!-- Archived view -->
+    <div id="archived-view" style="margin-top: 24px" hidden>
+      <div class="table-controls">
+        <div class="table-controls__count">Showing 1 - 3 of 3 Entries</div>
+        <div class="table-controls__right">
+          <label for="archived-entries-per-page">Show</label>
+          <select id="archived-entries-per-page">
+            <option value="100" selected>100</option>
+            <option value="50">50</option>
+            <option value="25">25</option>
+            <option value="10">10</option>
+          </select>
+        </div>
+      </div>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Form Number <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Application Name <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Application Type <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Deactivation Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Modified By <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Application Status <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>HIJ456</td>
+            <td>Cosmetology License Original</td>
+            <td>Cosmetology License Original (One), Notarized, Individual, License</td>
+            <td>01/15/2026</td>
+            <td>Jennifer Lee</td>
+            <td class="status-text--archived">Archived</td>
+          </tr>
+          <tr>
+            <td>KLM789</td>
+            <td>Business License Renewal</td>
+            <td>Business License Renewal (One), Authenticated, Business, Certificate</td>
+            <td>02/10/2026</td>
+            <td>David Brown</td>
+            <td class="status-text--archived">Archived</td>
+          </tr>
+          <tr>
+            <td>NOP012</td>
+            <td>Contractor License Original</td>
+            <td>Contractor License Original (One), Notarized, Business, Certificate</td>
+            <td>05/22/2026</td>
+            <td>Maria Garcia</td>
+            <td class="status-text--archived">Archived</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <nav aria-label="Pagination">
+        <ul class="pagination">
+          <li><a href="#" class="pagination__arrow" aria-label="Previous page">‹ Previous</a></li>
+          <li><a href="#" class="is-current" aria-label="Page 1" aria-current="page">1</a></li>
+          <li><a href="#" class="pagination__arrow" aria-label="Next page">Next ›</a></li>
+        </ul>
+      </nav>
+    </div>
+
+  </main>
+
+</div>
+
+<script src="js/toolbar.js"></script>
+<script src="js/column-select.js"></script>
+<script>
+  initToolbar('#toolbar', { activeKey: 'applications' });
+
+  // Search type segmented control
+  document.querySelectorAll('.search-toggle__segment').forEach(function (segment) {
+    segment.addEventListener('click', function () {
+      document.querySelectorAll('.search-toggle__segment').forEach(function (s) {
+        s.classList.remove('is-active');
+      });
+      segment.classList.add('is-active');
+    });
+  });
+
+  // Icon Key accordion
+  (function () {
+    var button = document.getElementById('icon-key-button');
+    var content = document.getElementById('icon-key-content');
+    button.addEventListener('click', function () {
+      var expanded = button.getAttribute('aria-expanded') === 'true';
+      button.setAttribute('aria-expanded', String(!expanded));
+      content.hidden = expanded;
+    });
+  })();
+
+  // Column visibility multiselect (Applications table)
+  initColumnSelect({
+    triggerId: 'applications-column-select-button',
+    panelId: 'applications-column-select-panel',
+    filterId: 'applications-column-filter-input',
+    tableId: 'applications-table',
+  });
+
+  // Status filter tabs (Drafts / Live / Archived) — clicking the active tab toggles back to All
+  (function () {
+    var tabs = document.querySelectorAll('.filter-tabs__btn');
+    var allView = document.getElementById('all-view');
+    var iconKey = document.getElementById('icon-key');
+    var views = {
+      drafts: document.getElementById('drafts-view'),
+      live: document.getElementById('live-view'),
+      archived: document.getElementById('archived-view'),
+    };
+    var iconKeyGrids = {
+      drafts: document.getElementById('icon-key-grid--drafts'),
+      live: document.getElementById('icon-key-grid--live'),
+    };
+
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        var key = tab.getAttribute('data-filter');
+        var alreadyActive = tab.classList.contains('is-active');
+
+        tabs.forEach(function (t) { t.classList.remove('is-active'); });
+        Object.keys(views).forEach(function (k) { views[k].hidden = true; });
+
+        if (alreadyActive) {
+          allView.hidden = false;
+          iconKey.hidden = true;
+          return;
+        }
+
+        tab.classList.add('is-active');
+        allView.hidden = true;
+        views[key].hidden = false;
+        iconKey.hidden = !iconKeyGrids[key];
+        Object.keys(iconKeyGrids).forEach(function (k) { iconKeyGrids[k].hidden = k !== key; });
+      });
+    });
+  })();
+
+  // Copy Application URL to clipboard
+  document.querySelectorAll('.copy-url-btn').forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      var originalText = link.textContent;
+      navigator.clipboard.writeText(link.getAttribute('data-url')).then(function () {
+        link.textContent = 'Copied!';
+        setTimeout(function () { link.textContent = originalText; }, 1500);
+      });
+    });
+  });
+</script>
+
+</body>
+</html>

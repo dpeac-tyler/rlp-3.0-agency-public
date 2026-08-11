@@ -38,6 +38,7 @@
     tasks: 'my-tasks.html',
     queues: 'queues.html',
     licenses: 'license-types.html',
+    applications: 'applications.html',
   };
 
   function loadPersisted() {
