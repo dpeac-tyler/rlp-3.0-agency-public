@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task Detail — RLP Agency Console</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Header (shared chrome) -->
+  <header class="app-header">
+    <a class="app-header__brand" href="index.html">
+      <img class="app-header__logo" src="assets/tyler-t.png" alt="Tenant logo">
+      <span class="app-header__brand-name">Name of Agency</span>
+    </a>
+    <nav class="app-header__links" aria-label="Account">
+      <a href="settings.html">Settings</a>
+      <span class="app-header__divider" aria-hidden="true">|</span>
+      <a href="search.html">Search</a>
+      <span class="app-header__divider" aria-hidden="true">|</span>
+      <a href="#">Help</a>
+      <span class="app-header__divider" aria-hidden="true">|</span>
+      <a href="#">Logout</a>
+    </nav>
+  </header>
+
+  <!-- Customizable toolbar (shared chrome, rendered by js/toolbar.js) -->
+  <div id="toolbar"></div>
+
+  <!-- Sticky task bar -->
+  <div class="task-bar">
+    <div class="task-bar__info">
+      <div class="task-bar__breadcrumb">
+        <a href="my-tasks.html">My Tasks</a>
+        <span aria-hidden="true">&rsaquo;</span>
+        <span id="breadcrumb-task-name">Task</span>
+      </div>
+      <div class="task-bar__title">
+        <span id="header-application-title">Loading&hellip;</span>
+        <span class="tag tag--resubmission" id="resubmission-tag" hidden>Resubmission</span>
+      </div>
+      <div class="task-bar__meta">Submission <span id="header-submission-number">Loading&hellip;</span> &middot; <span id="header-application-type">Loading&hellip;</span></div>
+    </div>
+    <div class="task-bar__right">
+      <div class="task-bar__claimant"><strong>Claimant &ndash; ASP Admin Two</strong></div>
+      <div class="task-bar__actions">
+      <button type="button" class="btn btn--warm">HFS Lookup</button>
+      <a href="#" class="btn btn--warm" id="initiate-inspection-btn">Initiate Inspection</a>
+      <span class="detail-actions__divider" aria-hidden="true"></span>
+      <button type="button" class="btn btn--secondary">Reject for Resubmission</button>
+      <button type="button" class="btn btn--secondary" id="deny-btn">Deny</button>
+      <span class="detail-actions__divider" aria-hidden="true"></span>
+      <button type="button" class="btn btn--accent-cool">Unclaim Task</button>
+      <span class="detail-actions__divider" aria-hidden="true"></span>
+      <button type="button" class="btn btn--primary">Approve</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page content -->
+  <main class="page-body" style="background: #fafafa;">
+
+    <!-- Summary islands -->
+    <div class="islands" id="summary-islands">
+
+      <div class="island">
+        <div class="island__eyebrow-row">
+          <span class="island__eyebrow">Submitter</span>
+        </div>
+        <div class="island__headline" id="submitter-name">Loading&hellip;</div>
+        <div class="island__kv">
+          <div class="island__kv-row"><span class="island__kv-key">Username:</span> <span class="island__kv-value" id="submitter-username">Loading&hellip;</span></div>
+          <div class="island__kv-row"><span class="island__kv-key">Customer:</span> <span class="island__kv-value" id="submitter-customer">Loading&hellip;</span></div>
+          <div class="island__kv-row"><span class="island__kv-key">Email:</span> <span class="island__kv-value" id="submitter-email">Loading&hellip;</span></div>
+          <div class="island__kv-row"><span class="island__kv-key">Phone:</span> <span class="island__kv-value" id="submitter-phone">Loading&hellip;</span></div>
+        </div>
+        <a href="#" class="island__footer-link">View Profile</a>
+      </div>
+
+      <div class="island">
+        <div class="island__eyebrow-row">
+          <span class="island__eyebrow">License</span>
+        </div>
+        <div class="island__headline" id="license-number">Loading&hellip;</div>
+        <div class="island__kv">
+          <div class="island__kv-row"><span class="island__kv-key">Type:</span> <span class="island__kv-value" id="license-type">Loading&hellip;</span></div>
+          <div class="island__kv-row"><span class="island__kv-key">Issued:</span> <span class="island__kv-value" id="license-issued">01/15/2024</span></div>
+          <div class="island__kv-row"><span class="island__kv-key">Expires:</span> <span class="island__kv-value" id="license-expires">01/15/2027</span></div>
+        </div>
+        <a href="#" class="island__footer-link">License history</a>
+      </div>
+
+      <div class="island">
+        <div class="island__eyebrow-row">
+          <span class="island__eyebrow">MAILING ADDRESS</span>
+        </div>
+        <div class="island__headline">100 Congress Ave</div>
+        <div class="island__kv">
+          <div class="island__kv-row"><span class="island__kv-key">City:</span> <span class="island__kv-value">Austin</span></div>
+          <div class="island__kv-row"><span class="island__kv-key">State:</span> <span class="island__kv-value" id="site-mailing-note">Texas</span></div>
+          <div class="island__kv-row"><span class="island__kv-key">Zip Code:</span> <span class="island__kv-value">78748</span></div>
+          <!-- <div class="island__kv-row"><span class="island__kv-key">Documents:</span> <span class="island__kv-value" id="site-doc-count">2 received</span></div> -->
+        </div>
+        <!-- <a href="#" class="island__footer-link">Map &amp; parcel</a> -->
+      </div>
+
+      <div class="island" id="related-submissions-island">
+        <div class="island__eyebrow-row">
+          <span class="island__eyebrow">Related Submissions</span>
+        </div>
+        <div class="island__kv" id="related-submissions-kv" style="margin-top: 12px">
+          <div class="island__kv-row">No related submissions</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Work card + rail -->
+    <div class="work-grid">
+
+      <div class="work-column">
+      <div class="work-card">
+        <div class="work-card__header">
+          <div class="work-card__title">Review agency license fields</div>
+          <div class="work-card__subtitle">If a License already exists, the values from it are defaulted on the submission review tasks. View or edit the Agency License field below. The values in these fields will be applied to the License at the time of submission approval.</div>
+        </div>
+        <div class="work-card__body">
+
+          <div class="info-notice">
+            <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+            <span><strong>Required</strong> &mdash; Required to approve the final task</span>
+          </div>
+
+          <form id="agency-fields-form" onsubmit="return false;">
+            <div class="field-grid field-grid--2">
+              <div class="field">
+                <label for="alf-business-name">Business Name</label>
+                <input type="text" id="alf-business-name" name="alf-business-name" value="Riverside Landscaping &amp; Nursery LLC">
+              </div>
+              <div class="field">
+                <label for="alf-dba-name">DBA Name</label>
+                <input type="text" id="alf-dba-name" name="alf-dba-name" value="Gardeners R Us">
+              </div>
+              <div class="field">
+                <label for="alf-fein">FEIN</label>
+                <input type="text" id="alf-fein" name="alf-fein" value="47-1029384">
+              </div>
+              <div class="field">
+                <label for="alf-phone">Phone Number</label>
+                <input type="text" id="alf-phone" name="alf-phone" value="(512) 555-0148">
+              </div>
+              <div class="field field--span-2">
+                <label for="alf-email">Email Address <span class="field-required">Required</span></label>
+                <input type="text" id="alf-email" name="alf-email" value="info@riversidelandscaping.com">
+              </div>
+            </div>
+
+            <div class="address-group" style="margin-top: 24px">
+              <div class="address-group__header">
+                <span class="address-group__label">Addresses</span>
+                <label class="checkbox-option__label">
+                  <input type="checkbox" id="alf-same-as-mailing" checked> Physical same as mailing
+                </label>
+              </div>
+              <div class="address-group__body">
+                <div class="field">
+                  <label for="alf-mailing-address-1">Address 1 <span class="field-required">Required</span></label>
+                  <input type="text" id="alf-mailing-address-1" name="alf-mailing-address-1" value="100 Congress Ave">
+                </div>
+                <div class="field">
+                  <label for="alf-mailing-city">City <span class="field-required">Required</span></label>
+                  <input type="text" id="alf-mailing-city" name="alf-mailing-city" value="Austin">
+                </div>
+                <div class="field">
+                  <label for="alf-mailing-state">State <span class="field-required">Required</span></label>
+                  <select id="alf-mailing-state" name="alf-mailing-state">
+                    <option value="">Please Select</option>
+                    <option value="texas" selected>Texas</option>
+                    <option value="illinois">Illinois</option>
+                    <option value="utah">Utah</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="alf-mailing-zip">Zip Code <span class="field-required">Required</span></label>
+                  <input type="text" id="alf-mailing-zip" name="alf-mailing-zip" value="78701">
+                </div>
+                <div class="field field--span-2">
+                  <label for="alf-mailing-address-2">Address 2</label>
+                  <input type="text" id="alf-mailing-address-2" name="alf-mailing-address-2" placeholder="Optional">
+                </div>
+                <div class="field field--span-2">
+                  <label for="alf-mailing-country">Country <span class="field-required">Required</span></label>
+                  <select id="alf-mailing-country" name="alf-mailing-country">
+                    <option value="">Please Select</option>
+                    <option value="united-states" selected>United States</option>
+                    <option value="canada">Canada</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="address-group__sub-label" id="physical-address-label" hidden>Physical Address</div>
+              <div class="address-group__body" id="physical-address-fields" hidden>
+                <div class="field">
+                  <label for="alf-physical-address-1">Address 1 <span class="field-required">Required</span></label>
+                  <input type="text" id="alf-physical-address-1" name="alf-physical-address-1" value="100 Congress Ave">
+                </div>
+                <div class="field">
+                  <label for="alf-physical-city">City <span class="field-required">Required</span></label>
+                  <input type="text" id="alf-physical-city" name="alf-physical-city" value="Austin">
+                </div>
+                <div class="field">
+                  <label for="alf-physical-state">State <span class="field-required">Required</span></label>
+                  <select id="alf-physical-state" name="alf-physical-state">
+                    <option value="">Please Select</option>
+                    <option value="texas" selected>Texas</option>
+                    <option value="illinois">Illinois</option>
+                    <option value="utah">Utah</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="alf-physical-zip">Zip Code <span class="field-required">Required</span></label>
+                  <input type="text" id="alf-physical-zip" name="alf-physical-zip" value="78701">
+                </div>
+                <div class="field field--span-2">
+                  <label for="alf-physical-address-2">Address 2</label>
+                  <input type="text" id="alf-physical-address-2" name="alf-physical-address-2" placeholder="Optional">
+                </div>
+              </div>
+            </div>
+
+            <div class="field" style="margin-top: 24px">
+              <div class="field-label-row">
+                <label for="alf-notes">Agency License Fields Notes</label>
+                <i class="fa-solid fa-circle-question" aria-hidden="true" title="Internal notes about these fields — not visible to the constituent."></i>
+              </div>
+              <textarea id="alf-notes" name="alf-notes" rows="4" maxlength="1000"></textarea>
+            </div>
+          </form>
+
+        </div>
+        <div class="work-card__footer">
+          <!-- <button type="reset" form="agency-fields-form" class="btn btn--secondary">Revert</button> -->
+          <button type="button" class="btn btn--primary" id="agency-fields-save-btn" disabled>Save</button>
+        </div>
+      </div>
+
+      <div class="accordion">
+        <button type="button" class="accordion__button island__eyebrow" aria-expanded="true" aria-controls="inspection-content">
+          Inspections
+          <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+        </button>
+        <div id="inspection-content" class="accordion__content">
+          <div class="info-grid">
+            <div class="info-grid__item">
+              <span class="info-grid__label">ID</span>
+              <span class="info-grid__value">INS-2026-A1B2C</span>
+            </div>
+            <div class="info-grid__item">
+              <span class="info-grid__label">Type</span>
+              <span class="info-grid__value">Initial</span>
+            </div>
+            <div class="info-grid__item">
+              <span class="info-grid__label">Status</span>
+              <span class="info-grid__value">Complete</span>
+            </div>
+            <div class="info-grid__item">
+              <span class="info-grid__label">Outcome</span>
+              <span class="info-grid__value status-text--passed">Passed</span>
+            </div>
+            <div class="info-grid__item">
+              <span class="info-grid__label">Due Date</span>
+              <span class="info-grid__value">03/15/2026</span>
+            </div>
+            <div class="info-grid__item">
+              <span class="info-grid__label">Completion Date</span>
+              <span class="info-grid__value">03/01/2026</span>
+            </div>
+            <div class="info-grid__item">
+              <span class="info-grid__label">Inspection For</span>
+              <span class="info-grid__value">Sarah Johnson</span>
+            </div>
+            <div class="info-grid__item">
+              <span class="info-grid__label">Site</span>
+              <span class="info-grid__value">100 Congress Ave, Austin, TX 78701</span>
+            </div>
+            <div class="info-grid__item">
+              <span class="info-grid__label">Responsible Party</span>
+              <span class="info-grid__value">Sarah Johnson</span>
+            </div>
+            <div class="info-grid__item">
+              <span class="info-grid__label">Source</span>
+              <span class="info-grid__value">Submission #: SUB-004321</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <div class="rail-card">
+          <div class="detail-tabs detail-tabs--compact" role="tablist">
+            <button type="button" class="detail-tabs__btn is-active" data-tab="activity" role="tab" aria-selected="true">Activity</button>
+            <button type="button" class="detail-tabs__btn" data-tab="submission" role="tab" aria-selected="false">Submission</button>
+            <button type="button" class="detail-tabs__btn" data-tab="documents" role="tab" aria-selected="false">Documents <span class="toolbar-badge" id="documents-tab-count">2</span></button>
+          </div>
+
+          <div class="tab-panel" id="activity-panel">
+            <div class="field">
+              <label for="task-comments">Task Comments</label>
+              <textarea id="task-comments" name="task-comments" rows="4" maxlength="2500"></textarea>
+              <div class="char-counter"><span id="task-comments-remaining">2500</span> of 2500 remaining</div>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn btn--primary">Save</button>
+            </div>
+            <p class="empty-state" style="padding: 20px 0 0; text-align: left;">No comments yet.</p>
+          </div>
+
+          <div class="tab-panel" id="submission-panel" hidden>
+            <div class="info-grid info-grid--2">
+              <div class="info-grid__item">
+                <span class="info-grid__label">Submission Number</span>
+                <span class="info-grid__value" id="submission-panel-number">Loading&hellip;</span>
+              </div>
+              <div class="info-grid__item">
+                <span class="info-grid__label">Submitted Date</span>
+                <span class="info-grid__value" id="submission-panel-date">Loading&hellip;</span>
+              </div>
+              <div class="info-grid__item">
+                <span class="info-grid__label">Application Type</span>
+                <span class="info-grid__value" id="submission-panel-app-type">Loading&hellip;</span>
+              </div>
+              <div class="info-grid__item">
+                <span class="info-grid__label">Payment Status</span>
+                <span class="info-grid__value status-text--paid">Paid</span>
+              </div>
+            </div>
+            <div class="form-actions">
+              <a href="#" class="btn btn--secondary">View Full Submission</a>
+            </div>
+          </div>
+
+          <div class="tab-panel" id="documents-panel" hidden>
+            <div class="doc-list">
+              <div class="doc-list__item">
+                <div class="doc-list__meta">
+                  <span class="doc-list__name">Business_License_Application.pdf</span>
+                  <span class="doc-list__sub">Application &middot; 03/15/2026</span>
+                </div>
+                <a href="#" class="icon-btn" aria-label="View Document"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+              </div>
+              <div class="doc-list__item">
+                <div class="doc-list__meta">
+                  <span class="doc-list__name">Proof_of_Insurance.pdf</span>
+                  <span class="doc-list__sub">Supporting Document &middot; 03/16/2026</span>
+                </div>
+                <a href="#" class="icon-btn" aria-label="View Document"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+</div>
+
+<!-- Task Checklist (collapsible drawer, right edge of viewport) -->
+<button type="button" class="task-checklist-tab" id="task-checklist-tab" aria-label="Expand Task Checklist" aria-expanded="false" aria-controls="task-checklist">
+  <i class="fa-solid fa-list-check" aria-hidden="true"></i>
+  <span>Task Checklist</span>
+</button>
+
+<div class="task-checklist" id="task-checklist">
+  <div class="task-checklist__header">
+    <button type="button" class="task-checklist__collapse-btn" id="task-checklist-collapse" aria-label="Collapse Task Checklist">
+      <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+    </button>
+    <span class="task-checklist__title">Task Checklist</span>
+  </div>
+  <div class="task-checklist__body">
+    <div class="task-checklist__task-label" id="task-checklist-task-label">Task 1 of 1</div>
+
+    <div class="checklist-item">
+      <div class="field-label-row">
+        <span class="checklist-item__label">Verify Training</span>
+        <i class="fa-solid fa-circle-question" aria-hidden="true" title="Confirm the applicant has completed all required training hours."></i>
+      </div>
+      <div class="checklist-item__options">
+        <label class="radio-option"><input type="radio" name="chk-verify-training" value="done"> Done</label>
+        <label class="radio-option"><input type="radio" name="chk-verify-training" value="in-progress"> In Progress</label>
+        <label class="radio-option"><input type="radio" name="chk-verify-training" value="na"> N/A</label>
+      </div>
+    </div>
+
+    <div class="checklist-item">
+      <div class="field-label-row">
+        <span class="checklist-item__label">Review Supporting Documents</span>
+        <i class="fa-solid fa-circle-question" aria-hidden="true" title="Confirm all required supporting documents have been reviewed."></i>
+      </div>
+      <div class="checklist-item__options">
+        <label class="radio-option"><input type="radio" name="chk-review-supporting-documents" value="done"> Done</label>
+        <label class="radio-option"><input type="radio" name="chk-review-supporting-documents" value="in-progress"> In Progress</label>
+        <label class="radio-option"><input type="radio" name="chk-review-supporting-documents" value="na"> N/A</label>
+      </div>
+    </div>
+
+    <div class="checklist-item">
+      <div class="field-label-row">
+        <span class="checklist-item__label">Background Check</span>
+        <i class="fa-solid fa-circle-question" aria-hidden="true" title="Confirm the background check has been completed and reviewed."></i>
+      </div>
+      <div class="checklist-item__options">
+        <label class="radio-option"><input type="radio" name="chk-background-check" value="done"> Done</label>
+        <label class="radio-option"><input type="radio" name="chk-background-check" value="in-progress"> In Progress</label>
+        <label class="radio-option"><input type="radio" name="chk-background-check" value="na"> N/A</label>
+      </div>
+    </div>
+
+    <div class="checklist-item">
+      <div class="field-label-row">
+        <span class="checklist-item__label">DL Check</span>
+        <i class="fa-solid fa-circle-question" aria-hidden="true" title="Confirm the applicant's driver's license status has been verified."></i>
+      </div>
+      <div class="checklist-item__options">
+        <label class="radio-option"><input type="radio" name="chk-dl-check" value="done"> Done</label>
+        <label class="radio-option"><input type="radio" name="chk-dl-check" value="in-progress"> In Progress</label>
+        <label class="radio-option"><input type="radio" name="chk-dl-check" value="na"> N/A</label>
+      </div>
+    </div>
+
+    <div class="checklist-item">
+      <div class="field-label-row">
+        <span class="checklist-item__label">Review License History</span>
+        <i class="fa-solid fa-circle-question" aria-hidden="true" title="Confirm the applicant's license history has been reviewed for prior violations."></i>
+      </div>
+      <div class="checklist-item__options">
+        <label class="radio-option"><input type="radio" name="chk-review-license-history" value="done"> Done</label>
+        <label class="radio-option"><input type="radio" name="chk-review-license-history" value="in-progress"> In Progress</label>
+        <label class="radio-option"><input type="radio" name="chk-review-license-history" value="na"> N/A</label>
+      </div>
+    </div>
+
+    <div class="checklist-item">
+      <div class="field-label-row">
+        <span class="checklist-item__label">Student Loans Check</span>
+        <i class="fa-solid fa-circle-question" aria-hidden="true" title="Confirm the applicant is not in default on state-backed student loans."></i>
+      </div>
+      <div class="checklist-item__options">
+        <label class="radio-option"><input type="radio" name="chk-student-loans-check" value="done"> Done</label>
+        <label class="radio-option"><input type="radio" name="chk-student-loans-check" value="in-progress"> In Progress</label>
+        <label class="radio-option"><input type="radio" name="chk-student-loans-check" value="na"> N/A</label>
+      </div>
+    </div>
+
+    <div class="checklist-item">
+      <div class="field-label-row">
+        <span class="checklist-item__label">No Outstanding Fees</span>
+        <i class="fa-solid fa-circle-question" aria-hidden="true" title="Confirm the applicant has no outstanding fees or fines owed to the agency."></i>
+      </div>
+      <div class="checklist-item__options">
+        <label class="radio-option"><input type="radio" name="chk-no-outstanding-fees" value="done"> Done</label>
+        <label class="radio-option"><input type="radio" name="chk-no-outstanding-fees" value="in-progress"> In Progress</label>
+        <label class="radio-option"><input type="radio" name="chk-no-outstanding-fees" value="na"> N/A</label>
+      </div>
+    </div>
+
+    <div class="field" style="margin-top: 20px">
+      <label for="task-checklist-notes">Notes</label>
+      <textarea id="task-checklist-notes" name="task-checklist-notes" rows="4"></textarea>
+    </div>
+  </div>
+  <div class="task-checklist__footer">
+    <button type="button" class="btn btn--primary" id="task-checklist-save-btn" disabled>Save</button>
+  </div>
+</div>
+
+<!-- Deny Submission Modal -->
+<div id="deny-modal" class="modal-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="deny-modal-title">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title" id="deny-modal-title">Deny Submission</h2>
+      <button type="button" class="modal-close" id="deny-modal-close" aria-label="Close modal">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <h3>Instructions</h3>
+      <p>You may enter notes related to the denial. These notes will be visible on related submission rows in the agency's Applicant Profile for the constituent. If you provide notes in the Constituent Notes area, these notes will also be emailed to the constituent and be available in their account on related submission rows.</p>
+
+      <div class="field">
+        <label for="denial-codes-button">Denial Code(s)</label>
+        <div class="multiselect">
+          <button type="button" class="multiselect-trigger" id="denial-codes-button" aria-haspopup="listbox" aria-expanded="false">
+            <span class="multiselect-trigger-text">Please Select</span>
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="multiselect-panel" id="denial-codes-panel" hidden>
+            <label class="multiselect-option"><input type="checkbox" name="denial-codes" value="DEN-001 - Application Incomplete"><span>DEN-001 - Application Incomplete</span></label>
+            <label class="multiselect-option"><input type="checkbox" name="denial-codes" value="DEN-002 - Background Check Failed"><span>DEN-002 - Background Check Failed</span></label>
+            <label class="multiselect-option"><input type="checkbox" name="denial-codes" value="DEN-003 - Eligibility Requirements Not Met"><span>DEN-003 - Eligibility Requirements Not Met</span></label>
+            <label class="multiselect-option"><input type="checkbox" name="denial-codes" value="DEN-004 - Duplicate Application"><span>DEN-004 - Duplicate Application</span></label>
+            <label class="multiselect-option"><input type="checkbox" name="denial-codes" value="DEN-005 - License Previously Revoked"><span>DEN-005 - License Previously Revoked</span></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="checkbox-option" style="margin-top: 20px">
+        <label class="checkbox-option__label">
+          <input type="checkbox" id="send-denial-email" name="send-denial-email">
+          Send denied submission email to constituent.
+        </label>
+      </div>
+
+      <div class="field" style="margin-top: 20px">
+        <label for="agency-notes">Agency Notes</label>
+        <textarea id="agency-notes" name="agency-notes" rows="4" maxlength="1000"></textarea>
+        <div class="char-counter"><span id="agency-notes-remaining">1000</span> of 1000 remaining</div>
+      </div>
+
+      <div class="field" style="margin-top: 20px">
+        <label for="constituent-notes">Constituent Notes</label>
+        <textarea id="constituent-notes" name="constituent-notes" rows="4" maxlength="1000"></textarea>
+        <div class="char-counter"><span id="constituent-notes-remaining">1000</span> of 1000 remaining</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn--primary" id="deny-submit-btn">Deny Submission</button>
+      <button type="button" class="btn btn--cancel" id="deny-cancel-btn">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/toolbar.js"></script>
+<script>
+  initToolbar('#toolbar', { activeKey: null });
+
+  // Task data - matches the table from my-tasks.html / queues.html
+  var taskData = {
+    1: {
+      applicationTitle: "Professional Engineer License",
+      taskName: "Task 1 of 1",
+      licenseType: "Professional Engineer License – Individual",
+      applicationType: "Original (Individual)",
+      constituentName: "John Smith",
+      submittedDate: "03/15/2026",
+      submissionNumber: "123456789",
+      customerNumber: "CUST-10001",
+      username: "jsmith2024"
+    },
+    2: {
+      applicationTitle: "Contractor License Renewal",
+      taskName: "Task 1 of 2",
+      licenseType: "Contractor License – Business Renewal",
+      applicationType: "Renewal (Business)",
+      constituentName: "Maria Garcia",
+      submittedDate: "03/16/2026",
+      submissionNumber: "234567890",
+      customerNumber: "CUST-10002",
+      username: "mgarcia2024"
+    },
+    3: {
+      applicationTitle: "Professional Engineer License",
+      taskName: "Task 1 of 1",
+      licenseType: "Professional Engineer License – Individual",
+      applicationType: "Original (Individual)",
+      constituentName: "Robert Williams",
+      submittedDate: "03/17/2026",
+      submissionNumber: "345678901",
+      customerNumber: "CUST-10003",
+      username: "rwilliams2024"
+    },
+    4: {
+      applicationTitle: "Contractor License Renewal",
+      taskName: "Task 2 of 2",
+      licenseType: "Contractor License – Business Renewal",
+      applicationType: "Renewal (Business)",
+      constituentName: "Jennifer Lee",
+      submittedDate: "03/18/2026",
+      submissionNumber: "456789012",
+      customerNumber: "CUST-10004",
+      username: "jlee2024",
+      isResubmission: true,
+      relatedSubmissions: [
+        { label: "Original", taskId: 6, number: "456789000", date: "02/20/2026", status: "Rejected for Resubmission", statusClass: "status-text--rejected-for-resubmission" }
+      ]
+    },
+    5: {
+      applicationTitle: "Professional Engineer License",
+      taskName: "Task 1 of 1",
+      licenseType: "Professional Engineer License – Individual",
+      applicationType: "Original (Individual)",
+      constituentName: "David Brown",
+      submittedDate: "03/19/2026",
+      submissionNumber: "567890123",
+      customerNumber: "CUST-10005",
+      username: "dbrown2024"
+    },
+    6: {
+      applicationTitle: "Contractor License Renewal",
+      taskName: "Task 1 of 2",
+      licenseType: "Contractor License – Business Renewal",
+      applicationType: "Renewal (Business)",
+      constituentName: "Jennifer Lee",
+      submittedDate: "02/20/2026",
+      submissionNumber: "456789000",
+      customerNumber: "CUST-10004",
+      username: "jlee2024",
+      relatedSubmissions: [
+        { label: "Resubmission", taskId: 4, number: "456789012", date: "03/18/2026", status: "In Review", statusClass: "status-text--in-review" }
+      ]
+    }
+  };
+
+  var urlParams = new URLSearchParams(window.location.search);
+  var taskId = urlParams.get('id');
+  var task = taskData[taskId] || taskData[1];
+
+  document.getElementById('breadcrumb-task-name').textContent = task.taskName;
+  document.getElementById('task-checklist-task-label').textContent = task.taskName;
+  document.getElementById('header-application-title').textContent = task.applicationTitle;
+  document.getElementById('header-submission-number').textContent = task.submissionNumber;
+  document.getElementById('header-application-type').textContent = task.applicationType;
+  document.getElementById('resubmission-tag').hidden = !task.isResubmission;
+
+  (function () {
+    var kv = document.getElementById('related-submissions-kv');
+    var items = task.relatedSubmissions || [];
+    if (items.length === 0) {
+      document.getElementById('related-submissions-island').hidden = true;
+      document.getElementById('summary-islands').classList.add('islands--3col');
+      return;
+    }
+    kv.innerHTML = '';
+    items.forEach(function (item) {
+      var row = document.createElement('a');
+      row.className = 'island__kv-row island__related-link';
+      row.href = 'task-detail.html?id=' + item.taskId;
+      row.innerHTML = '<strong>' + item.label + ':</strong> ' + item.number + ' &middot; ' + item.date +
+        ' &middot; <span class="' + item.statusClass + '">' + item.status + '</span>';
+      kv.appendChild(row);
+    });
+  })();
+
+  document.getElementById('submitter-name').textContent = task.constituentName;
+  document.getElementById('submitter-username').textContent = task.username;
+  document.getElementById('submitter-customer').textContent = task.customerNumber;
+  document.getElementById('submitter-email').textContent = task.username.toLowerCase() + '@example.com';
+  document.getElementById('submitter-phone').textContent = '(555) 123-4567';
+
+  document.getElementById('license-number').textContent = 'LIC-' + task.submissionNumber.substring(0, 6);
+  document.getElementById('license-type').textContent = task.licenseType;
+
+  document.getElementById('submission-panel-number').textContent = task.submissionNumber;
+  document.getElementById('submission-panel-date').textContent = task.submittedDate;
+  document.getElementById('submission-panel-app-type').textContent = task.applicationType;
+
+  document.getElementById('initiate-inspection-btn').href = 'initiate-inspection.html?id=' + (taskId || 1);
+
+  // Accordion toggle (all accordions on the page)
+  document.querySelectorAll('.accordion__button').forEach(function (button) {
+    button.addEventListener('click', function () {
+      var expanded = button.getAttribute('aria-expanded') === 'true';
+      var content = document.getElementById(button.getAttribute('aria-controls'));
+      button.setAttribute('aria-expanded', String(!expanded));
+      content.hidden = expanded;
+    });
+  });
+
+  // Activity / Submission / Documents tabs
+  (function () {
+    var tabs = document.querySelectorAll('.detail-tabs__btn');
+    var panels = {
+      activity: document.getElementById('activity-panel'),
+      submission: document.getElementById('submission-panel'),
+      documents: document.getElementById('documents-panel')
+    };
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        var key = tab.getAttribute('data-tab');
+        tabs.forEach(function (t) {
+          t.classList.remove('is-active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        tab.classList.add('is-active');
+        tab.setAttribute('aria-selected', 'true');
+        Object.keys(panels).forEach(function (k) { panels[k].hidden = k !== key; });
+      });
+    });
+  })();
+
+  // Physical address fields — hidden and mirrored to mailing values while "Physical same as
+  // mailing" is checked; revealed as their own editable set when unchecked.
+  (function () {
+    var checkbox = document.getElementById('alf-same-as-mailing');
+    var physicalFields = document.getElementById('physical-address-fields');
+    var physicalLabel = document.getElementById('physical-address-label');
+    var mailingToPhysical = {
+      'alf-mailing-address-1': 'alf-physical-address-1',
+      'alf-mailing-address-2': 'alf-physical-address-2',
+      'alf-mailing-city': 'alf-physical-city',
+      'alf-mailing-state': 'alf-physical-state',
+      'alf-mailing-zip': 'alf-physical-zip'
+    };
+    checkbox.addEventListener('change', function () {
+      var sameAsMailing = checkbox.checked;
+      physicalFields.hidden = sameAsMailing;
+      physicalLabel.hidden = sameAsMailing;
+      if (sameAsMailing) {
+        Object.keys(mailingToPhysical).forEach(function (mailingId) {
+          document.getElementById(mailingToPhysical[mailingId]).value = document.getElementById(mailingId).value;
+        });
+      }
+    });
+  })();
+
+  // Save Fields button stays disabled until a value in the Agency License Fields form changes.
+  (function () {
+    var form = document.getElementById('agency-fields-form');
+    var saveBtn = document.getElementById('agency-fields-save-btn');
+    form.addEventListener('input', function () { saveBtn.disabled = false; });
+    form.addEventListener('change', function () { saveBtn.disabled = false; });
+  })();
+
+  // Task Checklist drawer — collapsed tab expands the panel; header button collapses it back.
+  (function () {
+    var tab = document.getElementById('task-checklist-tab');
+    var panel = document.getElementById('task-checklist');
+    var collapseBtn = document.getElementById('task-checklist-collapse');
+    var body = panel.querySelector('.task-checklist__body');
+    var saveBtn = document.getElementById('task-checklist-save-btn');
+
+    function openChecklist() {
+      panel.classList.add('is-open');
+      tab.hidden = true;
+      tab.setAttribute('aria-expanded', 'true');
+    }
+    function closeChecklist() {
+      panel.classList.remove('is-open');
+      tab.hidden = false;
+      tab.setAttribute('aria-expanded', 'false');
+    }
+
+    tab.addEventListener('click', openChecklist);
+    collapseBtn.addEventListener('click', closeChecklist);
+    body.addEventListener('change', function () { saveBtn.disabled = false; });
+    body.addEventListener('input', function () { saveBtn.disabled = false; });
+  })();
+
+  // Deny modal
+  var denyModal = document.getElementById('deny-modal');
+  document.getElementById('deny-btn').addEventListener('click', function () {
+    denyModal.hidden = false;
+  });
+  function closeDenyModal() { denyModal.hidden = true; }
+  document.getElementById('deny-modal-close').addEventListener('click', closeDenyModal);
+  document.getElementById('deny-cancel-btn').addEventListener('click', closeDenyModal);
+  denyModal.addEventListener('click', function (e) { if (e.target === denyModal) closeDenyModal(); });
+
+  // Character counters
+  function wireCounter(textareaId, remainingId, max) {
+    var textarea = document.getElementById(textareaId);
+    var counter = document.getElementById(remainingId);
+    textarea.addEventListener('input', function () {
+      counter.textContent = max - textarea.value.length;
+    });
+  }
+  wireCounter('task-comments', 'task-comments-remaining', 2500);
+  wireCounter('agency-notes', 'agency-notes-remaining', 1000);
+  wireCounter('constituent-notes', 'constituent-notes-remaining', 1000);
+
+  // Denial codes multiselect
+  (function () {
+    var trigger = document.getElementById('denial-codes-button');
+    var panel = document.getElementById('denial-codes-panel');
+    var triggerText = trigger.querySelector('.multiselect-trigger-text');
+    var checkboxes = panel.querySelectorAll('input[type="checkbox"]');
+
+    function updateTriggerText() {
+      var selected = Array.prototype.filter.call(checkboxes, function (cb) { return cb.checked; });
+      if (selected.length === 0) triggerText.textContent = 'Please Select';
+      else if (selected.length === 1) triggerText.textContent = selected[0].value;
+      else triggerText.textContent = selected.length + ' selected';
+    }
+
+    trigger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var expanded = trigger.getAttribute('aria-expanded') === 'true';
+      trigger.setAttribute('aria-expanded', String(!expanded));
+      panel.hidden = expanded;
+    });
+
+    checkboxes.forEach(function (cb) { cb.addEventListener('change', updateTriggerText); });
+    panel.addEventListener('click', function (e) { e.stopPropagation(); });
+    document.addEventListener('click', function (e) {
+      if (!trigger.contains(e.target) && !panel.contains(e.target)) {
+        trigger.setAttribute('aria-expanded', 'false');
+        panel.hidden = true;
+      }
+    });
+  })();
+</script>
+
+</body>
+</html>

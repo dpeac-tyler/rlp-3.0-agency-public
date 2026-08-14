@@ -784,11 +784,11 @@ button {
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  padding: 14px 18px;
+  padding: 22px 18px;
   font-size: 16px;
   font-weight: 700;
   color: var(--c-text-primary);
-  background: var(--c-tile-bg);
+  background: #fff;
   text-align: left;
 }
 
@@ -805,6 +805,7 @@ button {
 .accordion__content {
   padding: 18px 20px;
   border-top: 1px solid var(--c-border);
+  background: #fff;
 }
 
 .accordion__content[hidden] {
@@ -1030,6 +1031,12 @@ button {
   background: var(--c-blue-hover);
 }
 
+.btn:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 .btn--secondary {
   background: #fff;
   color: var(--c-text-primary);
@@ -1048,6 +1055,15 @@ button {
 
 .btn--cancel:hover {
   background: #b50909;
+}
+
+.btn--accent-cool {
+  background: #d9e8f6;
+  color: var(--c-text-primary);
+}
+
+.btn--accent-cool:hover {
+  background: #c3dbf0;
 }
 
 /* Multiselect dropdown (User Group, etc.) */
@@ -1257,6 +1273,7 @@ button {
 .status-text--live,
 .status-text--paid,
 .status-text--completed,
+.status-text--passed,
 .status-text--sent,
 .status-text--sold {
   color: var(--c-status-green);
@@ -1379,4 +1396,743 @@ button {
 .pagination__arrow {
   color: var(--c-blue);
   font-weight: 600;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Task detail page                                                       */
+/* ---------------------------------------------------------------------- */
+
+.detail-header {
+  margin-top: 20px;
+  background: var(--c-header-navy);
+  color: #fff;
+  border-radius: var(--r-panel);
+  padding: 20px 24px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.detail-header__lines {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 16px;
+}
+
+.detail-header__task-count {
+  font-size: 16px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.detail-actions {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.detail-actions__divider {
+  width: 1px;
+  height: 28px;
+  background: var(--c-border);
+}
+
+.detail-actions__spacer {
+  flex: 1 1 auto;
+}
+
+.btn--warm {
+  background: var(--c-gold);
+  color: var(--c-gold-text);
+}
+
+.btn--warm:hover {
+  background: #cf9109;
+}
+
+/* Read-only label/value grid — Submitter Profile, Inspection Information, Submission summary */
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px 24px;
+}
+
+.info-grid--2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.info-grid__item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.info-grid__label {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--c-text-primary);
+}
+
+.info-grid__value {
+  font-size: 16px;
+  color: var(--c-text-secondary);
+}
+
+.profile-summary {
+  margin-top: 28px;
+}
+
+.profile-summary__heading {
+  font-size: 19px;
+  font-weight: 700;
+  margin: 0 0 14px;
+}
+
+.section-heading {
+  font-size: 19px;
+  font-weight: 700;
+  border-bottom: 2px solid var(--c-border);
+  padding-bottom: 8px;
+  margin: 32px 0 16px;
+}
+
+/* Info notice callout (Agency License Fields) */
+
+.info-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: #e7f6f8;
+  border-left: 4px solid var(--c-blue);
+  border-radius: 4px;
+  padding: 12px 16px;
+  font-size: 16px;
+  color: var(--c-text-primary);
+  margin: 16px 0 24px;
+}
+
+.info-notice i {
+  color: var(--c-blue);
+  margin-top: 2px;
+}
+
+.info-notice strong {
+  font-weight: 700;
+}
+
+/* Textarea field */
+
+.field textarea {
+  border: 1px solid #c9ccd0;
+  border-radius: var(--r-pill);
+  padding: 10px 14px;
+  font-family: inherit;
+  font-size: 16px;
+  color: var(--c-text-primary);
+  background: #fff;
+  resize: vertical;
+}
+
+.field textarea:focus {
+  outline: none;
+  border-color: var(--c-blue);
+  box-shadow: 0 0 0 1px var(--c-blue);
+}
+
+.field-label-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.field-label-row i {
+  color: var(--c-text-secondary);
+  font-size: 14px;
+}
+
+.char-counter {
+  font-size: 16px;
+  color: var(--c-text-secondary);
+  margin-top: 6px;
+}
+
+/* Detail tabs (Activity / Submission / Documents) */
+
+.detail-tabs {
+  display: flex;
+  border-bottom: 2px solid var(--c-border);
+  margin-top: 28px;
+}
+
+.detail-tabs__btn {
+  padding: 14px 22px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--c-text-secondary);
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+}
+
+.detail-tabs__btn.is-active {
+  color: var(--c-blue);
+  border-bottom-color: var(--c-blue);
+}
+
+.tab-panel {
+  padding-top: 24px;
+}
+
+.tab-panel[hidden] {
+  display: none;
+}
+
+/* Modal */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 24px;
+}
+
+.modal-overlay[hidden] {
+  display: none;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: var(--r-panel);
+  width: 100%;
+  max-width: 640px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-menu);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--c-border);
+}
+
+.modal-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.modal-close {
+  color: var(--c-text-secondary);
+  font-size: 18px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-close:hover {
+  background: var(--c-tile-bg);
+}
+
+.modal-body {
+  padding: 24px;
+}
+
+.modal-body h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 10px;
+}
+
+.modal-body p {
+  font-size: 16px;
+  color: var(--c-text-secondary);
+  line-height: 1.5;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 12px;
+  padding: 20px 24px;
+  border-top: 1px solid var(--c-border);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Task detail page — v2 layout (sticky task bar, summary islands,        */
+/* work card + rail). Used by task-detail.html only.                     */
+/* ---------------------------------------------------------------------- */
+
+.task-bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #fff;
+  border-bottom: 1px solid var(--c-border);
+  padding: 18px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.task-bar__info {
+  min-width: 0;
+}
+
+.task-bar__breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 16px;
+  color: var(--c-text-secondary);
+  margin-bottom: 6px;
+}
+
+.task-bar__right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  flex: none;
+}
+
+.task-bar__claimant {
+  font-size: 16px;
+  color: var(--c-text-secondary);
+  white-space: nowrap;
+}
+
+.task-bar__title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--c-text-primary);
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 12px;
+}
+
+.tag--resubmission {
+  background: #e5edf7;
+  color: var(--c-status-cool-blue);
+}
+
+.tag[hidden] {
+  display: none;
+}
+
+.task-bar__meta {
+  font-size: 16px;
+  color: var(--c-text-secondary);
+  margin-top: 4px;
+}
+
+.task-bar__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex: none;
+}
+
+/* Summary islands */
+
+.islands {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.islands--3col {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 1180px) {
+  .islands {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 820px) {
+  .islands {
+    grid-template-columns: 1fr;
+  }
+}
+
+.island {
+  background: #fff;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-panel);
+  padding: 18px 20px;
+  min-width: 0;
+}
+
+.island__eyebrow-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.island__eyebrow {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--c-text-secondary);
+}
+
+.island__headline {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--c-text-primary);
+}
+
+.island__kv {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 14px;
+  font-size: 16px;
+}
+
+.island__kv-row {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.island__kv-key {
+  font-weight: 700;
+  color: var(--c-text-secondary);
+}
+
+.island__kv-value {
+  color: var(--c-text-primary);
+}
+
+.island__footer-link {
+  display: inline-block;
+  margin-top: 14px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.island__related-link {
+  display: block;
+  color: var(--c-blue);
+  text-decoration: none;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.island__related-link:hover {
+  color: var(--c-blue-hover);
+  text-decoration: underline;
+}
+
+.island__related-link strong {
+  color: inherit;
+}
+
+/* Work area (agency license fields) + rail */
+
+.work-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  margin-top: 20px;
+}
+
+.work-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.work-card {
+  background: #fff;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-panel);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .06);
+}
+
+.work-card__header {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--c-hairline-2);
+}
+
+.work-card__title {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--c-text-primary);
+}
+
+.work-card__subtitle {
+  font-size: 16px;
+  color: var(--c-text-secondary);
+  margin-top: 4px;
+}
+
+.work-card__body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.work-card__footer {
+  padding: 16px 24px;
+  border-top: 1px solid var(--c-hairline-2);
+  background: var(--c-tile-bg);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  border-radius: 0 0 var(--r-panel) var(--r-panel);
+}
+
+.field-grid--2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.field--span-2 {
+  grid-column: span 2;
+}
+
+/* Addresses group (mailing + optional physical, toggled by "same as mailing") */
+
+.address-group {
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-pill);
+  overflow: hidden;
+}
+
+.address-group__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: var(--c-tile-bg);
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--c-border);
+}
+
+.address-group__label {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--c-text-secondary);
+}
+
+.address-group__body {
+  padding: 18px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.address-group__sub-label {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--c-text-secondary);
+  padding: 16px 18px 0;
+}
+
+/* Rail card (activity/submission/documents tabs, below the work card) */
+
+.rail-card {
+  background: #fff;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-panel);
+}
+
+.detail-tabs--compact {
+  margin-top: 0;
+}
+
+.detail-tabs--compact .detail-tabs__btn {
+  padding: 14px 14px;
+}
+
+.rail-card .tab-panel {
+  padding: 20px;
+}
+
+.doc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.doc-list__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.doc-list__name {
+  font-weight: 600;
+  color: var(--c-text-primary);
+  display: block;
+}
+
+.doc-list__sub {
+  font-size: 16px;
+  color: var(--c-text-secondary);
+}
+
+/* Task Checklist — collapsible drawer docked to the right edge of the viewport */
+
+.task-checklist-tab {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  background: var(--c-header-navy);
+  color: #fff;
+  padding: 18px 12px;
+  border: none;
+  border-radius: var(--r-panel) 0 0 var(--r-panel);
+  box-shadow: -2px 0 8px rgba(0, 0, 0, .15);
+  cursor: pointer;
+}
+
+.task-checklist-tab[hidden] {
+  display: none;
+}
+
+.task-checklist-tab i {
+  font-size: 18px;
+}
+
+.task-checklist-tab span {
+  writing-mode: vertical-rl;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.task-checklist {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 400px;
+  max-width: 90vw;
+  background: #fff;
+  box-shadow: -6px 0 20px rgba(0, 0, 0, .18);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform .2s ease;
+}
+
+.task-checklist.is-open {
+  transform: translateX(0);
+}
+
+.task-checklist__header {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--c-header-navy);
+  color: #fff;
+  padding: 14px 20px;
+}
+
+.task-checklist__collapse-btn {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: #fff;
+  color: var(--c-header-navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.task-checklist__title {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.task-checklist__body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 20px 24px;
+}
+
+.task-checklist__task-label {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--c-text-primary);
+  margin-bottom: 18px;
+}
+
+.checklist-item {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--c-hairline-2);
+}
+
+.checklist-item:first-of-type {
+  padding-top: 0;
+}
+
+.checklist-item__label {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--c-text-primary);
+}
+
+.checklist-item__options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.task-checklist__footer {
+  flex: none;
+  padding: 16px 24px;
+  border-top: 1px solid var(--c-hairline-2);
 }
