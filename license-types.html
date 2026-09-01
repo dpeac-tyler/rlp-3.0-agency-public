@@ -61,27 +61,19 @@
       </form>
     </div>
 
-    <div class="accordion" style="margin-top: 20px">
-      <button type="button" class="accordion__button" id="icon-key-button" aria-expanded="false" aria-controls="icon-key-content">
-        Icon Key
-        <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
-      </button>
-      <div class="accordion__content" id="icon-key-content" hidden>
-        <div class="accordion__content-label">Options and Control Types</div>
-        <div class="icon-key-grid">
-          <div class="icon-key-item"><img src="assets/edit-icon.png" alt=""> Edit License Type</div>
-          <div class="icon-key-item"><img src="assets/eye-icon.png" alt=""> View License Type</div>
-        </div>
-      </div>
-    </div>
-
     <div style="margin-top: 24px">
       <a href="#" class="btn btn--primary">Create New License</a>
     </div>
 
     <div style="margin-top: 24px">
       <div class="table-controls">
-        <div class="table-controls__count">Showing 1 - 5 of 5 Entries</div>
+        <div class="table-controls__count">
+          Showing 1 - 5 of 5 Entries
+          <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--license-types">
+            What do the control icons mean?
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+        </div>
         <div class="table-controls__right">
           <label for="license-types-column-select-button">Columns</label>
           <div class="multiselect table-controls__column-select">
@@ -107,6 +99,11 @@
             <option value="10">10</option>
           </select>
         </div>
+      </div>
+
+      <div class="icon-legend" id="icon-legend--license-types" hidden>
+        <div class="icon-legend__item"><img src="assets/edit-icon.png" alt=""> Edit License Type</div>
+        <div class="icon-legend__item"><img src="assets/eye-icon.png" alt=""> View License Type</div>
       </div>
 
       <table class="data-table" id="license-types-table">
@@ -200,6 +197,7 @@
 
 <script src="js/toolbar.js"></script>
 <script src="js/column-select.js"></script>
+<script src="js/icon-legend.js"></script>
 <script>
   initToolbar('#toolbar', { activeKey: 'licenses' });
 
@@ -213,16 +211,8 @@
     });
   });
 
-  // Icon Key accordion
-  (function () {
-    var button = document.getElementById('icon-key-button');
-    var content = document.getElementById('icon-key-content');
-    button.addEventListener('click', function () {
-      var expanded = button.getAttribute('aria-expanded') === 'true';
-      button.setAttribute('aria-expanded', String(!expanded));
-      content.hidden = expanded;
-    });
-  })();
+  // Control icon legend
+  initIconLegends();
 
   // Column visibility multiselect (License Types table)
   initColumnSelect({

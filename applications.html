@@ -61,26 +61,6 @@
       </form>
     </div>
 
-    <div class="accordion" style="margin-top: 20px" id="icon-key" hidden>
-      <button type="button" class="accordion__button" id="icon-key-button" aria-expanded="false" aria-controls="icon-key-content">
-        Icon Key
-        <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
-      </button>
-      <div class="accordion__content" id="icon-key-content" hidden>
-        <div class="accordion__content-label">Options and Control Types</div>
-        <div class="icon-key-grid" id="icon-key-grid--drafts">
-          <div class="icon-key-item"><img src="assets/discard-icon.png" alt=""> Discard Application</div>
-          <div class="icon-key-item"><img src="assets/edit-icon.png" alt=""> Edit Application</div>
-          <div class="icon-key-item"><img src="assets/publish-icon.png" alt=""> Publish Application</div>
-          <div class="icon-key-item"><img src="assets/test-icon.png" alt=""> Test Application</div>
-        </div>
-        <div class="icon-key-grid" id="icon-key-grid--live" hidden>
-          <div class="icon-key-item"><img src="assets/icon-deactivate.png" alt=""> Deactivate Application</div>
-          <div class="icon-key-item"><img src="assets/eye-icon.png" alt=""> View Application</div>
-        </div>
-      </div>
-    </div>
-
     <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px">
       <a href="#" class="btn btn--primary">Create New Application</a>
       <div class="filter-tabs" role="group" aria-label="Application status filter" style="margin-top: 0">
@@ -190,7 +170,13 @@
     <!-- Drafts view -->
     <div id="drafts-view" style="margin-top: 24px" hidden>
       <div class="table-controls">
-        <div class="table-controls__count">Showing 1 - 3 of 3 Entries</div>
+        <div class="table-controls__count">
+          Showing 1 - 3 of 3 Entries
+          <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--drafts">
+            What do the control icons mean?
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+        </div>
         <div class="table-controls__right">
           <label for="drafts-entries-per-page">Show</label>
           <select id="drafts-entries-per-page">
@@ -200,6 +186,13 @@
             <option value="10">10</option>
           </select>
         </div>
+      </div>
+
+      <div class="icon-legend" id="icon-legend--drafts" hidden>
+        <div class="icon-legend__item"><img src="assets/discard-icon.png" alt=""> Discard Application</div>
+        <div class="icon-legend__item"><img src="assets/edit-icon.png" alt=""> Edit Application</div>
+        <div class="icon-legend__item"><img src="assets/publish-icon.png" alt=""> Publish Application</div>
+        <div class="icon-legend__item"><img src="assets/test-icon.png" alt=""> Test Application</div>
       </div>
 
       <table class="data-table">
@@ -272,7 +265,13 @@
     <!-- Live view -->
     <div id="live-view" style="margin-top: 24px" hidden>
       <div class="table-controls">
-        <div class="table-controls__count">Showing 1 - 3 of 3 Entries</div>
+        <div class="table-controls__count">
+          Showing 1 - 3 of 3 Entries
+          <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--live">
+            What do the control icons mean?
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+        </div>
         <div class="table-controls__right">
           <label for="live-entries-per-page">Show</label>
           <select id="live-entries-per-page">
@@ -282,6 +281,11 @@
             <option value="10">10</option>
           </select>
         </div>
+      </div>
+
+      <div class="icon-legend" id="icon-legend--live" hidden>
+        <div class="icon-legend__item"><img src="assets/icon-deactivate.png" alt=""> Deactivate Application</div>
+        <div class="icon-legend__item"><img src="assets/eye-icon.png" alt=""> View Application</div>
       </div>
 
       <table class="data-table">
@@ -410,6 +414,7 @@
 
 <script src="js/toolbar.js"></script>
 <script src="js/column-select.js"></script>
+<script src="js/icon-legend.js"></script>
 <script>
   initToolbar('#toolbar', { activeKey: 'applications' });
 
@@ -423,16 +428,8 @@
     });
   });
 
-  // Icon Key accordion
-  (function () {
-    var button = document.getElementById('icon-key-button');
-    var content = document.getElementById('icon-key-content');
-    button.addEventListener('click', function () {
-      var expanded = button.getAttribute('aria-expanded') === 'true';
-      button.setAttribute('aria-expanded', String(!expanded));
-      content.hidden = expanded;
-    });
-  })();
+  // Control icon legends (Drafts and Live views)
+  initIconLegends();
 
   // Column visibility multiselect (Applications table)
   initColumnSelect({
@@ -446,15 +443,10 @@
   (function () {
     var tabs = document.querySelectorAll('.filter-tabs__btn');
     var allView = document.getElementById('all-view');
-    var iconKey = document.getElementById('icon-key');
     var views = {
       drafts: document.getElementById('drafts-view'),
       live: document.getElementById('live-view'),
       archived: document.getElementById('archived-view'),
-    };
-    var iconKeyGrids = {
-      drafts: document.getElementById('icon-key-grid--drafts'),
-      live: document.getElementById('icon-key-grid--live'),
     };
 
     tabs.forEach(function (tab) {
@@ -467,15 +459,12 @@
 
         if (alreadyActive) {
           allView.hidden = false;
-          iconKey.hidden = true;
           return;
         }
 
         tab.classList.add('is-active');
         allView.hidden = true;
         views[key].hidden = false;
-        iconKey.hidden = !iconKeyGrids[key];
-        Object.keys(iconKeyGrids).forEach(function (k) { iconKeyGrids[k].hidden = k !== key; });
       });
     });
   })();

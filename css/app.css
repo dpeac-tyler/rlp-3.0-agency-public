@@ -839,6 +839,66 @@ button {
   display: block;
 }
 
+/* Control icon legend — inline disclosure in the table controls bar.
+   Replaces the Icon Key accordion. */
+
+.icon-legend-toggle {
+  margin-left: 14px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--c-blue);
+  background: none;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.icon-legend-toggle:hover {
+  color: var(--c-blue-hover);
+}
+
+.icon-legend-toggle i {
+  margin-left: 6px;
+  font-size: 12px;
+  text-decoration: none;
+  display: inline-block;
+  transition: transform .15s;
+}
+
+.icon-legend-toggle[aria-expanded="true"] i {
+  transform: rotate(180deg);
+}
+
+.icon-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 36px;
+  margin-bottom: 12px;
+  padding: 14px 18px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-panel);
+  background: var(--c-tile-bg);
+}
+
+.icon-legend[hidden] {
+  display: none;
+}
+
+.icon-legend__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  color: var(--c-text-primary);
+}
+
+.icon-legend__item img {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
 /* Filter tabs (segmented) — same visual pattern as .search-toggle */
 
 .filter-tabs {
