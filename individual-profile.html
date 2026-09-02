@@ -1,0 +1,2347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Individual Profile — RLP Agency Console</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Header (shared chrome) -->
+  <header class="app-header">
+    <a class="app-header__brand" href="index.html">
+      <img class="app-header__logo" src="assets/tyler-t.png" alt="Tenant logo">
+      <span class="app-header__brand-name">Name of Agency</span>
+    </a>
+    <nav class="app-header__links" aria-label="Account">
+      <a href="settings.html">Settings</a>
+      <span class="app-header__divider" aria-hidden="true">|</span>
+      <a href="search.html">Search</a>
+      <span class="app-header__divider" aria-hidden="true">|</span>
+      <a href="#">Help</a>
+      <span class="app-header__divider" aria-hidden="true">|</span>
+      <a href="#">Logout</a>
+    </nav>
+  </header>
+
+  <!-- Customizable toolbar (shared chrome, rendered by js/toolbar.js) -->
+  <div id="toolbar"></div>
+
+  <!-- Identity bar. Uses the task-detail bar component; --profile hands the
+       sticky behaviour to the profile rail below and sets the fafafa band. -->
+  <div class="task-bar task-bar--profile">
+    <div class="task-bar__info">
+      <div class="task-bar__breadcrumb">
+        <a href="search.html">Search Results</a>
+        <span aria-hidden="true">&rsaquo;</span>
+        <span>Sarah Johnson</span>
+      </div>
+      <div class="task-bar__title">
+        <span class="flag-popover-wrapper">
+          <button type="button" id="flag-trigger" class="flag-trigger" aria-haspopup="dialog" aria-expanded="false" aria-controls="flag-popover" aria-label="No flags active. Activate to add a flag.">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" width="24" height="28" aria-hidden="true" focusable="false">
+              <path id="flag-icon-path" fill="none" stroke="#d35f00" stroke-width="40" stroke-linejoin="round" d="M160 96C160 78.3 145.7 64 128 64C110.3 64 96 78.3 96 96L96 544C96 561.7 110.3 576 128 576C145.7 576 160 561.7 160 544L160 422.4L222.7 403.6C264.6 391 309.8 394.9 348.9 414.5C391.6 435.9 441.4 438.5 486.1 421.7L523.2 407.8C535.7 403.1 544 391.2 544 377.8L544 130.1C544 107.1 519.8 92.1 499.2 102.4L487.4 108.3C442.5 130.8 389.6 130.8 344.6 108.3C308.2 90.1 266.3 86.5 227.4 98.2L160 118.4L160 96z"/>
+            </svg>
+          </button>
+
+          <div id="flag-popover" class="flag-popover" role="dialog" aria-labelledby="flag-popover-title" aria-modal="false" hidden>
+            <div class="flag-popover__header">
+              <h2 id="flag-popover-title" class="flag-popover__title">Flags</h2>
+              <button type="button" class="flag-popover__close" id="flag-popover-close" aria-label="Close flags">
+                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+              </button>
+            </div>
+            <ul class="flag-popover__list" id="flag-popover-list" role="list"></ul>
+            <p class="flag-popover__empty" id="flag-popover-empty" hidden>No flags are active on this account.</p>
+            <div class="flag-popover__footer">
+              <button type="button" class="flag-popover__add-btn" id="flag-popover-add">
+                <i class="fa-solid fa-plus" aria-hidden="true"></i> Add Flag
+              </button>
+            </div>
+          </div>
+        </span>
+        Sarah Johnson
+      </div>
+      <div class="task-bar__meta">Individual &middot; Customer #000172601 &middot; Username qa.ind.10900 <span class="status-text--active">(Active)</span> &middot; Registered 03/28/2023</div>
+    </div>
+    <div class="task-bar__right">
+      <div class="task-bar__claimant">Last activity &ndash; 08/26/2026</div>
+      <div class="task-bar__actions">
+        <button type="button" class="btn btn--danger">Delete Account</button>
+        <span class="detail-actions__divider" aria-hidden="true"></span>
+        <button type="button" class="btn btn--primary">Start Submission</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact facts + the link to the full profile record -->
+  <div class="profile-facts">
+    <div class="profile-facts__item">
+      <div class="profile-facts__label">Email</div>
+      <div class="profile-facts__value">sarah.johnson@mercyridge.org</div>
+      <a href="#" class="profile-facts__link">Change email</a>
+    </div>
+    <div class="profile-facts__item">
+      <div class="profile-facts__label">Primary Phone</div>
+      <div class="profile-facts__value">(304) 555-0182<br>Mobile (304) 555-0247</div>
+    </div>
+    <div class="profile-facts__item">
+      <div class="profile-facts__label">Mailing Address</div>
+      <div class="profile-facts__value">648 East Rocky Old Road, Suite 210<br>Charleston, WV 25301</div>
+    </div>
+    <div class="profile-facts__item">
+      <div class="profile-facts__label">Profile</div>
+      <a href="#details" class="profile-facts__link profile-facts__link--action is-current" data-panel="panel-details">
+        <i class="fa-solid fa-address-card" aria-hidden="true"></i> View Profile Details
+      </a>
+    </div>
+  </div>
+
+  <div class="profile-shell">
+
+    <!-- ================================================================ -->
+    <!-- Left rail — identity, key facts, record navigation                -->
+    <!-- ================================================================ -->
+    <aside class="profile-rail">
+      <nav class="profile-nav" aria-label="Profile records">
+
+        <div class="profile-nav__heading" id="nav-heading-records">Records</div>
+        <ul class="profile-nav__list" aria-labelledby="nav-heading-records">
+          <li>
+            <button type="button" class="profile-nav__link" aria-expanded="false" aria-controls="nav-group-affiliations">
+              <i class="fa-solid fa-users profile-nav__icon" aria-hidden="true"></i>
+              <span class="profile-nav__label">Affiliations</span>
+              <span class="profile-nav__count">10</span>
+              <i class="fa-solid fa-chevron-down profile-nav__chevron" aria-hidden="true"></i>
+            </button>
+            <ul class="profile-nav__sublist" id="nav-group-affiliations" hidden>
+              <li><a href="#affiliations-history" class="profile-nav__sublink" data-panel="panel-affiliations-history"><span class="profile-nav__label">History</span><span class="profile-nav__count">4</span></a></li>
+              <li><a href="#affiliations-pending" class="profile-nav__sublink" data-panel="panel-affiliations-pending"><span class="profile-nav__label">Pending</span><span class="profile-nav__count">1</span></a></li>
+              <li><a href="#affiliations-subordinate" class="profile-nav__sublink" data-panel="panel-affiliations-subordinate"><span class="profile-nav__label">Subordinate</span><span class="profile-nav__count">3</span></a></li>
+              <li><a href="#affiliations-superior" class="profile-nav__sublink" data-panel="panel-affiliations-superior"><span class="profile-nav__label">Superior</span><span class="profile-nav__count">2</span></a></li>
+            </ul>
+          </li>
+
+          <li>
+            <a href="#assets" class="profile-nav__link" data-panel="panel-assets">
+              <i class="fa-solid fa-boxes-stacked profile-nav__icon" aria-hidden="true"></i>
+              <span class="profile-nav__label">Assets</span>
+              <span class="profile-nav__count">2</span>
+            </a>
+          </li>
+
+          <li>
+            <button type="button" class="profile-nav__link" aria-expanded="false" aria-controls="nav-group-certificates">
+              <i class="fa-solid fa-certificate profile-nav__icon" aria-hidden="true"></i>
+              <span class="profile-nav__label">Certificates</span>
+              <span class="profile-nav__count">4</span>
+              <i class="fa-solid fa-chevron-down profile-nav__chevron" aria-hidden="true"></i>
+            </button>
+            <ul class="profile-nav__sublist" id="nav-group-certificates" hidden>
+              <li><a href="#certificates-active" class="profile-nav__sublink" data-panel="panel-certificates-active"><span class="profile-nav__label">Active Certificates</span><span class="profile-nav__count">2</span></a></li>
+              <li><a href="#certificates-history" class="profile-nav__sublink" data-panel="panel-certificates-history"><span class="profile-nav__label">Expired &amp; Historical</span><span class="profile-nav__count">2</span></a></li>
+            </ul>
+          </li>
+
+          <li>
+            <button type="button" class="profile-nav__link" aria-expanded="false" aria-controls="nav-group-correspondence">
+              <i class="fa-solid fa-envelope profile-nav__icon" aria-hidden="true"></i>
+              <span class="profile-nav__label">Correspondence</span>
+              <span class="profile-nav__count">7</span>
+              <i class="fa-solid fa-chevron-down profile-nav__chevron" aria-hidden="true"></i>
+            </button>
+            <ul class="profile-nav__sublist" id="nav-group-correspondence" hidden>
+              <li><a href="#emails" class="profile-nav__sublink" data-panel="panel-emails"><span class="profile-nav__label">Emails</span><span class="profile-nav__count">5</span></a></li>
+              <li><a href="#letters" class="profile-nav__sublink" data-panel="panel-letters"><span class="profile-nav__label">Letters</span><span class="profile-nav__count">2</span></a></li>
+            </ul>
+          </li>
+
+          <li>
+            <a href="#documents" class="profile-nav__link" data-panel="panel-documents">
+              <i class="fa-solid fa-folder-open profile-nav__icon" aria-hidden="true"></i>
+              <span class="profile-nav__label">Documents</span>
+              <span class="profile-nav__count">5</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="#flags" class="profile-nav__link" data-panel="panel-flags">
+              <i class="fa-solid fa-flag profile-nav__icon" aria-hidden="true"></i>
+              <span class="profile-nav__label">Flags</span>
+              <span class="profile-nav__count">2</span>
+            </a>
+          </li>
+          <li>
+            <a href="#inspections" class="profile-nav__link" data-panel="panel-inspections">
+              <i class="fa-solid fa-clipboard-check profile-nav__icon" aria-hidden="true"></i>
+              <span class="profile-nav__label">Inspections</span>
+              <span class="profile-nav__count">3</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="#invoices" class="profile-nav__link" data-panel="panel-invoices">
+              <i class="fa-solid fa-file-invoice-dollar profile-nav__icon" aria-hidden="true"></i>
+              <span class="profile-nav__label">Invoices</span>
+              <span class="profile-nav__count">4</span>
+            </a>
+          </li>
+
+          <li>
+            <button type="button" class="profile-nav__link" aria-expanded="false" aria-controls="nav-group-submissions">
+              <i class="fa-solid fa-file-lines profile-nav__icon" aria-hidden="true"></i>
+              <span class="profile-nav__label">Submissions</span>
+              <span class="profile-nav__count">5</span>
+              <i class="fa-solid fa-chevron-down profile-nav__chevron" aria-hidden="true"></i>
+            </button>
+            <ul class="profile-nav__sublist" id="nav-group-submissions" hidden>
+              <li><a href="#submissions" class="profile-nav__sublink" data-panel="panel-submissions"><span class="profile-nav__label">All Submissions</span><span class="profile-nav__count">4</span></a></li>
+              <li><a href="#payment-requests" class="profile-nav__sublink" data-panel="panel-payment-requests"><span class="profile-nav__label">Payment Requests</span><span class="profile-nav__count">1</span></a></li>
+            </ul>
+          </li>
+
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- ================================================================ -->
+    <!-- Right side — one panel per rail destination                       -->
+    <!-- ================================================================ -->
+    <main id="profile-main">
+      <!-- ---------------------------------------------------------------- -->
+      <!-- Profile Details                                                  -->
+      <!-- ---------------------------------------------------------------- -->
+      <section class="profile-panel" id="panel-details" aria-label="Profile Details">
+        <div class="profile-panel__head">
+          <div class="profile-panel__eyebrow">Profile</div>
+          <h1 class="profile-panel__title">Profile Details</h1>
+          <p class="profile-panel__desc">Identity, contact and account information for this individual. Changes made here apply to the constituent account, not to an individual license.</p>
+        </div>
+
+        <div class="islands">
+          <div class="island">
+            <div class="island__eyebrow-row"><span class="island__eyebrow">Active Certificates</span></div>
+            <div class="island__headline">2</div>
+            <div class="island__kv">
+              <div class="island__kv-row"><span class="island__kv-key">Next expiration:</span> <span class="island__kv-value">04/18/2027</span></div>
+              <div class="island__kv-row"><span class="island__kv-key">Historical:</span> <span class="island__kv-value">2</span></div>
+            </div>
+            <a href="#certificates-active" class="island__footer-link" data-panel="panel-certificates-active">View certificates</a>
+          </div>
+
+          <div class="island">
+            <div class="island__eyebrow-row"><span class="island__eyebrow">Open Submissions</span></div>
+            <div class="island__headline">2</div>
+            <div class="island__kv">
+              <div class="island__kv-row"><span class="island__kv-key">In review:</span> <span class="island__kv-value">1</span></div>
+              <div class="island__kv-row"><span class="island__kv-key">Draft:</span> <span class="island__kv-value">1</span></div>
+            </div>
+            <a href="#submissions" class="island__footer-link" data-panel="panel-submissions">View submissions</a>
+          </div>
+
+          <div class="island">
+            <div class="island__eyebrow-row"><span class="island__eyebrow">Outstanding Balance</span></div>
+            <div class="island__headline">$195.00</div>
+            <div class="island__kv">
+              <div class="island__kv-row"><span class="island__kv-key">Pending:</span> <span class="island__kv-value">$145.00</span></div>
+              <div class="island__kv-row"><span class="island__kv-key">Past due:</span> <span class="island__kv-value status-text--past-due">$50.00</span></div>
+            </div>
+            <a href="#invoices" class="island__footer-link" data-panel="panel-invoices">View invoices</a>
+          </div>
+
+          <div class="island" id="flags-island">
+            <div class="island__eyebrow-row"><span class="island__eyebrow">Active Flags</span></div>
+            <div class="island__headline">2</div>
+            <div class="island__kv">
+              <div class="island__kv-row"><span class="island__kv-key">Eligibility:</span> <span class="island__kv-value" data-flag-stat="eligibility">1</span></div>
+              <div class="island__kv-row"><span class="island__kv-key">Agency review:</span> <span class="island__kv-value" data-flag-stat="review">1</span></div>
+            </div>
+            <a href="#flags" class="island__footer-link" data-panel="panel-flags">View flags</a>
+          </div>
+        </div>
+
+        <div class="profile-panel__actions">
+          <button type="button" class="btn btn--primary">Edit Profile</button>
+          <button type="button" class="btn btn--secondary">Change Email</button>
+          <button type="button" class="btn btn--secondary">Reset Password</button>
+        </div>
+
+        <h2 class="section-heading">Identity</h2>
+        <div class="info-grid">
+          <div class="info-grid__item"><span class="info-grid__label">Customer Number</span><span class="info-grid__value">000172601</span></div>
+          <div class="info-grid__item"><span class="info-grid__label">Constituent Type</span><span class="info-grid__value">Individual</span></div>
+          <div class="info-grid__item"><span class="info-grid__label">Date of Birth</span><span class="info-grid__value">06/14/1988</span></div>
+          <div class="info-grid__item"><span class="info-grid__label">First Name</span><span class="info-grid__value">Sarah</span></div>
+          <div class="info-grid__item"><span class="info-grid__label">Middle Name</span><span class="info-grid__value">Elizabeth</span></div>
+          <div class="info-grid__item"><span class="info-grid__label">Last Name</span><span class="info-grid__value">Johnson</span></div>
+          <div class="info-grid__item"><span class="info-grid__label">Suffix</span><span class="info-grid__value">&mdash;</span></div>
+          <div class="info-grid__item"><span class="info-grid__label">SSN</span><span class="info-grid__value">&bull;&bull;&bull;&ndash;&bull;&bull;&ndash;4471</span></div>
+          <div class="info-grid__item"><span class="info-grid__label">Registered Date</span><span class="info-grid__value">03/28/2023</span></div>
+        </div>
+
+        <h2 class="section-heading">Contact</h2>
+        <div class="info-grid">
+          <div class="info-grid__item"><span class="info-grid__label">Email</span><span class="info-grid__value">sarah.johnson@mercyridge.org</span></div>
+          <div class="info-grid__item"><span class="info-grid__label">Alternate Email</span><span class="info-grid__value">s.johnson1988@gmail.com</span></div>
+          <div class="info-grid__item"><span class="info-grid__label">Preferred Contact Method</span><span class="info-grid__value">Email</span></div>
+          <div class="info-grid__item"><span class="info-grid__label">Primary Phone</span><span class="info-grid__value">(304) 555-0182</span></div>
+          <div class="info-grid__item"><span class="info-grid__label">Mobile Phone</span><span class="info-grid__value">(304) 555-0247</span></div>
+          <div class="info-grid__item"><span class="info-grid__label">Fax</span><span class="info-grid__value">&mdash;</span></div>
+        </div>
+
+        <h2 class="section-heading">Mailing Address</h2>
+        <div class="info-grid">
+          <div class="info-grid__item"><span class="info-grid__label">Address Line 1</span><span class="info-grid__value">648 East Rocky Old Road</span></div>
+          <div class="info-grid__item"><span class="info-grid__label">Address Line 2</span><span class="info-grid__value">Suite 210</span></div>
+          <div class="info-grid__item"><span class="info-grid__label">City</span><span class="info-grid__value">Charleston</span></div>
+          <div class="info-grid__item"><span class="info-grid__label">State</span><span class="info-grid__value">West Virginia</span></div>
+          <div class="info-grid__item"><span class="info-grid__label">Zip Code</span><span class="info-grid__value">25301</span></div>
+          <div class="info-grid__item"><span class="info-grid__label">Country</span><span class="info-grid__value">United States</span></div>
+        </div>
+
+        <h2 class="section-heading">Physical Address</h2>
+        <div class="info-grid">
+          <div class="info-grid__item"><span class="info-grid__label">Address Line 1</span><span class="info-grid__value">1402 Ridgemont Avenue</span></div>
+          <div class="info-grid__item"><span class="info-grid__label">Address Line 2</span><span class="info-grid__value">&mdash;</span></div>
+          <div class="info-grid__item"><span class="info-grid__label">City</span><span class="info-grid__value">Charleston</span></div>
+          <div class="info-grid__item"><span class="info-grid__label">State</span><span class="info-grid__value">West Virginia</span></div>
+          <div class="info-grid__item"><span class="info-grid__label">Zip Code</span><span class="info-grid__value">25314</span></div>
+          <div class="info-grid__item"><span class="info-grid__label">Country</span><span class="info-grid__value">United States</span></div>
+        </div>
+
+        <h2 class="section-heading">Account Access</h2>
+        <div class="info-grid">
+          <div class="info-grid__item"><span class="info-grid__label">Username</span><span class="info-grid__value">qa.ind.10900</span></div>
+          <div class="info-grid__item"><span class="info-grid__label">Account Status</span><span class="info-grid__value status-text--active">Active</span></div>
+          <div class="info-grid__item"><span class="info-grid__label">Multi-Factor Authentication</span><span class="info-grid__value">Enabled &mdash; SMS</span></div>
+          <div class="info-grid__item"><span class="info-grid__label">Last Login</span><span class="info-grid__value">08/26/2026 9:14 AM</span></div>
+          <div class="info-grid__item"><span class="info-grid__label">Password Last Changed</span><span class="info-grid__value">02/11/2026</span></div>
+          <div class="info-grid__item"><span class="info-grid__label">Email Verified</span><span class="info-grid__value status-text--completed">Yes</span></div>
+        </div>
+      </section>
+
+      <!-- ---------------------------------------------------------------- -->
+      <!-- Affiliations — History                                           -->
+      <!-- ---------------------------------------------------------------- -->
+      <section class="profile-panel" id="panel-affiliations-history" aria-label="Affiliation History" hidden>
+        <div class="profile-panel__head">
+          <div class="profile-panel__eyebrow">Affiliations</div>
+          <h1 class="profile-panel__title">History</h1>
+          <p class="profile-panel__desc">Affiliations that have been removed, expired or declined. Read-only.</p>
+        </div>
+
+        <div class="panel-filters">
+          <div class="field">
+            <label for="affiliation-history-type">History Type</label>
+            <select id="affiliation-history-type">
+              <option value="all" selected>All</option>
+              <option value="subordinate">Subordinate History</option>
+              <option value="superior-license">Superior License History</option>
+              <option value="superior-account">Superior Account History</option>
+            </select>
+          </div>
+          <button type="button" class="btn btn--primary">Search</button>
+        </div>
+
+        <div class="profile-panel__table">
+          <div class="table-controls">
+            <div class="table-controls__count">Showing 1 - 4 of 4 Entries</div>
+            <div class="table-controls__right">
+              <label for="entries-affiliations-history">Show</label>
+              <select id="entries-affiliations-history">
+                <option value="100" selected>100</option>
+                <option value="50">50</option>
+                <option value="25">25</option>
+                <option value="10">10</option>
+              </select>
+            </div>
+          </div>
+
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>License/Account Type <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>License Number <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Name <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Relationship <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Reason <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Removal Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Certified Nurse Aide</td>
+                <td>CNA-0022110</td>
+                <td>Brian T. Halloway</td>
+                <td>Subordinate</td>
+                <td>Employment ended</td>
+                <td>02/14/2025</td>
+              </tr>
+              <tr>
+                <td>Health Care Facility License</td>
+                <td>HCF-0002204</td>
+                <td>Fairview Nursing Home</td>
+                <td>Superior</td>
+                <td>Affiliation removed by agency</td>
+                <td>09/30/2024</td>
+              </tr>
+              <tr>
+                <td>Certified Nurse Aide</td>
+                <td>CNA-0019880</td>
+                <td>Rosa Nieves</td>
+                <td>Subordinate</td>
+                <td>License expired</td>
+                <td>07/01/2024</td>
+              </tr>
+              <tr>
+                <td>Home Health Agency License</td>
+                <td>HHA-0005510</td>
+                <td>Bluegrass Home Care</td>
+                <td>Superior</td>
+                <td>Facility closed</td>
+                <td>12/20/2023</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <nav aria-label="Pagination">
+            <ul class="pagination">
+              <li><a href="#" class="pagination__arrow" aria-label="Previous page">&lsaquo; Previous</a></li>
+              <li><a href="#" class="is-current" aria-label="Page 1" aria-current="page">1</a></li>
+              <li><a href="#" class="pagination__arrow" aria-label="Next page">Next &rsaquo;</a></li>
+            </ul>
+          </nav>
+        </div>
+      </section>
+
+      <!-- ---------------------------------------------------------------- -->
+      <!-- Affiliations — Pending                                           -->
+      <!-- ---------------------------------------------------------------- -->
+      <section class="profile-panel" id="panel-affiliations-pending" aria-label="Pending Affiliations" hidden>
+        <div class="profile-panel__head">
+          <div class="profile-panel__eyebrow">Affiliations</div>
+          <h1 class="profile-panel__title">Pending</h1>
+          <p class="profile-panel__desc">Affiliation requests awaiting acceptance. Approving a request grants the requester access to the license.</p>
+        </div>
+
+        <div class="profile-panel__table">
+          <div class="table-controls">
+            <div class="table-controls__count">
+              Showing 1 - 1 of 1 Entries
+              <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--affiliations-pending">
+                What do the control icons mean?
+                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="table-controls__right">
+              <label for="entries-affiliations-pending">Show</label>
+              <select id="entries-affiliations-pending">
+                <option value="100" selected>100</option>
+                <option value="50">50</option>
+                <option value="25">25</option>
+                <option value="10">10</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="icon-legend" id="icon-legend--affiliations-pending" hidden>
+            <div class="icon-legend__item"><img src="assets/view-applicant-profile.png" alt=""> View Profile</div>
+            <div class="icon-legend__item"><img src="assets/review-task.png" alt=""> Review Request</div>
+            <div class="icon-legend__item"><img src="assets/icon-delete.png" alt=""> Decline Request</div>
+          </div>
+
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>License/Account Type <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>License Number <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Name <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Requested Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Status <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Controls</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Health Care Facility License</td>
+                <td>HCF-0004902</td>
+                <td>Cedar Hollow Rehabilitation</td>
+                <td>08/26/2026</td>
+                <td class="status-text--pending">Pending</td>
+                <td class="controls-cell">
+                  <a href="#" class="icon-btn" aria-label="View Profile"><img src="assets/view-applicant-profile.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Review Request"><img src="assets/review-task.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Decline Request"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <nav aria-label="Pagination">
+            <ul class="pagination">
+              <li><a href="#" class="pagination__arrow" aria-label="Previous page">&lsaquo; Previous</a></li>
+              <li><a href="#" class="is-current" aria-label="Page 1" aria-current="page">1</a></li>
+              <li><a href="#" class="pagination__arrow" aria-label="Next page">Next &rsaquo;</a></li>
+            </ul>
+          </nav>
+        </div>
+      </section>
+
+      <!-- ---------------------------------------------------------------- -->
+      <!-- Affiliations — Subordinate                                       -->
+      <!-- ---------------------------------------------------------------- -->
+      <section class="profile-panel" id="panel-affiliations-subordinate" aria-label="Subordinate Affiliations" hidden>
+        <div class="profile-panel__head">
+          <div class="profile-panel__eyebrow">Affiliations</div>
+          <h1 class="profile-panel__title">Subordinate</h1>
+          <p class="profile-panel__desc">Accounts and licenses that sit beneath this individual. Subordinates can act on the licenses listed here.</p>
+        </div>
+
+        <div class="profile-panel__actions">
+          <button type="button" class="btn btn--primary">Add Affiliation</button>
+        </div>
+
+        <div class="profile-panel__table">
+          <div class="table-controls">
+            <div class="table-controls__count">
+              Showing 1 - 3 of 3 Entries
+              <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--affiliations-subordinate">
+                What do the control icons mean?
+                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="table-controls__right">
+              <label for="entries-affiliations-subordinate">Show</label>
+              <select id="entries-affiliations-subordinate">
+                <option value="100" selected>100</option>
+                <option value="50">50</option>
+                <option value="25">25</option>
+                <option value="10">10</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="icon-legend" id="icon-legend--affiliations-subordinate" hidden>
+            <div class="icon-legend__item"><img src="assets/view-applicant-profile.png" alt=""> View Profile</div>
+            <div class="icon-legend__item"><img src="assets/icon-delete.png" alt=""> Remove Affiliation</div>
+          </div>
+
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>License/Account Type <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>License Number <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Name <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Affiliation Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Email <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Phone Number <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Controls</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Certified Nurse Aide</td>
+                <td>CNA-0027781</td>
+                <td>Daniel R. Okafor</td>
+                <td>04/15/2024</td>
+                <td>d.okafor@mercyridge.org</td>
+                <td>(304) 555-0144</td>
+                <td class="controls-cell">
+                  <a href="#" class="icon-btn" aria-label="View Profile"><img src="assets/view-applicant-profile.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Remove Affiliation"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+              <tr>
+                <td>Certified Nurse Aide</td>
+                <td>CNA-0027903</td>
+                <td>Alicia M. Vance</td>
+                <td>06/02/2024</td>
+                <td>a.vance@mercyridge.org</td>
+                <td>(304) 555-0198</td>
+                <td class="controls-cell">
+                  <a href="#" class="icon-btn" aria-label="View Profile"><img src="assets/view-applicant-profile.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Remove Affiliation"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+              <tr>
+                <td>Student Nurse Permit</td>
+                <td>SNP-0011240</td>
+                <td>Hector Delgado</td>
+                <td>01/09/2026</td>
+                <td>h.delgado@wvu.edu</td>
+                <td>(304) 555-0221</td>
+                <td class="controls-cell">
+                  <a href="#" class="icon-btn" aria-label="View Profile"><img src="assets/view-applicant-profile.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Remove Affiliation"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <nav aria-label="Pagination">
+            <ul class="pagination">
+              <li><a href="#" class="pagination__arrow" aria-label="Previous page">&lsaquo; Previous</a></li>
+              <li><a href="#" class="is-current" aria-label="Page 1" aria-current="page">1</a></li>
+              <li><a href="#" class="pagination__arrow" aria-label="Next page">Next &rsaquo;</a></li>
+            </ul>
+          </nav>
+        </div>
+      </section>
+
+      <!-- ---------------------------------------------------------------- -->
+      <!-- Affiliations — Superior                                          -->
+      <!-- ---------------------------------------------------------------- -->
+      <section class="profile-panel" id="panel-affiliations-superior" aria-label="Superior Affiliations" hidden>
+        <div class="profile-panel__head">
+          <div class="profile-panel__eyebrow">Affiliations</div>
+          <h1 class="profile-panel__title">Superior</h1>
+          <p class="profile-panel__desc">Accounts and licenses this individual is affiliated under, such as an employing facility or agency.</p>
+        </div>
+
+        <div class="profile-panel__actions">
+          <button type="button" class="btn btn--primary">Add Affiliation</button>
+        </div>
+
+        <div class="profile-panel__table">
+          <div class="table-controls">
+            <div class="table-controls__count">
+              Showing 1 - 2 of 2 Entries
+              <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--affiliations-superior">
+                What do the control icons mean?
+                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="table-controls__right">
+              <label for="entries-affiliations-superior">Show</label>
+              <select id="entries-affiliations-superior">
+                <option value="100" selected>100</option>
+                <option value="50">50</option>
+                <option value="25">25</option>
+                <option value="10">10</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="icon-legend" id="icon-legend--affiliations-superior" hidden>
+            <div class="icon-legend__item"><img src="assets/view-applicant-profile.png" alt=""> View Profile</div>
+            <div class="icon-legend__item"><img src="assets/icon-delete.png" alt=""> Remove Affiliation</div>
+          </div>
+
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>License/Account Type <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>License Number <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Name <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Affiliation Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Email <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Phone Number <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Controls</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Health Care Facility License</td>
+                <td>HCF-0003118</td>
+                <td>Mercy Ridge Care Center</td>
+                <td>03/01/2023</td>
+                <td>admin@mercyridge.org</td>
+                <td>(304) 555-0100</td>
+                <td class="controls-cell">
+                  <a href="#" class="icon-btn" aria-label="View Profile"><img src="assets/view-applicant-profile.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Remove Affiliation"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+              <tr>
+                <td>Home Health Agency License</td>
+                <td>HHA-0006642</td>
+                <td>Allegheny Home Health LLC</td>
+                <td>11/14/2024</td>
+                <td>contact@alleghenyhh.com</td>
+                <td>(304) 555-0177</td>
+                <td class="controls-cell">
+                  <a href="#" class="icon-btn" aria-label="View Profile"><img src="assets/view-applicant-profile.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Remove Affiliation"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <nav aria-label="Pagination">
+            <ul class="pagination">
+              <li><a href="#" class="pagination__arrow" aria-label="Previous page">&lsaquo; Previous</a></li>
+              <li><a href="#" class="is-current" aria-label="Page 1" aria-current="page">1</a></li>
+              <li><a href="#" class="pagination__arrow" aria-label="Next page">Next &rsaquo;</a></li>
+            </ul>
+          </nav>
+        </div>
+      </section>
+
+      <!-- ---------------------------------------------------------------- -->
+      <!-- Assets                                                           -->
+      <!-- ---------------------------------------------------------------- -->
+      <section class="profile-panel" id="panel-assets" aria-label="Assets" hidden>
+        <div class="profile-panel__head">
+          <div class="profile-panel__eyebrow">Records</div>
+          <h1 class="profile-panel__title">Assets</h1>
+          <p class="profile-panel__desc">Vehicles, equipment and structures registered to this individual and tied to a license or inspection.</p>
+        </div>
+
+        <div class="profile-panel__actions">
+          <button type="button" class="btn btn--primary">Add Asset</button>
+        </div>
+
+        <div class="profile-panel__table">
+          <div class="table-controls">
+            <div class="table-controls__count">
+              Showing 1 - 2 of 2 Entries
+              <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--assets">
+                What do the control icons mean?
+                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="table-controls__right">
+              <label for="entries-assets">Show</label>
+              <select id="entries-assets">
+                <option value="100" selected>100</option>
+                <option value="50">50</option>
+                <option value="25">25</option>
+                <option value="10">10</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="icon-legend" id="icon-legend--assets" hidden>
+            <div class="icon-legend__item"><img src="assets/eye-icon.png" alt=""> View Asset</div>
+            <div class="icon-legend__item"><img src="assets/edit-icon.png" alt=""> Edit Asset</div>
+            <div class="icon-legend__item"><img src="assets/view-history.png" alt=""> View History</div>
+            <div class="icon-legend__item"><img src="assets/icon-deactivate.png" alt=""> Decommission Asset</div>
+          </div>
+
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID Type <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>ID Value <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Asset Type <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Related License <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Modified By <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Modified Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Status <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Controls</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Serial Number</td>
+                <td>SN-88421-K</td>
+                <td>Equipment</td>
+                <td>RN-0041872</td>
+                <td>Sarah Johnson</td>
+                <td>07/14/2026</td>
+                <td class="status-text--active">Active</td>
+                <td class="controls-cell">
+                  <a href="#" class="icon-btn" aria-label="View Asset"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Edit Asset"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="View History"><img src="assets/view-history.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Decommission Asset"><img src="assets/icon-deactivate.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+              <tr>
+                <td>VIN</td>
+                <td>1HGCM82633A004352</td>
+                <td>Vehicle</td>
+                <td>HHA-0002218</td>
+                <td>Admin Account</td>
+                <td>02/03/2025</td>
+                <td class="status-text--decommissioned">Decommissioned</td>
+                <td class="controls-cell">
+                  <a href="#" class="icon-btn" aria-label="View Asset"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="View History"><img src="assets/view-history.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <nav aria-label="Pagination">
+            <ul class="pagination">
+              <li><a href="#" class="pagination__arrow" aria-label="Previous page">&lsaquo; Previous</a></li>
+              <li><a href="#" class="is-current" aria-label="Page 1" aria-current="page">1</a></li>
+              <li><a href="#" class="pagination__arrow" aria-label="Next page">Next &rsaquo;</a></li>
+            </ul>
+          </nav>
+        </div>
+      </section>
+
+      <!-- ---------------------------------------------------------------- -->
+      <!-- Certificates — Active                                            -->
+      <!-- ---------------------------------------------------------------- -->
+      <section class="profile-panel" id="panel-certificates-active" aria-label="Active Certificates" hidden>
+        <div class="profile-panel__head">
+          <div class="profile-panel__eyebrow">Certificates</div>
+          <h1 class="profile-panel__title">Active Certificates</h1>
+          <p class="profile-panel__desc">Credentials currently issued to this individual by your agency.</p>
+        </div>
+
+        <div class="profile-panel__actions">
+          <button type="button" class="btn btn--primary">Issue Certificate</button>
+          <button type="button" class="btn btn--secondary">Bulk Print</button>
+        </div>
+
+        <div class="profile-panel__table">
+          <div class="table-controls">
+            <div class="table-controls__count">
+              Showing 1 - 2 of 2 Entries
+              <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--certificates-active">
+                What do the control icons mean?
+                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="table-controls__right">
+              <label for="entries-certificates-active">Show</label>
+              <select id="entries-certificates-active">
+                <option value="100" selected>100</option>
+                <option value="50">50</option>
+                <option value="25">25</option>
+                <option value="10">10</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="icon-legend" id="icon-legend--certificates-active" hidden>
+            <div class="icon-legend__item"><img src="assets/download-certificate.png" alt=""> Download Certificate</div>
+            <div class="icon-legend__item"><img src="assets/manage-agency-license-fields.png" alt=""> Manage Agency License Fields</div>
+            <div class="icon-legend__item"><img src="assets/manage-license.png" alt=""> Manage License</div>
+            <div class="icon-legend__item"><img src="assets/regenerate-certificate.png" alt=""> Regenerate Certificate</div>
+            <div class="icon-legend__item"><img src="assets/view-history.png" alt=""> View History</div>
+            <div class="icon-legend__item"><img src="assets/view-submission.png" alt=""> View Submission</div>
+            <div class="icon-legend__item"><img src="assets/create-invoice.png" alt=""> Create Invoice</div>
+          </div>
+
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>License Type <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>License Number <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Application Type <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Start Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Expiration Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Status <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Controls</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Registered Nurse</td>
+                <td>RN-0041872</td>
+                <td>Original (One)</td>
+                <td>04/18/2023</td>
+                <td>04/18/2027</td>
+                <td class="status-text--active">Active</td>
+                <td class="controls-cell">
+                  <a href="#" class="icon-btn" aria-label="Download Certificate"><img src="assets/download-certificate.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Manage Agency License Fields"><img src="assets/manage-agency-license-fields.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Manage License"><img src="assets/manage-license.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Regenerate Certificate"><img src="assets/regenerate-certificate.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="View History"><img src="assets/view-history.png" alt="" width="30" height="30"></a>
+                  <a href="task-detail.html" class="icon-btn" aria-label="View Submission"><img src="assets/view-submission.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+              <tr>
+                <td>Certified Nurse Aide</td>
+                <td>CNA-0019344</td>
+                <td>Renewal (One)</td>
+                <td>06/01/2025</td>
+                <td>06/01/2027</td>
+                <td class="status-text--active">Active</td>
+                <td class="controls-cell">
+                  <a href="#" class="icon-btn" aria-label="Download Certificate"><img src="assets/download-certificate.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Manage Agency License Fields"><img src="assets/manage-agency-license-fields.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Manage License"><img src="assets/manage-license.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Regenerate Certificate"><img src="assets/regenerate-certificate.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="View History"><img src="assets/view-history.png" alt="" width="30" height="30"></a>
+                  <a href="task-detail.html" class="icon-btn" aria-label="View Submission"><img src="assets/view-submission.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Create Invoice"><img src="assets/create-invoice.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <nav aria-label="Pagination">
+            <ul class="pagination">
+              <li><a href="#" class="pagination__arrow" aria-label="Previous page">&lsaquo; Previous</a></li>
+              <li><a href="#" class="is-current" aria-label="Page 1" aria-current="page">1</a></li>
+              <li><a href="#" class="pagination__arrow" aria-label="Next page">Next &rsaquo;</a></li>
+            </ul>
+          </nav>
+        </div>
+      </section>
+
+      <!-- ---------------------------------------------------------------- -->
+      <!-- Certificates — Expired & Historical                              -->
+      <!-- ---------------------------------------------------------------- -->
+      <section class="profile-panel" id="panel-certificates-history" aria-label="Expired and Historical Certificates" hidden>
+        <div class="profile-panel__head">
+          <div class="profile-panel__eyebrow">Certificates</div>
+          <h1 class="profile-panel__title">Expired &amp; Historical</h1>
+          <p class="profile-panel__desc">Credentials that are no longer in force. Retained for audit and eligibility review.</p>
+        </div>
+
+        <div class="profile-panel__table">
+          <div class="table-controls">
+            <div class="table-controls__count">
+              Showing 1 - 2 of 2 Entries
+              <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--certificates-history">
+                What do the control icons mean?
+                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="table-controls__right">
+              <label for="entries-certificates-history">Show</label>
+              <select id="entries-certificates-history">
+                <option value="100" selected>100</option>
+                <option value="50">50</option>
+                <option value="25">25</option>
+                <option value="10">10</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="icon-legend" id="icon-legend--certificates-history" hidden>
+            <div class="icon-legend__item"><img src="assets/download-certificate.png" alt=""> Download Certificate</div>
+            <div class="icon-legend__item"><img src="assets/view-history.png" alt=""> View History</div>
+            <div class="icon-legend__item"><img src="assets/view-submission.png" alt=""> View Submission</div>
+          </div>
+
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>License Type <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>License Number <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Application Type <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Start Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>End Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Status <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Controls</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Student Nurse Permit</td>
+                <td>SNP-0008122</td>
+                <td>Original (One)</td>
+                <td>08/15/2019</td>
+                <td>08/15/2021</td>
+                <td class="status-text--expired">Expired</td>
+                <td class="controls-cell">
+                  <a href="#" class="icon-btn" aria-label="Download Certificate"><img src="assets/download-certificate.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="View History"><img src="assets/view-history.png" alt="" width="30" height="30"></a>
+                  <a href="task-detail.html" class="icon-btn" aria-label="View Submission"><img src="assets/view-submission.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+              <tr>
+                <td>Home Health Aide</td>
+                <td>HHA-0002218</td>
+                <td>Original (One)</td>
+                <td>02/03/2018</td>
+                <td>10/22/2020</td>
+                <td class="status-text--revoked">Revoked</td>
+                <td class="controls-cell">
+                  <a href="#" class="icon-btn" aria-label="Download Certificate"><img src="assets/download-certificate.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="View History"><img src="assets/view-history.png" alt="" width="30" height="30"></a>
+                  <a href="task-detail.html" class="icon-btn" aria-label="View Submission"><img src="assets/view-submission.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <nav aria-label="Pagination">
+            <ul class="pagination">
+              <li><a href="#" class="pagination__arrow" aria-label="Previous page">&lsaquo; Previous</a></li>
+              <li><a href="#" class="is-current" aria-label="Page 1" aria-current="page">1</a></li>
+              <li><a href="#" class="pagination__arrow" aria-label="Next page">Next &rsaquo;</a></li>
+            </ul>
+          </nav>
+        </div>
+      </section>
+
+      <!-- ---------------------------------------------------------------- -->
+      <!-- Correspondence — Emails                                          -->
+      <!-- ---------------------------------------------------------------- -->
+      <section class="profile-panel" id="panel-emails" aria-label="Emails" hidden>
+        <div class="profile-panel__head">
+          <div class="profile-panel__eyebrow">Correspondence</div>
+          <h1 class="profile-panel__title">Emails</h1>
+          <p class="profile-panel__desc">Emails generated for this individual by the platform or added manually by agency staff.</p>
+        </div>
+
+        <div class="profile-panel__actions">
+          <a href="#" class="btn btn--primary">Add Email</a>
+        </div>
+
+        <div class="profile-panel__table">
+          <div class="table-controls">
+            <div class="table-controls__count">
+              Showing 1 - 5 of 5 Entries
+              <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--emails">
+                What do the control icons mean?
+                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="table-controls__right">
+              <label for="entries-emails">Show</label>
+              <select id="entries-emails">
+                <option value="100" selected>100</option>
+                <option value="50">50</option>
+                <option value="25">25</option>
+                <option value="10">10</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="icon-legend" id="icon-legend--emails" hidden>
+            <div class="icon-legend__item"><img src="assets/eye-icon.png" alt=""> View Information</div>
+            <div class="icon-legend__item"><img src="assets/envelope-icon.png" alt=""> View Email</div>
+            <div class="icon-legend__item"><img src="assets/print-icon.png" alt=""> Print Email</div>
+            <div class="icon-legend__item"><img src="assets/edit-icon.png" alt=""> Edit Email</div>
+            <div class="icon-legend__item"><img src="assets/resend-email.png" alt=""> Resend Email</div>
+          </div>
+
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Correspondence <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Generated Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Last Sent Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Last Delivered Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Record Type <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Status <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Sent Count <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Controls</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Additional Information Requested</td>
+                <td>08/26/2026</td>
+                <td>08/26/2026</td>
+                <td>&mdash;</td>
+                <td>SUB-0092817</td>
+                <td class="status-text--generated">Generated</td>
+                <td>2</td>
+                <td class="controls-cell">
+                  <a href="#" class="icon-btn" aria-label="View Information"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="View Email"><img src="assets/envelope-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Print Email"><img src="assets/print-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Resend Email"><img src="assets/resend-email.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+              <tr>
+                <td>Submission Received</td>
+                <td>08/22/2026</td>
+                <td>08/22/2026</td>
+                <td>08/22/2026</td>
+                <td>SUB-0092817</td>
+                <td class="status-text--sent">Sent</td>
+                <td>1</td>
+                <td class="controls-cell">
+                  <a href="#" class="icon-btn" aria-label="View Information"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="View Email"><img src="assets/envelope-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Print Email"><img src="assets/print-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Resend Email"><img src="assets/resend-email.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+              <tr>
+                <td>Address Change Confirmation</td>
+                <td>07/14/2026</td>
+                <td>&mdash;</td>
+                <td>&mdash;</td>
+                <td>Profile</td>
+                <td class="status-text--generated">Generated</td>
+                <td>0</td>
+                <td class="controls-cell">
+                  <a href="#" class="icon-btn" aria-label="View Information"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="View Email"><img src="assets/envelope-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Edit Email"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Resend Email"><img src="assets/resend-email.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+              <tr>
+                <td>Renewal Reminder &mdash; 60 Day</td>
+                <td>06/23/2026</td>
+                <td>06/23/2026</td>
+                <td>06/23/2026</td>
+                <td>Registered Nurse</td>
+                <td class="status-text--sent">Sent</td>
+                <td>1</td>
+                <td class="controls-cell">
+                  <a href="#" class="icon-btn" aria-label="View Information"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="View Email"><img src="assets/envelope-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Print Email"><img src="assets/print-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Resend Email"><img src="assets/resend-email.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+              <tr>
+                <td>Payment Receipt</td>
+                <td>05/28/2025</td>
+                <td>05/28/2025</td>
+                <td>05/28/2025</td>
+                <td>INV-0041002</td>
+                <td class="status-text--sent">Sent</td>
+                <td>1</td>
+                <td class="controls-cell">
+                  <a href="#" class="icon-btn" aria-label="View Information"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="View Email"><img src="assets/envelope-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Print Email"><img src="assets/print-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Resend Email"><img src="assets/resend-email.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <nav aria-label="Pagination">
+            <ul class="pagination">
+              <li><a href="#" class="pagination__arrow" aria-label="Previous page">&lsaquo; Previous</a></li>
+              <li><a href="#" class="is-current" aria-label="Page 1" aria-current="page">1</a></li>
+              <li><a href="#" class="pagination__arrow" aria-label="Next page">Next &rsaquo;</a></li>
+            </ul>
+          </nav>
+        </div>
+      </section>
+
+      <!-- ---------------------------------------------------------------- -->
+      <!-- Correspondence — Letters                                         -->
+      <!-- ---------------------------------------------------------------- -->
+      <section class="profile-panel" id="panel-letters" aria-label="Letters" hidden>
+        <div class="profile-panel__head">
+          <div class="profile-panel__eyebrow">Correspondence</div>
+          <h1 class="profile-panel__title">Letters</h1>
+          <p class="profile-panel__desc">Printed correspondence generated for this individual, including the delivery method and mailing date.</p>
+        </div>
+
+        <div class="profile-panel__actions">
+          <a href="#" class="btn btn--primary">Add Letter</a>
+        </div>
+
+        <div class="profile-panel__table">
+          <div class="table-controls">
+            <div class="table-controls__count">
+              Showing 1 - 2 of 2 Entries
+              <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--letters">
+                What do the control icons mean?
+                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="table-controls__right">
+              <label for="entries-letters">Show</label>
+              <select id="entries-letters">
+                <option value="100" selected>100</option>
+                <option value="50">50</option>
+                <option value="25">25</option>
+                <option value="10">10</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="icon-legend" id="icon-legend--letters" hidden>
+            <div class="icon-legend__item"><img src="assets/eye-icon.png" alt=""> View Information</div>
+            <div class="icon-legend__item"><img src="assets/print-icon.png" alt=""> Print Letter</div>
+            <div class="icon-legend__item"><img src="assets/edit-icon.png" alt=""> Edit Letter</div>
+            <div class="icon-legend__item"><img src="assets/download-certificate.png" alt=""> Download Letter</div>
+          </div>
+
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Correspondence <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Delivery Method <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Generated Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Mailed Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Record Type <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Status <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Controls</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Notice of Complaint Inspection</td>
+                <td>Certified Mail</td>
+                <td>09/02/2026</td>
+                <td>&mdash;</td>
+                <td>INS-0015803</td>
+                <td class="status-text--generated">Generated</td>
+                <td class="controls-cell">
+                  <a href="#" class="icon-btn" aria-label="View Information"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Edit Letter"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Print Letter"><img src="assets/print-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Download Letter"><img src="assets/download-certificate.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+              <tr>
+                <td>License Certificate Mailing</td>
+                <td>USPS First Class</td>
+                <td>04/18/2023</td>
+                <td>04/20/2023</td>
+                <td>Registered Nurse</td>
+                <td class="status-text--sent">Sent</td>
+                <td class="controls-cell">
+                  <a href="#" class="icon-btn" aria-label="View Information"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Print Letter"><img src="assets/print-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Download Letter"><img src="assets/download-certificate.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <nav aria-label="Pagination">
+            <ul class="pagination">
+              <li><a href="#" class="pagination__arrow" aria-label="Previous page">&lsaquo; Previous</a></li>
+              <li><a href="#" class="is-current" aria-label="Page 1" aria-current="page">1</a></li>
+              <li><a href="#" class="pagination__arrow" aria-label="Next page">Next &rsaquo;</a></li>
+            </ul>
+          </nav>
+        </div>
+      </section>
+
+      <!-- ---------------------------------------------------------------- -->
+      <!-- Documents (document locker)                                      -->
+      <!-- ---------------------------------------------------------------- -->
+      <section class="profile-panel" id="panel-documents" aria-label="Documents" hidden>
+        <div class="profile-panel__head">
+          <div class="profile-panel__eyebrow">Records</div>
+          <h1 class="profile-panel__title">Documents</h1>
+          <p class="profile-panel__desc">Every file attached to this individual, from their own uploads and from agency staff. Files marked <strong>Agency Only</strong> are not visible to the constituent.</p>
+        </div>
+
+        <div class="panel-filters">
+          <div class="field">
+            <label for="document-title-filter">Title</label>
+            <input type="text" id="document-title-filter" placeholder="Search by title&hellip;">
+          </div>
+          <div class="field">
+            <label for="document-type-filter">File Type</label>
+            <select id="document-type-filter">
+              <option value="" selected>Please Select</option>
+              <option value="pdf">PDF</option>
+              <option value="jpg">JPG</option>
+              <option value="docx">DOCX</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="document-visibility-filter">Visibility</label>
+            <select id="document-visibility-filter">
+              <option value="" selected>Please Select</option>
+              <option value="public">Public</option>
+              <option value="agency">Agency Only</option>
+            </select>
+          </div>
+          <button type="button" class="btn btn--primary">Search</button>
+          <button type="button" class="btn btn--secondary">Clear</button>
+        </div>
+
+        <div class="profile-panel__actions">
+          <button type="button" class="btn btn--primary" id="upload-file-btn">Upload File</button>
+        </div>
+
+        <div class="profile-panel__table">
+          <div class="table-controls">
+            <div class="table-controls__count">
+              Showing 1 - 5 of 5 Entries
+              <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--documents">
+                What do the control icons mean?
+                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="table-controls__right">
+              <label for="entries-documents">Show</label>
+              <select id="entries-documents">
+                <option value="100" selected>100</option>
+                <option value="50">50</option>
+                <option value="25">25</option>
+                <option value="10">10</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="icon-legend" id="icon-legend--documents" hidden>
+            <div class="icon-legend__item"><img src="assets/eye-icon.png" alt=""> View File</div>
+            <div class="icon-legend__item"><img src="assets/print-icon.png" alt=""> Print File</div>
+            <div class="icon-legend__item"><img src="assets/edit-icon.png" alt=""> Edit File Details</div>
+            <div class="icon-legend__item"><img src="assets/icon-delete.png" alt=""> Delete File</div>
+          </div>
+
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Title <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>File Type <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Visibility <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Uploaded By <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Uploaded Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Record Type <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Controls</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Continuing Education Certificate 2026</td>
+                <td>PDF</td>
+                <td>Public</td>
+                <td>Sarah Johnson</td>
+                <td>08/20/2026</td>
+                <td>Nursing License Renewal</td>
+                <td class="controls-cell">
+                  <a href="#" class="icon-btn" aria-label="View File"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Print File"><img src="assets/print-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Edit File Details"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Delete File"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+              <tr>
+                <td>Employment Verification Letter</td>
+                <td>DOCX</td>
+                <td>Public</td>
+                <td>Sarah Johnson</td>
+                <td>06/01/2025</td>
+                <td>CNA License Renewal</td>
+                <td class="controls-cell">
+                  <a href="#" class="icon-btn" aria-label="View File"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Print File"><img src="assets/print-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Edit File Details"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Delete File"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+              <tr>
+                <td>Background Check Results</td>
+                <td>PDF</td>
+                <td>Agency Only</td>
+                <td>Admin Account</td>
+                <td>03/29/2023</td>
+                <td>Nursing License Original</td>
+                <td class="controls-cell">
+                  <a href="#" class="icon-btn" aria-label="View File"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Print File"><img src="assets/print-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Edit File Details"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Delete File"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+              <tr>
+                <td>Nursing Diploma</td>
+                <td>PDF</td>
+                <td>Public</td>
+                <td>Sarah Johnson</td>
+                <td>03/28/2023</td>
+                <td>Nursing License Original</td>
+                <td class="controls-cell">
+                  <a href="#" class="icon-btn" aria-label="View File"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Print File"><img src="assets/print-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Edit File Details"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Delete File"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+              <tr>
+                <td>Government Issued ID</td>
+                <td>JPG</td>
+                <td>Agency Only</td>
+                <td>Sarah Johnson</td>
+                <td>03/28/2023</td>
+                <td>Nursing License Original</td>
+                <td class="controls-cell">
+                  <a href="#" class="icon-btn" aria-label="View File"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Print File"><img src="assets/print-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Edit File Details"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Delete File"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <nav aria-label="Pagination">
+            <ul class="pagination">
+              <li><a href="#" class="pagination__arrow" aria-label="Previous page">&lsaquo; Previous</a></li>
+              <li><a href="#" class="is-current" aria-label="Page 1" aria-current="page">1</a></li>
+              <li><a href="#" class="pagination__arrow" aria-label="Next page">Next &rsaquo;</a></li>
+            </ul>
+          </nav>
+        </div>
+      </section>
+
+      <!-- ---------------------------------------------------------------- -->
+      <!-- Flags                                                            -->
+      <!-- ---------------------------------------------------------------- -->
+      <section class="profile-panel" id="panel-flags" aria-label="Flags" hidden>
+        <div class="profile-panel__head">
+          <div class="profile-panel__eyebrow">Records</div>
+          <h1 class="profile-panel__title">Flags</h1>
+          <p class="profile-panel__desc">Conditions applied to this individual. Eligibility flags are set automatically by rule; agency review flags are applied by staff.</p>
+        </div>
+
+        <div class="info-notice" id="flags-notice">
+          <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+          <span id="flags-notice-text"></span>
+        </div>
+
+        <div class="profile-panel__actions">
+          <button type="button" class="btn btn--primary" id="flags-panel-add">Add Flag</button>
+        </div>
+
+        <div class="profile-panel__table">
+          <div class="table-controls">
+            <div class="table-controls__count">
+              <span id="flags-count">Showing 1 - 2 of 2 Entries</span>
+              <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--flags">
+                What do the control icons mean?
+                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="table-controls__right">
+              <label for="entries-flags">Show</label>
+              <select id="entries-flags">
+                <option value="100" selected>100</option>
+                <option value="50">50</option>
+                <option value="25">25</option>
+                <option value="10">10</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="icon-legend" id="icon-legend--flags" hidden>
+            <div class="icon-legend__item"><img src="assets/eye-icon.png" alt=""> View Flag Detail</div>
+            <div class="icon-legend__item"><img src="assets/view-history.png" alt=""> View History</div>
+            <div class="icon-legend__item"><img src="assets/icon-delete.png" alt=""> Remove Flag</div>
+          </div>
+
+          <p class="empty-state" id="flags-empty-state" hidden>No flags are active on this account.</p>
+
+          <table class="data-table" id="flags-table">
+            <thead>
+              <tr>
+                <th>Flag <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Category <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Source <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Blocks Submission <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Applied By <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Applied Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Controls</th>
+              </tr>
+            </thead>
+            <tbody id="flags-tbody"></tbody>
+          </table>
+
+          <nav aria-label="Pagination">
+            <ul class="pagination">
+              <li><a href="#" class="pagination__arrow" aria-label="Previous page">&lsaquo; Previous</a></li>
+              <li><a href="#" class="is-current" aria-label="Page 1" aria-current="page">1</a></li>
+              <li><a href="#" class="pagination__arrow" aria-label="Next page">Next &rsaquo;</a></li>
+            </ul>
+          </nav>
+        </div>
+      </section>
+      <!-- ---------------------------------------------------------------- -->
+      <!-- Inspections                                                      -->
+      <!-- ---------------------------------------------------------------- -->
+      <section class="profile-panel" id="panel-inspections" aria-label="Inspections" hidden>
+        <div class="profile-panel__head">
+          <div class="profile-panel__eyebrow">Records</div>
+          <h1 class="profile-panel__title">Inspections</h1>
+          <p class="profile-panel__desc">Inspections where this individual is the subject or the responsible party. Filter by the record the inspection originated from.</p>
+        </div>
+
+        <div class="profile-panel__actions">
+          <a href="#" class="btn btn--primary">Initiate Inspection</a>
+          <div class="filter-tabs" role="group" aria-label="Inspection category filter" id="inspection-filter-tabs" style="margin-top: 0; margin-left: auto">
+            <button type="button" class="filter-tabs__btn" data-category="Application">Application</button>
+            <button type="button" class="filter-tabs__btn" data-category="Case">Case</button>
+            <button type="button" class="filter-tabs__btn" data-category="Field">Field</button>
+            <button type="button" class="filter-tabs__btn" data-category="Routine">Routine</button>
+          </div>
+        </div>
+
+        <div class="profile-panel__table">
+          <div class="table-controls">
+            <div class="table-controls__count" id="inspections-count-wrap">
+              <span id="inspections-count">Showing 1 - 3 of 3 Entries</span>
+              <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--inspections">
+                What do the control icons mean?
+                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="table-controls__right">
+              <label for="entries-inspections">Show</label>
+              <select id="entries-inspections">
+                <option value="100" selected>100</option>
+                <option value="50">50</option>
+                <option value="25">25</option>
+                <option value="10">10</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="icon-legend" id="icon-legend--inspections" hidden>
+            <div class="icon-legend__item"><img src="assets/eye-icon.png" alt=""> View Inspection</div>
+            <div class="icon-legend__item"><img src="assets/initiate-inspection.png" alt=""> Manage Inspection</div>
+            <div class="icon-legend__item"><img src="assets/view-history.png" alt=""> View History</div>
+          </div>
+
+          <p class="empty-state" id="inspections-empty-state" hidden>No inspections found for this category.</p>
+
+          <table class="data-table" id="inspections-table">
+            <thead>
+              <tr>
+                <th>ID <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Type <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Origin <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Inspection Subject <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Outcome <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Due Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Completion Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Status <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Controls</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-category="Routine">
+                <td>INS-0014422</td>
+                <td>Site Inspection</td>
+                <td>Routine</td>
+                <td>Mercy Ridge Care Center</td>
+                <td class="status-text--passed">Passed</td>
+                <td>05/12/2026</td>
+                <td>05/10/2026</td>
+                <td class="status-text--completed">Completed</td>
+                <td class="controls-cell">
+                  <a href="#" class="icon-btn" aria-label="View Inspection"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="View History"><img src="assets/view-history.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+              <tr data-category="Case">
+                <td>INS-0015803</td>
+                <td>Complaint Inspection</td>
+                <td>Case CS-0002214</td>
+                <td>Sarah Johnson</td>
+                <td>&mdash;</td>
+                <td>09/18/2026</td>
+                <td>&mdash;</td>
+                <td class="status-text--assigned">Assigned</td>
+                <td class="controls-cell">
+                  <a href="#" class="icon-btn" aria-label="View Inspection"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Manage Inspection"><img src="assets/initiate-inspection.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+              <tr data-category="Application">
+                <td>INS-0013118</td>
+                <td>Equipment Inspection</td>
+                <td>SUB-0089140</td>
+                <td>Mobile Care Unit 3</td>
+                <td class="status-text--rejected">Failed</td>
+                <td>11/02/2025</td>
+                <td>11/02/2025</td>
+                <td class="status-text--completed">Completed</td>
+                <td class="controls-cell">
+                  <a href="#" class="icon-btn" aria-label="View Inspection"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="View History"><img src="assets/view-history.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <nav aria-label="Pagination">
+            <ul class="pagination">
+              <li><a href="#" class="pagination__arrow" aria-label="Previous page">&lsaquo; Previous</a></li>
+              <li><a href="#" class="is-current" aria-label="Page 1" aria-current="page">1</a></li>
+              <li><a href="#" class="pagination__arrow" aria-label="Next page">Next &rsaquo;</a></li>
+            </ul>
+          </nav>
+        </div>
+      </section>
+
+      <!-- ---------------------------------------------------------------- -->
+      <!-- Invoices                                                         -->
+      <!-- ---------------------------------------------------------------- -->
+      <section class="profile-panel" id="panel-invoices" aria-label="Invoices" hidden>
+        <div class="profile-panel__head">
+          <div class="profile-panel__eyebrow">Records</div>
+          <h1 class="profile-panel__title">Invoices</h1>
+          <p class="profile-panel__desc">Fees billed to this individual. Outstanding balance is <strong>$195.00</strong>, of which <span class="status-text--past-due">$50.00 is past due</span>.</p>
+        </div>
+
+        <div class="profile-panel__actions">
+          <button type="button" class="btn btn--primary">Create Invoice</button>
+          <button type="button" class="btn btn--secondary">Record Payment</button>
+        </div>
+
+        <div class="profile-panel__table">
+          <div class="table-controls">
+            <div class="table-controls__count">
+              Showing 1 - 4 of 4 Entries
+              <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--invoices">
+                What do the control icons mean?
+                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="table-controls__right">
+              <label for="entries-invoices">Show</label>
+              <select id="entries-invoices">
+                <option value="100" selected>100</option>
+                <option value="50">50</option>
+                <option value="25">25</option>
+                <option value="10">10</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="icon-legend" id="icon-legend--invoices" hidden>
+            <div class="icon-legend__item"><img src="assets/eye-icon.png" alt=""> View Transactions</div>
+            <div class="icon-legend__item"><img src="assets/print-icon.png" alt=""> Print Invoice</div>
+            <div class="icon-legend__item"><img src="assets/create-invoice.png" alt=""> Initiate Refund</div>
+            <div class="icon-legend__item"><img src="assets/icon-delete.png" alt=""> Void Invoice</div>
+          </div>
+
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Invoice Number <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Record Type <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Invoice Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Due Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Amount Due <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Status <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Controls</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>INV-0044120</td>
+                <td>Nursing License Renewal</td>
+                <td>08/22/2026</td>
+                <td>09/21/2026</td>
+                <td>$145.00</td>
+                <td class="status-text--pending">Pending</td>
+                <td class="controls-cell">
+                  <a href="#" class="icon-btn" aria-label="View Transactions"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Print Invoice"><img src="assets/print-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Void Invoice"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+              <tr>
+                <td>INV-0041002</td>
+                <td>CNA License Renewal</td>
+                <td>05/28/2025</td>
+                <td>06/27/2025</td>
+                <td>$75.00</td>
+                <td class="status-text--paid">Paid</td>
+                <td class="controls-cell">
+                  <a href="#" class="icon-btn" aria-label="View Transactions"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Print Invoice"><img src="assets/print-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Initiate Refund"><img src="assets/create-invoice.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+              <tr>
+                <td>INV-0038771</td>
+                <td>Nursing License Original</td>
+                <td>03/30/2023</td>
+                <td>04/29/2023</td>
+                <td>$210.00</td>
+                <td class="status-text--paid">Paid</td>
+                <td class="controls-cell">
+                  <a href="#" class="icon-btn" aria-label="View Transactions"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Print Invoice"><img src="assets/print-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Initiate Refund"><img src="assets/create-invoice.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+              <tr>
+                <td>INV-0036550</td>
+                <td>Late Renewal Penalty</td>
+                <td>09/02/2022</td>
+                <td>10/02/2022</td>
+                <td>$50.00</td>
+                <td class="status-text--past-due">Past Due</td>
+                <td class="controls-cell">
+                  <a href="#" class="icon-btn" aria-label="View Transactions"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Print Invoice"><img src="assets/print-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Void Invoice"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <nav aria-label="Pagination">
+            <ul class="pagination">
+              <li><a href="#" class="pagination__arrow" aria-label="Previous page">&lsaquo; Previous</a></li>
+              <li><a href="#" class="is-current" aria-label="Page 1" aria-current="page">1</a></li>
+              <li><a href="#" class="pagination__arrow" aria-label="Next page">Next &rsaquo;</a></li>
+            </ul>
+          </nav>
+        </div>
+      </section>
+
+      <!-- ---------------------------------------------------------------- -->
+      <!-- Submissions — All                                                -->
+      <!-- ---------------------------------------------------------------- -->
+      <section class="profile-panel" id="panel-submissions" aria-label="All Submissions" hidden>
+        <div class="profile-panel__head">
+          <div class="profile-panel__eyebrow">Submissions</div>
+          <h1 class="profile-panel__title">All Submissions</h1>
+          <p class="profile-panel__desc">Every application this individual has started or submitted, including drafts that have not yet reached your agency.</p>
+        </div>
+
+        <div class="profile-panel__actions">
+          <button type="button" class="btn btn--primary">Start Submission</button>
+        </div>
+
+        <div class="profile-panel__table">
+          <div class="table-controls">
+            <div class="table-controls__count">
+              Showing 1 - 4 of 4 Entries
+              <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--submissions">
+                What do the control icons mean?
+                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="table-controls__right">
+              <label for="entries-submissions">Show</label>
+              <select id="entries-submissions">
+                <option value="100" selected>100</option>
+                <option value="50">50</option>
+                <option value="25">25</option>
+                <option value="10">10</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="icon-legend" id="icon-legend--submissions" hidden>
+            <div class="icon-legend__item"><img src="assets/view-submission.png" alt=""> View Submission</div>
+            <div class="icon-legend__item"><img src="assets/edit-icon.png" alt=""> Continue Submission</div>
+            <div class="icon-legend__item"><img src="assets/view-history.png" alt=""> View Workflow</div>
+            <div class="icon-legend__item"><img src="assets/eye-icon.png" alt=""> View Reason</div>
+            <div class="icon-legend__item"><img src="assets/icon-delete.png" alt=""> Delete Submission</div>
+          </div>
+
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>License Type <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Application Name <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Submission Number <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Status <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Submitted By <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Submitted Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Controls</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Registered Nurse</td>
+                <td>Nursing License Renewal</td>
+                <td>SUB-0092817</td>
+                <td class="status-text--in-review">In Review</td>
+                <td>Sarah Johnson</td>
+                <td>08/22/2026</td>
+                <td class="controls-cell">
+                  <a href="task-detail.html" class="icon-btn" aria-label="View Submission"><img src="assets/view-submission.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="View Workflow"><img src="assets/view-history.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+              <tr>
+                <td>Registered Nurse</td>
+                <td>Address Change</td>
+                <td>SUB-0091002</td>
+                <td class="status-text--draft">Draft</td>
+                <td>Sarah Johnson</td>
+                <td>&mdash;</td>
+                <td class="controls-cell">
+                  <a href="#" class="icon-btn" aria-label="Continue Submission"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Delete Submission"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+              <tr>
+                <td>Certified Nurse Aide</td>
+                <td>CNA License Renewal</td>
+                <td>SUB-0089140</td>
+                <td class="status-text--approved">Approved</td>
+                <td>Sarah Johnson</td>
+                <td>05/28/2025</td>
+                <td class="controls-cell">
+                  <a href="task-detail.html" class="icon-btn" aria-label="View Submission"><img src="assets/view-submission.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="View Workflow"><img src="assets/view-history.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+              <tr>
+                <td>Home Health Aide</td>
+                <td>Home Health Aide Reinstatement</td>
+                <td>SUB-0071455</td>
+                <td class="status-text--denied">Denied</td>
+                <td>Sarah Johnson</td>
+                <td>09/12/2021</td>
+                <td class="controls-cell">
+                  <a href="task-detail.html" class="icon-btn" aria-label="View Submission"><img src="assets/view-submission.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="View Reason"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="View Workflow"><img src="assets/view-history.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <nav aria-label="Pagination">
+            <ul class="pagination">
+              <li><a href="#" class="pagination__arrow" aria-label="Previous page">&lsaquo; Previous</a></li>
+              <li><a href="#" class="is-current" aria-label="Page 1" aria-current="page">1</a></li>
+              <li><a href="#" class="pagination__arrow" aria-label="Next page">Next &rsaquo;</a></li>
+            </ul>
+          </nav>
+        </div>
+      </section>
+
+      <!-- ---------------------------------------------------------------- -->
+      <!-- Submissions — Payment Requests                                   -->
+      <!-- ---------------------------------------------------------------- -->
+      <section class="profile-panel" id="panel-payment-requests" aria-label="Payment Requests" hidden>
+        <div class="profile-panel__head">
+          <div class="profile-panel__eyebrow">Submissions</div>
+          <h1 class="profile-panel__title">Payment Requests</h1>
+          <p class="profile-panel__desc">Requests sent to this individual to collect a fee outside of the standard submission checkout.</p>
+        </div>
+
+        <div class="profile-panel__actions">
+          <button type="button" class="btn btn--primary">Create Payment Request</button>
+        </div>
+
+        <div class="profile-panel__table">
+          <div class="table-controls">
+            <div class="table-controls__count">
+              Showing 1 - 1 of 1 Entries
+              <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--payment-requests">
+                What do the control icons mean?
+                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="table-controls__right">
+              <label for="entries-payment-requests">Show</label>
+              <select id="entries-payment-requests">
+                <option value="100" selected>100</option>
+                <option value="50">50</option>
+                <option value="25">25</option>
+                <option value="10">10</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="icon-legend" id="icon-legend--payment-requests" hidden>
+            <div class="icon-legend__item"><img src="assets/eye-icon.png" alt=""> View Transactions</div>
+            <div class="icon-legend__item"><img src="assets/print-icon.png" alt=""> Print Payment Request</div>
+            <div class="icon-legend__item"><img src="assets/resend-email.png" alt=""> Resend Payment Request</div>
+          </div>
+
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Payment Request Number <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Related Record <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Amount <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Status <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Created Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Controls</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>PR-0004412</td>
+                <td>SUB-0092817</td>
+                <td>$145.00</td>
+                <td class="status-text--pending">Pending</td>
+                <td>08/22/2026</td>
+                <td class="controls-cell">
+                  <a href="#" class="icon-btn" aria-label="View Transactions"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Print Payment Request"><img src="assets/print-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Resend Payment Request"><img src="assets/resend-email.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <nav aria-label="Pagination">
+            <ul class="pagination">
+              <li><a href="#" class="pagination__arrow" aria-label="Previous page">&lsaquo; Previous</a></li>
+              <li><a href="#" class="is-current" aria-label="Page 1" aria-current="page">1</a></li>
+              <li><a href="#" class="pagination__arrow" aria-label="Next page">Next &rsaquo;</a></li>
+            </ul>
+          </nav>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+</div>
+
+<!-- Add Flag Modal -->
+<div id="add-flag-modal" class="modal-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="add-flag-modal-title">
+  <div class="modal-content" style="max-width: 520px">
+    <div class="modal-header">
+      <h2 class="modal-title" id="add-flag-modal-title">Add Flag</h2>
+      <button type="button" class="modal-close" id="add-flag-modal-close" aria-label="Close modal">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+    <form id="add-flag-form" onsubmit="return false;">
+      <div class="modal-body">
+        <div class="field" id="flag-name-group">
+          <label for="flag-name-select">Flag Name <span class="field-required">Required</span></label>
+          <span class="field-error" id="flag-name-error" hidden>Please select a flag.</span>
+          <select id="flag-name-select" aria-describedby="flag-name-error">
+            <option value="">Please Select</option>
+          </select>
+          <p class="field-hint">Only flags currently active in Settings are available.</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn--primary">Save</button>
+        <button type="button" class="btn btn--secondary" id="add-flag-cancel">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Transient success message -->
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+  <span id="toast-text"></span>
+</div>
+
+<script src="js/toolbar.js"></script>
+<script src="js/icon-legend.js"></script>
+<script>
+  initToolbar('#toolbar', { activeKey: 'constituents' });
+  initIconLegends();
+
+  /* ------------------------------------------------------------------ */
+  /* Left rail navigation — shows one panel at a time.                   */
+  /* Top-level current item gets a navy left bar, a current sub-item     */
+  /* gets a gold left bar and its parent group stays marked open.        */
+  /* ------------------------------------------------------------------ */
+  (function () {
+    var panels = Array.prototype.slice.call(document.querySelectorAll('#profile-main .profile-panel'));
+    var navLinks = Array.prototype.slice.call(document.querySelectorAll('.profile-nav__link[data-panel], .profile-nav__sublink[data-panel]'));
+    var factsLinks = Array.prototype.slice.call(document.querySelectorAll('.profile-facts__link[data-panel]'));
+    var groupToggles = Array.prototype.slice.call(document.querySelectorAll('.profile-nav__link[aria-controls]'));
+
+    function setGroupExpanded(toggle, expanded) {
+      var list = document.getElementById(toggle.getAttribute('aria-controls'));
+      toggle.setAttribute('aria-expanded', String(expanded));
+      if (list) list.hidden = !expanded;
+    }
+
+    function groupToggleFor(el) {
+      var list = el.closest('.profile-nav__sublist');
+      if (!list) return null;
+      return document.querySelector('.profile-nav__link[aria-controls="' + list.id + '"]');
+    }
+
+    function showPanel(panelId, scroll) {
+      var panel = document.getElementById(panelId);
+      if (!panel) return;
+
+      panels.forEach(function (p) { p.hidden = p !== panel; });
+
+      navLinks.forEach(function (l) { l.classList.remove('is-current'); });
+      factsLinks.forEach(function (l) { l.classList.remove('is-current'); });
+      groupToggles.forEach(function (t) { t.classList.remove('is-open'); });
+
+      var link = document.querySelector('.profile-nav__link[data-panel="' + panelId + '"], .profile-nav__sublink[data-panel="' + panelId + '"], .profile-facts__link[data-panel="' + panelId + '"]');
+      if (link) {
+        link.classList.add('is-current');
+        var parent = groupToggleFor(link);
+        if (parent) {
+          parent.classList.add('is-open');
+          setGroupExpanded(parent, true);
+        }
+      }
+
+      if (scroll) window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* Group headers expand / collapse without changing the panel */
+    groupToggles.forEach(function (toggle) {
+      toggle.addEventListener('click', function () {
+        setGroupExpanded(toggle, toggle.getAttribute('aria-expanded') !== 'true');
+      });
+    });
+
+    /* Rail links + any in-panel shortcut carrying data-panel */
+    document.querySelectorAll('[data-panel]').forEach(function (link) {
+      if (link.tagName !== 'A') return;
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
+        var hash = link.getAttribute('href');
+        if (hash && hash.charAt(0) === '#') history.replaceState(null, '', hash);
+        showPanel(link.getAttribute('data-panel'), true);
+      });
+    });
+
+    /* Deep link: #certificates-active etc. */
+    if (window.location.hash) {
+      var target = document.querySelector('.profile-nav__link[href="' + window.location.hash + '"], .profile-nav__sublink[href="' + window.location.hash + '"], .profile-facts__link[href="' + window.location.hash + '"]');
+      if (target) showPanel(target.getAttribute('data-panel'), false);
+    }
+
+    window.showProfilePanel = showPanel;
+  })();
+
+  /* ------------------------------------------------------------------ */
+  /* Flags — popover on the constituent name, ported from the legacy     */
+  /* profile. Flags persist in localStorage; the popover, the identity   */
+  /* bar icon, the rail count, the Profile Details island and the Flags  */
+  /* panel table all render from the same store.                         */
+  /* ------------------------------------------------------------------ */
+  (function () {
+    var STORAGE_KEY = 'rlp.profile.flags.v1';
+
+    /* Flag definitions would come from Settings > Flags. Active only. */
+    var FLAG_DEFINITIONS = [
+      { name: 'Continuing Education Overdue', category: 'Eligibility',   blocks: 'Yes', status: 'Active' },
+      { name: 'Open Complaint Investigation', category: 'Agency Review', blocks: 'No',  status: 'Active' },
+      { name: 'Delinquent Payment',           category: 'Eligibility',   blocks: 'Yes', status: 'Active' },
+      { name: 'Background Check Failed',      category: 'Eligibility',   blocks: 'Yes', status: 'Active' },
+      { name: 'License Expired',              category: 'Eligibility',   blocks: 'Yes', status: 'Active' },
+      { name: 'Fraudulent Documentation',     category: 'Agency Review', blocks: 'Yes', status: 'Active' }
+    ];
+
+    var SEED = [
+      { name: 'Open Complaint Investigation', category: 'Agency Review', source: 'Manual',    blocks: 'No',  appliedBy: 'Admin Account', appliedDate: '09/02/2026' },
+      { name: 'Continuing Education Overdue', category: 'Eligibility',   source: 'Automatic', blocks: 'Yes', appliedBy: 'System',        appliedDate: '07/01/2026' }
+    ];
+
+    var flags;
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      flags = raw ? JSON.parse(raw) : SEED.slice();
+    } catch (e) {
+      flags = SEED.slice();
+    }
+
+    function save() {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(flags)); } catch (e) {}
+    }
+
+    var trigger = document.getElementById('flag-trigger');
+    var iconPath = document.getElementById('flag-icon-path');
+    var popover = document.getElementById('flag-popover');
+    var popoverClose = document.getElementById('flag-popover-close');
+    var popoverList = document.getElementById('flag-popover-list');
+    var popoverEmpty = document.getElementById('flag-popover-empty');
+    var popoverAdd = document.getElementById('flag-popover-add');
+
+    var modal = document.getElementById('add-flag-modal');
+    var form = document.getElementById('add-flag-form');
+    var select = document.getElementById('flag-name-select');
+    var nameGroup = document.getElementById('flag-name-group');
+    var nameError = document.getElementById('flag-name-error');
+    var modalClose = document.getElementById('add-flag-modal-close');
+    var modalCancel = document.getElementById('add-flag-cancel');
+    var panelAdd = document.getElementById('flags-panel-add');
+
+    var toast = document.getElementById('toast');
+    var toastText = document.getElementById('toast-text');
+    var toastTimer = null;
+    var lastFocused = null;
+
+    function showToast(message) {
+      toastText.textContent = message;
+      toast.classList.add('is-visible');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function () { toast.classList.remove('is-visible'); }, 3000);
+    }
+
+    /* Solid flag when flags are active, outline when clear */
+    function renderIcon() {
+      if (flags.length) {
+        iconPath.setAttribute('fill', '#d35f00');
+        iconPath.removeAttribute('stroke');
+        iconPath.removeAttribute('stroke-width');
+        iconPath.removeAttribute('stroke-linejoin');
+      } else {
+        iconPath.setAttribute('fill', 'none');
+        iconPath.setAttribute('stroke', '#d35f00');
+        iconPath.setAttribute('stroke-width', '40');
+        iconPath.setAttribute('stroke-linejoin', 'round');
+      }
+      trigger.setAttribute('aria-label', flags.length
+        ? flags.length + ' flag' + (flags.length !== 1 ? 's' : '') + ' active. Activate to view details.'
+        : 'No flags active. Activate to add a flag.');
+    }
+
+    function renderPopover() {
+      popoverList.innerHTML = '';
+      popoverEmpty.hidden = flags.length > 0;
+
+      flags.forEach(function (flag, index) {
+        var li = document.createElement('li');
+        li.className = 'flag-popover__item';
+
+        var icon = document.createElement('i');
+        icon.className = 'fa-solid fa-triangle-exclamation flag-popover__item-icon';
+        icon.setAttribute('aria-hidden', 'true');
+
+        var body = document.createElement('div');
+        body.className = 'flag-popover__item-body';
+        var name = document.createElement('strong');
+        name.textContent = flag.name;
+        var meta = document.createElement('span');
+        meta.className = 'flag-popover__item-meta';
+        meta.textContent = flag.category + ' \u00b7 ' + flag.source + ' \u00b7 ' + flag.appliedDate;
+        body.appendChild(name);
+        body.appendChild(meta);
+
+        li.appendChild(icon);
+        li.appendChild(body);
+
+        /* Automatic flags clear themselves when the underlying rule passes */
+        if (flag.source === 'Manual') {
+          var remove = document.createElement('button');
+          remove.type = 'button';
+          remove.className = 'flag-popover__item-remove';
+          remove.setAttribute('aria-label', 'Remove flag: ' + flag.name);
+          remove.innerHTML = '<i class="fa-solid fa-xmark" aria-hidden="true"></i>';
+          remove.addEventListener('click', function () {
+            flags.splice(index, 1);
+            save();
+            renderAll();
+            showToast('Flag "' + flag.name + '" has been removed.');
+          });
+          li.appendChild(remove);
+        }
+
+        popoverList.appendChild(li);
+      });
+    }
+
+    function renderPanel() {
+      var tbody = document.getElementById('flags-tbody');
+      var count = document.getElementById('flags-count');
+      var table = document.getElementById('flags-table');
+      var empty = document.getElementById('flags-empty-state');
+      var notice = document.getElementById('flags-notice');
+      var noticeText = document.getElementById('flags-notice-text');
+      if (!tbody) return;
+
+      tbody.innerHTML = '';
+      flags.forEach(function (flag, index) {
+        var tr = document.createElement('tr');
+        var cells = [flag.name, flag.category, flag.source, flag.blocks, flag.appliedBy, flag.appliedDate];
+        cells.forEach(function (value) {
+          var td = document.createElement('td');
+          td.textContent = value;
+          tr.appendChild(td);
+        });
+
+        var controls = document.createElement('td');
+        controls.className = 'controls-cell';
+        controls.innerHTML =
+          '<a href="#" class="icon-btn" aria-label="View Flag Detail"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>' +
+          '<a href="#" class="icon-btn" aria-label="View History"><img src="assets/view-history.png" alt="" width="30" height="30"></a>';
+        if (flag.source === 'Manual') {
+          var removeLink = document.createElement('a');
+          removeLink.href = '#';
+          removeLink.className = 'icon-btn';
+          removeLink.setAttribute('aria-label', 'Remove Flag');
+          removeLink.innerHTML = '<img src="assets/icon-delete.png" alt="" width="30" height="30">';
+          removeLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            flags.splice(index, 1);
+            save();
+            renderAll();
+            showToast('Flag "' + flag.name + '" has been removed.');
+          });
+          controls.appendChild(removeLink);
+        }
+        tr.appendChild(controls);
+        tbody.appendChild(tr);
+      });
+
+      count.textContent = flags.length
+        ? 'Showing 1 - ' + flags.length + ' of ' + flags.length + ' Entries'
+        : 'Showing 0 - 0 of 0 Entries';
+      table.hidden = flags.length === 0;
+      empty.hidden = flags.length > 0;
+
+      var blocking = flags.filter(function (f) { return f.blocks === 'Yes'; }).length;
+      if (!flags.length) {
+        notice.hidden = true;
+      } else {
+        notice.hidden = false;
+        noticeText.innerHTML = '<strong>' + flags.length + ' active flag' + (flags.length !== 1 ? 's' : '') + '</strong> &mdash; ' + (blocking
+          ? blocking + (blocking !== 1 ? ' of these block' : ' of these blocks') + ' this individual from submitting until cleared.'
+          : 'none of these block this individual from submitting.');
+      }
+    }
+
+    /* Rail count + the Profile Details island read from the same store */
+    function renderCounts() {
+      var navCount = document.querySelector('.profile-nav__link[data-panel="panel-flags"] .profile-nav__count');
+      if (navCount) navCount.textContent = flags.length;
+
+      var island = document.getElementById('flags-island');
+      if (island) {
+        island.querySelector('.island__headline').textContent = flags.length;
+        island.querySelector('[data-flag-stat="eligibility"]').textContent =
+          flags.filter(function (f) { return f.category === 'Eligibility'; }).length;
+        island.querySelector('[data-flag-stat="review"]').textContent =
+          flags.filter(function (f) { return f.category === 'Agency Review'; }).length;
+      }
+    }
+
+    function renderAll() {
+      renderIcon();
+      renderPopover();
+      renderPanel();
+      renderCounts();
+    }
+
+    function openPopover() {
+      renderPopover();
+      popover.hidden = false;
+      trigger.setAttribute('aria-expanded', 'true');
+      lastFocused = document.activeElement;
+      popoverClose.focus();
+    }
+
+    function closePopover(restoreFocus) {
+      popover.hidden = true;
+      trigger.setAttribute('aria-expanded', 'false');
+      if (restoreFocus && lastFocused) lastFocused.focus();
+    }
+
+    function populateSelect() {
+      var applied = flags.map(function (f) { return f.name; });
+      select.innerHTML = '<option value="">Please Select</option>';
+      FLAG_DEFINITIONS
+        .filter(function (d) { return d.status === 'Active' && applied.indexOf(d.name) === -1; })
+        .forEach(function (d) {
+          var opt = document.createElement('option');
+          opt.value = d.name;
+          opt.textContent = d.name;
+          select.appendChild(opt);
+        });
+    }
+
+    function clearErrors() {
+      nameGroup.classList.remove('field--error');
+      nameError.hidden = true;
+    }
+
+    function openModal() {
+      closePopover(false);
+      populateSelect();
+      form.reset();
+      clearErrors();
+      modal.hidden = false;
+      document.body.style.overflow = 'hidden';
+      setTimeout(function () { select.focus(); }, 50);
+    }
+
+    function closeModal() {
+      modal.hidden = true;
+      document.body.style.overflow = '';
+      form.reset();
+      clearErrors();
+    }
+
+    function today() {
+      var d = new Date();
+      function pad(n) { return (n < 10 ? '0' : '') + n; }
+      return pad(d.getMonth() + 1) + '/' + pad(d.getDate()) + '/' + d.getFullYear();
+    }
+
+    trigger.addEventListener('click', function () {
+      trigger.getAttribute('aria-expanded') === 'true' ? closePopover(true) : openPopover();
+    });
+    popoverClose.addEventListener('click', function () { closePopover(true); });
+    popoverAdd.addEventListener('click', openModal);
+    if (panelAdd) panelAdd.addEventListener('click', openModal);
+    modalClose.addEventListener('click', closeModal);
+    modalCancel.addEventListener('click', closeModal);
+    modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var name = select.value;
+      if (!name) {
+        nameGroup.classList.add('field--error');
+        nameError.hidden = false;
+        select.focus();
+        return;
+      }
+      var def = FLAG_DEFINITIONS.filter(function (d) { return d.name === name; })[0];
+      flags.unshift({
+        name: name,
+        category: def ? def.category : 'Agency Review',
+        source: 'Manual',
+        blocks: def ? def.blocks : 'No',
+        appliedBy: 'ASP Admin Two',
+        appliedDate: today()
+      });
+      save();
+      closeModal();
+      renderAll();
+      openPopover();
+      showToast('Flag "' + name + '" has been added.');
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape') return;
+      if (!modal.hidden) { closeModal(); return; }
+      if (trigger.getAttribute('aria-expanded') === 'true') closePopover(true);
+    });
+
+    document.addEventListener('click', function (e) {
+      if (trigger.getAttribute('aria-expanded') !== 'true') return;
+      if (popover.contains(e.target) || trigger.contains(e.target) || modal.contains(e.target)) return;
+      closePopover(false);
+    });
+
+    renderAll();
+  })();
+
+  /* ------------------------------------------------------------------ */
+  /* Inspections — category filter. Clicking the active tab clears it.   */
+  /* ------------------------------------------------------------------ */
+  (function () {
+    var tabs = Array.prototype.slice.call(document.querySelectorAll('#inspection-filter-tabs .filter-tabs__btn'));
+    var rows = Array.prototype.slice.call(document.querySelectorAll('#inspections-table tbody tr'));
+    var countEl = document.getElementById('inspections-count');
+    var emptyEl = document.getElementById('inspections-empty-state');
+    var table = document.getElementById('inspections-table');
+    if (!tabs.length) return;
+
+    function apply(category) {
+      var shown = 0;
+      rows.forEach(function (row) {
+        var match = !category || row.getAttribute('data-category') === category;
+        row.hidden = !match;
+        if (match) shown++;
+      });
+      countEl.textContent = shown
+        ? 'Showing 1 - ' + shown + ' of ' + shown + ' Entries'
+        : 'Showing 0 - 0 of 0 Entries';
+      table.hidden = shown === 0;
+      emptyEl.hidden = shown !== 0;
+    }
+
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        var wasActive = tab.classList.contains('is-active');
+        tabs.forEach(function (t) { t.classList.remove('is-active'); });
+        if (wasActive) { apply(null); return; }
+        tab.classList.add('is-active');
+        apply(tab.getAttribute('data-category'));
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>

@@ -979,6 +979,23 @@ button {
   box-shadow: 0 0 0 1px var(--c-blue);
 }
 
+.field-error {
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+  color: #b50909;
+  margin-bottom: 2px;
+}
+
+.field-error[hidden] {
+  display: none;
+}
+
+.field--error select,
+.field--error input[type="text"] {
+  border: 2px solid #b50909;
+}
+
 .field-hint {
   font-size: 16px;
   color: var(--c-text-secondary);
@@ -1108,12 +1125,15 @@ button {
   border-color: #9ea3a8;
 }
 
-.btn--cancel {
+/* Red — Cancel in a modal, and destructive actions (Delete Account) */
+.btn--cancel,
+.btn--danger {
   background: #d54309;
   color: #fff;
 }
 
-.btn--cancel:hover {
+.btn--cancel:hover,
+.btn--danger:hover {
   background: #b50909;
 }
 
@@ -1574,6 +1594,10 @@ button {
   font-size: 16px;
   color: var(--c-text-primary);
   margin: 16px 0 24px;
+}
+
+.info-notice[hidden] {
+  display: none;
 }
 
 .info-notice i {
@@ -2195,4 +2219,541 @@ button {
   flex: none;
   padding: 16px 24px;
   border-top: 1px solid var(--c-hairline-2);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Constituent profile — left-nav shell                                   */
+/* Used by individual-profile.html. Replaces the legacy horizontal         */
+/* .profile-tabs pattern: record types live in a persistent left rail.     */
+/* ---------------------------------------------------------------------- */
+
+/* The rail is the sticky element on this page, so the identity bar above it
+   opts out of .task-bar's sticky positioning and sits on the tile grey so it
+   reads as a band above the white panel area. */
+.task-bar--profile {
+  position: static;
+  background: var(--c-tile-bg);
+}
+
+.profile-shell {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  align-items: start;
+  min-height: 640px;
+}
+
+@media (max-width: 1100px) {
+  .profile-shell {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Rail — identity, key facts, record nav */
+
+.profile-rail {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  max-height: 100vh;
+  overflow-y: auto;
+  background: #fff;
+  border-right: 1px solid var(--c-border);
+  padding-bottom: 28px;
+}
+
+@media (max-width: 1100px) {
+  .profile-rail {
+    position: static;
+    max-height: none;
+    border-right: none;
+    border-bottom: 1px solid var(--c-border);
+  }
+}
+
+/* Facts band — full-width row of equal columns below the identity bar.
+   Keeps contact data out of the rail so Records starts at the top. */
+
+.profile-facts {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: #fff;
+  border-bottom: 1px solid var(--c-border);
+}
+
+@media (max-width: 1100px) {
+  .profile-facts {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .profile-facts {
+    grid-template-columns: 1fr;
+  }
+}
+
+.profile-facts__item {
+  padding: 16px 24px;
+  border-left: 1px solid var(--c-hairline);
+}
+
+.profile-facts__item:first-child {
+  padding-left: 32px;
+  border-left: none;
+}
+
+.profile-facts__label {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: .4px;
+  text-transform: uppercase;
+  color: var(--c-text-secondary);
+  margin-bottom: 4px;
+}
+
+.profile-facts__value {
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--c-text-primary);
+}
+
+.profile-facts__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  font-size: 16px;
+}
+
+.profile-facts__link--action {
+  font-weight: 700;
+}
+
+.profile-facts__link.is-current {
+  color: var(--c-header-navy);
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 2px solid var(--c-gold);
+}
+
+/* Record nav */
+
+.profile-nav {
+  padding-top: 4px;
+}
+
+.profile-nav__heading {
+  padding: 16px 20px 6px;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  color: var(--c-text-secondary);
+}
+
+.profile-nav__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.profile-nav__link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 11px 16px;
+  border: none;
+  border-left: 4px solid transparent;
+  background: none;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--c-text-primary);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.profile-nav__link:hover {
+  background: var(--c-tile-bg);
+}
+
+.profile-nav__link:focus-visible {
+  outline: 2px solid var(--c-blue);
+  outline-offset: -2px;
+}
+
+/* Open group (or current top-level item) — navy left bar */
+.profile-nav__link.is-open,
+.profile-nav__link.is-current {
+  border-left-color: var(--c-header-navy);
+  color: var(--c-header-navy);
+  font-weight: 700;
+}
+
+.profile-nav__link.is-current {
+  background: var(--c-tile-bg);
+}
+
+.profile-nav__icon {
+  flex: none;
+  width: 20px;
+  text-align: center;
+  font-size: 16px;
+  color: var(--c-text-secondary);
+}
+
+.profile-nav__link.is-open .profile-nav__icon,
+.profile-nav__link.is-current .profile-nav__icon {
+  color: var(--c-header-navy);
+}
+
+.profile-nav__label {
+  flex: 1 1 auto;
+}
+
+.profile-nav__count {
+  flex: none;
+  min-width: 26px;
+  padding: 1px 8px;
+  border-radius: var(--r-chip);
+  background: #eceef1;
+  color: var(--c-text-secondary);
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.profile-nav__link.is-current > .profile-nav__count {
+  background: var(--c-header-navy);
+  color: #fff;
+}
+
+.profile-nav__chevron {
+  flex: none;
+  width: 12px;
+  font-size: 12px;
+  color: var(--c-text-secondary);
+  transition: transform .15s ease;
+}
+
+.profile-nav__link[aria-expanded="true"] .profile-nav__chevron {
+  transform: rotate(180deg);
+}
+
+.profile-nav__sublist {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 6px;
+}
+
+.profile-nav__sublist[hidden] {
+  display: none;
+}
+
+/* Sub-item — gold left bar when current, indented to the icon column */
+.profile-nav__sublink {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: 32px;
+  padding: 9px 16px 9px 14px;
+  border-left: 4px solid transparent;
+  font-size: 16px;
+  color: var(--c-text-primary);
+  text-decoration: none;
+}
+
+.profile-nav__sublink:hover {
+  background: var(--c-tile-bg);
+}
+
+.profile-nav__sublink:focus-visible {
+  outline: 2px solid var(--c-blue);
+  outline-offset: -2px;
+}
+
+.profile-nav__sublink.is-current {
+  border-left-color: var(--c-gold);
+  background: var(--c-tile-bg);
+  color: var(--c-header-navy);
+  font-weight: 700;
+}
+
+.profile-nav__sublink .profile-nav__label {
+  flex: 1 1 auto;
+}
+
+/* Panels — one per record type */
+
+.profile-panel {
+  padding: 26px 32px 56px;
+}
+
+.profile-panel[hidden] {
+  display: none;
+}
+
+.profile-panel__head {
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--c-border);
+}
+
+.profile-panel__eyebrow {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  color: var(--c-text-secondary);
+}
+
+.profile-panel__title {
+  margin: 4px 0 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--c-text-primary);
+}
+
+.profile-panel__desc {
+  margin: 8px 0 0;
+  font-size: 16px;
+  color: var(--c-text-secondary);
+}
+
+/* Panel action bar — left-aligned, primary action first (RLP standard) */
+.profile-panel__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.profile-panel__table {
+  margin-top: 24px;
+}
+
+/* Islands sit on the tile grey inside a profile panel */
+.profile-panel .island {
+  background: var(--c-tile-bg);
+}
+
+/* Inline filter row above a panel table (search box + selects) */
+.panel-filters {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  padding: 16px;
+  background: var(--c-tile-bg);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-panel);
+}
+
+.panel-filters .field {
+  min-width: 200px;
+}
+
+.panel-filters .btn {
+  margin-bottom: 1px;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Flag popover — ported from rlp-fun-with-flags/individual-profile.html  */
+/* to 3.0 tokens. Sits on the constituent name in the identity bar.       */
+/* ---------------------------------------------------------------------- */
+
+.flag-popover-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.flag-trigger {
+  background: none;
+  border: none;
+  padding: 2px;
+  border-radius: var(--r-chip-sm);
+  line-height: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+
+.flag-trigger:hover {
+  background: var(--c-hairline);
+}
+
+.flag-trigger:focus-visible {
+  outline: 3px solid #2491ff;
+  outline-offset: 2px;
+}
+
+.flag-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 200;
+  min-width: 320px;
+  max-width: 400px;
+  background: #fff;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-panel);
+  box-shadow: var(--shadow-menu);
+}
+
+.flag-popover[hidden] {
+  display: none;
+}
+
+.flag-popover__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px 10px;
+  border-bottom: 1px solid var(--c-hairline);
+}
+
+.flag-popover__title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--c-text-primary);
+}
+
+.flag-popover__close {
+  background: none;
+  border: none;
+  padding: 4px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: var(--c-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.flag-popover__close:hover {
+  background: var(--c-tile-bg);
+}
+
+.flag-popover__list {
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+}
+
+.flag-popover__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--c-text-primary);
+  border-bottom: 1px solid var(--c-hairline);
+}
+
+.flag-popover__item:last-child {
+  border-bottom: none;
+}
+
+.flag-popover__item-icon {
+  flex: none;
+  color: var(--c-status-red);
+}
+
+.flag-popover__item-body {
+  flex: 1 1 auto;
+}
+
+.flag-popover__item-meta {
+  display: block;
+  font-size: 16px;
+  color: var(--c-text-secondary);
+}
+
+.flag-popover__item-remove {
+  flex: none;
+  align-self: center;
+  margin-left: auto;
+  background: none;
+  border: none;
+  padding: 4px 6px;
+  border-radius: var(--r-chip-sm);
+  color: var(--c-text-secondary);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.flag-popover__item-remove:hover {
+  color: #b50909;
+  background: #fff3f3;
+}
+
+.flag-popover__empty {
+  padding: 14px 16px;
+  font-size: 16px;
+  color: var(--c-text-secondary);
+}
+
+.flag-popover__footer {
+  padding: 6px 16px 12px;
+  border-top: 1px solid var(--c-hairline);
+}
+
+.flag-popover__add-btn {
+  background: none;
+  border: none;
+  padding: 6px 0;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--c-blue);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.flag-popover__add-btn:hover {
+  text-decoration: underline;
+}
+
+/* Transient success message (flag added / removed) */
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(12px);
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 520px;
+  padding: 14px 20px;
+  background: #ecf3ec;
+  border-left: 6px solid var(--c-status-green);
+  border-radius: var(--r-pill);
+  box-shadow: var(--shadow-menu);
+  font-size: 16px;
+  color: var(--c-text-primary);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s ease, transform .2s ease;
+}
+
+.toast.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.toast i {
+  color: var(--c-status-green);
 }
