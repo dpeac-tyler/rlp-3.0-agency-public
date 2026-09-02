@@ -1386,6 +1386,23 @@
               </button>
             </div>
             <div class="table-controls__right">
+              <label for="inspections-column-select-button">Columns</label>
+              <div class="multiselect table-controls__column-select">
+                <button type="button" class="multiselect-trigger" id="inspections-column-select-button" aria-haspopup="listbox" aria-expanded="false">
+                  <span class="multiselect-trigger-text">All Columns</span>
+                  <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                </button>
+                <div class="multiselect-panel" id="inspections-column-select-panel" hidden>
+                  <input type="text" class="multiselect-filter" id="inspections-column-filter-input" placeholder="Filter columns…" autocomplete="off">
+                  <label class="multiselect-option"><input type="checkbox" class="column-checkbox" data-column="0" checked><span>Type</span></label>
+                  <label class="multiselect-option"><input type="checkbox" class="column-checkbox" data-column="1" checked><span>Source</span></label>
+                  <label class="multiselect-option"><input type="checkbox" class="column-checkbox" data-column="2" checked><span>Status</span></label>
+                  <label class="multiselect-option"><input type="checkbox" class="column-checkbox" data-column="3" checked><span>Outcome</span></label>
+                  <label class="multiselect-option"><input type="checkbox" class="column-checkbox" data-column="4" checked><span>Due Date</span></label>
+                  <label class="multiselect-option"><input type="checkbox" class="column-checkbox" data-column="5" checked><span>Completion Date</span></label>
+                  <label class="multiselect-option"><input type="checkbox" class="column-checkbox" data-column="6" checked><span>Inspector</span></label>
+                </div>
+              </div>
               <label for="entries-inspections">Show</label>
               <select id="entries-inspections">
                 <option value="100" selected>100</option>
@@ -1941,9 +1958,18 @@
 
 <script src="js/toolbar.js"></script>
 <script src="js/icon-legend.js"></script>
+<script src="js/column-select.js"></script>
 <script>
   initToolbar('#toolbar', { activeKey: 'constituents' });
   initIconLegends();
+
+  /* Column visibility multiselect (Inspections table) */
+  initColumnSelect({
+    triggerId: 'inspections-column-select-button',
+    panelId: 'inspections-column-select-panel',
+    filterId: 'inspections-column-filter-input',
+    tableId: 'inspections-table',
+  });
 
   /* Shared transient success message */
   var showToast = (function () {
