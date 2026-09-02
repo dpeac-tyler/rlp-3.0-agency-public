@@ -2565,6 +2565,25 @@ button {
   margin-bottom: 1px;
 }
 
+/* A filter field that should take the leftover width (single search box) */
+.panel-filters__grow {
+  flex: 1 1 320px;
+}
+
+/* Document locker — lock marks an Agency Only document */
+.doc-lock {
+  vertical-align: middle;
+}
+
+.data-table .filename-cell {
+  word-break: break-word;
+}
+
+.field input[type="file"] {
+  font-size: 16px;
+  color: var(--c-text-primary);
+}
+
 /* ---------------------------------------------------------------------- */
 /* Flag popover — ported from rlp-fun-with-flags/individual-profile.html  */
 /* to 3.0 tokens. Sits on the constituent name in the identity bar.       */

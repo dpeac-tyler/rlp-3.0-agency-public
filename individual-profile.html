@@ -1142,43 +1142,26 @@
         <div class="profile-panel__head">
           <div class="profile-panel__eyebrow">Records</div>
           <h1 class="profile-panel__title">Documents</h1>
-          <p class="profile-panel__desc">Every file attached to this individual, from their own uploads and from agency staff. Files marked <strong>Agency Only</strong> are not visible to the constituent.</p>
+          <p class="profile-panel__desc">Every document attached to this individual, from their own uploads and from agency staff. A <img src="assets/lock-icon.png" alt="" width="14" height="14" class="doc-lock"> marks a document that is visible to agency staff only &mdash; the constituent cannot see it in their account.</p>
         </div>
 
         <div class="panel-filters">
-          <div class="field">
-            <label for="document-title-filter">Title</label>
-            <input type="text" id="document-title-filter" placeholder="Search by title&hellip;">
-          </div>
-          <div class="field">
-            <label for="document-type-filter">File Type</label>
-            <select id="document-type-filter">
-              <option value="" selected>Please Select</option>
-              <option value="pdf">PDF</option>
-              <option value="jpg">JPG</option>
-              <option value="docx">DOCX</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="document-visibility-filter">Visibility</label>
-            <select id="document-visibility-filter">
-              <option value="" selected>Please Select</option>
-              <option value="public">Public</option>
-              <option value="agency">Agency Only</option>
-            </select>
+          <div class="field panel-filters__grow">
+            <label for="document-search">Search</label>
+            <input type="text" id="document-search" placeholder="Title, filename, document type, or record&hellip;">
           </div>
           <button type="button" class="btn btn--primary">Search</button>
           <button type="button" class="btn btn--secondary">Clear</button>
         </div>
 
         <div class="profile-panel__actions">
-          <button type="button" class="btn btn--primary" id="upload-file-btn">Upload File</button>
+          <button type="button" class="btn btn--primary" id="upload-document-btn">Upload Document</button>
         </div>
 
         <div class="profile-panel__table">
           <div class="table-controls">
             <div class="table-controls__count">
-              Showing 1 - 5 of 5 Entries
+              <span id="documents-count">Showing 1 - 5 of 5 Entries</span>
               <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--documents">
                 What do the control icons mean?
                 <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
@@ -1196,93 +1179,100 @@
           </div>
 
           <div class="icon-legend" id="icon-legend--documents" hidden>
-            <div class="icon-legend__item"><img src="assets/eye-icon.png" alt=""> View File</div>
-            <div class="icon-legend__item"><img src="assets/print-icon.png" alt=""> Print File</div>
-            <div class="icon-legend__item"><img src="assets/edit-icon.png" alt=""> Edit File Details</div>
-            <div class="icon-legend__item"><img src="assets/icon-delete.png" alt=""> Delete File</div>
+            <div class="icon-legend__item"><img src="assets/lock-icon.png" alt=""> Visibility: Agency Only</div>
+            <div class="icon-legend__item"><img src="assets/download-certificate.png" alt=""> Download Document</div>
+            <div class="icon-legend__item"><img src="assets/edit-icon.png" alt=""> Edit Document Details</div>
+            <div class="icon-legend__item"><img src="assets/upload-icon.png" alt=""> Replace Document</div>
+            <div class="icon-legend__item"><img src="assets/view-history.png" alt=""> View Document History</div>
+            <div class="icon-legend__item"><img src="assets/icon-delete.png" alt=""> Delete Document</div>
           </div>
 
-          <table class="data-table">
+          <table class="data-table" id="documents-table">
             <thead>
               <tr>
                 <th>Title <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
-                <th>File Type <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
-                <th>Visibility <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
-                <th>Uploaded By <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Document Type / Sub Type <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Record <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Filename <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
                 <th>Uploaded Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
-                <th>Record Type <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Uploaded By <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
                 <th>Controls</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="documents-tbody">
+              <tr>
+                <td>Complaint Citation <img src="assets/lock-icon.png" alt="Agency Only" width="16" height="16" class="doc-lock"></td>
+                <td>Court / Citation</td>
+                <td>Case CS-0002214</td>
+                <td class="filename-cell">citation-cs-0002214.pdf</td>
+                <td>09/02/2026</td>
+                <td>Admin Account</td>
+                <td class="controls-cell">
+                  <a href="#" class="icon-btn" aria-label="Download Document"><img src="assets/download-certificate.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Edit Document Details"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Replace Document"><img src="assets/upload-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="View Document History"><img src="assets/view-history.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Delete Document"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
               <tr>
                 <td>Continuing Education Certificate 2026</td>
-                <td>PDF</td>
-                <td>Public</td>
-                <td>Sarah Johnson</td>
+                <td>Educational / Certificate</td>
+                <td>Submission SUB-0092817</td>
+                <td class="filename-cell">ce-certificate-2026.pdf</td>
                 <td>08/20/2026</td>
-                <td>Nursing License Renewal</td>
-                <td class="controls-cell">
-                  <a href="#" class="icon-btn" aria-label="View File"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
-                  <a href="#" class="icon-btn" aria-label="Print File"><img src="assets/print-icon.png" alt="" width="30" height="30"></a>
-                  <a href="#" class="icon-btn" aria-label="Edit File Details"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>
-                  <a href="#" class="icon-btn" aria-label="Delete File"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>
-                </td>
-              </tr>
-              <tr>
-                <td>Employment Verification Letter</td>
-                <td>DOCX</td>
-                <td>Public</td>
                 <td>Sarah Johnson</td>
-                <td>06/01/2025</td>
-                <td>CNA License Renewal</td>
                 <td class="controls-cell">
-                  <a href="#" class="icon-btn" aria-label="View File"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
-                  <a href="#" class="icon-btn" aria-label="Print File"><img src="assets/print-icon.png" alt="" width="30" height="30"></a>
-                  <a href="#" class="icon-btn" aria-label="Edit File Details"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>
-                  <a href="#" class="icon-btn" aria-label="Delete File"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Download Document"><img src="assets/download-certificate.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Edit Document Details"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Replace Document"><img src="assets/upload-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="View Document History"><img src="assets/view-history.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Delete Document"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>
                 </td>
               </tr>
               <tr>
-                <td>Background Check Results</td>
-                <td>PDF</td>
-                <td>Agency Only</td>
-                <td>Admin Account</td>
-                <td>03/29/2023</td>
-                <td>Nursing License Original</td>
+                <td>Government Issued ID <img src="assets/lock-icon.png" alt="Agency Only" width="16" height="16" class="doc-lock"></td>
+                <td>Photo / ID Photo</td>
+                <td>License RN-0041872</td>
+                <td class="filename-cell">gov-id-front.jpg</td>
+                <td>03/28/2023</td>
+                <td>Sarah Johnson</td>
                 <td class="controls-cell">
-                  <a href="#" class="icon-btn" aria-label="View File"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
-                  <a href="#" class="icon-btn" aria-label="Print File"><img src="assets/print-icon.png" alt="" width="30" height="30"></a>
-                  <a href="#" class="icon-btn" aria-label="Edit File Details"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>
-                  <a href="#" class="icon-btn" aria-label="Delete File"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Download Document"><img src="assets/download-certificate.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Edit Document Details"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Replace Document"><img src="assets/upload-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="View Document History"><img src="assets/view-history.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Delete Document"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>
+                </td>
+              </tr>
+              <tr>
+                <td>Background Check Results <img src="assets/lock-icon.png" alt="Agency Only" width="16" height="16" class="doc-lock"></td>
+                <td>Compliance / Inspection Record</td>
+                <td>License RN-0041872</td>
+                <td class="filename-cell">background-check-results.pdf</td>
+                <td>03/29/2023</td>
+                <td>Admin Account</td>
+                <td class="controls-cell">
+                  <a href="#" class="icon-btn" aria-label="Download Document"><img src="assets/download-certificate.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Edit Document Details"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Replace Document"><img src="assets/upload-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="View Document History"><img src="assets/view-history.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Delete Document"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>
                 </td>
               </tr>
               <tr>
                 <td>Nursing Diploma</td>
-                <td>PDF</td>
-                <td>Public</td>
-                <td>Sarah Johnson</td>
+                <td>Educational / Transcript</td>
+                <td>License RN-0041872</td>
+                <td class="filename-cell">nursing-diploma-2023.pdf</td>
                 <td>03/28/2023</td>
-                <td>Nursing License Original</td>
-                <td class="controls-cell">
-                  <a href="#" class="icon-btn" aria-label="View File"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
-                  <a href="#" class="icon-btn" aria-label="Print File"><img src="assets/print-icon.png" alt="" width="30" height="30"></a>
-                  <a href="#" class="icon-btn" aria-label="Edit File Details"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>
-                  <a href="#" class="icon-btn" aria-label="Delete File"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>
-                </td>
-              </tr>
-              <tr>
-                <td>Government Issued ID</td>
-                <td>JPG</td>
-                <td>Agency Only</td>
                 <td>Sarah Johnson</td>
-                <td>03/28/2023</td>
-                <td>Nursing License Original</td>
                 <td class="controls-cell">
-                  <a href="#" class="icon-btn" aria-label="View File"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
-                  <a href="#" class="icon-btn" aria-label="Print File"><img src="assets/print-icon.png" alt="" width="30" height="30"></a>
-                  <a href="#" class="icon-btn" aria-label="Edit File Details"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>
-                  <a href="#" class="icon-btn" aria-label="Delete File"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Download Document"><img src="assets/download-certificate.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Edit Document Details"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Replace Document"><img src="assets/upload-icon.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="View Document History"><img src="assets/view-history.png" alt="" width="30" height="30"></a>
+                  <a href="#" class="icon-btn" aria-label="Delete Document"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>
                 </td>
               </tr>
             </tbody>
@@ -1834,6 +1824,98 @@
   </div>
 </div>
 
+<!-- Upload Document Modal -->
+<div id="upload-document-modal" class="modal-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="upload-document-title">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title" id="upload-document-title">Upload Document</h2>
+      <button type="button" class="modal-close" id="upload-document-close" aria-label="Close modal">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+    <form id="upload-document-form" onsubmit="return false;">
+      <div class="modal-body">
+
+        <fieldset class="fieldset">
+          <legend>Visibility <span class="field-required">Required</span></legend>
+          <div class="radio-group">
+            <label class="radio-option"><input type="radio" name="document-visibility" value="Agency Only" checked> Agency Only</label>
+            <label class="radio-option"><input type="radio" name="document-visibility" value="Agency + Constituent"> Agency + Constituent</label>
+          </div>
+        </fieldset>
+
+        <div class="field" style="margin-top: 20px" id="document-title-group">
+          <label for="document-title">Document Title <span class="field-required">Required</span></label>
+          <span class="field-error" id="document-title-error" hidden>Please enter a document title.</span>
+          <input type="text" id="document-title" aria-describedby="document-title-error">
+        </div>
+
+        <div class="field-grid field-grid--2" style="margin-top: 20px">
+          <div class="field" id="document-type-group">
+            <label for="document-type">Document Type <span class="field-required">Required</span></label>
+            <span class="field-error" id="document-type-error" hidden>Please select a document type.</span>
+            <select id="document-type" aria-describedby="document-type-error">
+              <option value="">Please Select</option>
+              <option value="Compliance">Compliance</option>
+              <option value="Court">Court</option>
+              <option value="Educational">Educational</option>
+              <option value="Training">Training</option>
+              <option value="Photo">Photo</option>
+            </select>
+          </div>
+
+          <div class="field" id="document-sub-type-group" hidden>
+            <label for="document-sub-type">Document Sub Type <span class="field-required">Required</span></label>
+            <span class="field-error" id="document-sub-type-error" hidden>Please select a document sub type.</span>
+            <select id="document-sub-type" aria-describedby="document-sub-type-error">
+              <option value="">Please Select</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field-grid field-grid--2" style="margin-top: 20px">
+          <div class="field">
+            <label for="document-record-type">Record Type</label>
+            <select id="document-record-type">
+              <option value="">Please Select</option>
+              <option value="License">License</option>
+              <option value="Submission">Submission</option>
+              <option value="Case">Case</option>
+              <option value="Inspection">Inspection</option>
+            </select>
+          </div>
+
+          <div class="field" id="document-record-group" hidden>
+            <label for="document-record">Associated Record <span class="field-required">Required</span></label>
+            <span class="field-error" id="document-record-error" hidden>Please select an associated record.</span>
+            <select id="document-record" aria-describedby="document-record-error">
+              <option value="">Please Select</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field" style="margin-top: 20px" id="document-file-group">
+          <label for="document-file">Upload Document <span class="field-required">Required</span></label>
+          <p class="field-hint">File size and type limitations per attachment: 50 MB for txt, csv, png, jpg, jpeg, pdf, doc, xls, docx, xlsx</p>
+          <span class="field-error" id="document-file-error" hidden>Please choose a document to upload.</span>
+          <input type="file" id="document-file" aria-describedby="document-file-error">
+        </div>
+
+        <div class="field" style="margin-top: 20px">
+          <label for="document-notes">Document Notes</label>
+          <textarea id="document-notes" rows="4" maxlength="500"></textarea>
+          <p class="field-hint">Maximum 500 characters</p>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn--primary">Save</button>
+        <button type="button" class="btn btn--secondary" id="upload-document-cancel">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <!-- Transient success message -->
 <div class="toast" id="toast" role="status" aria-live="polite">
   <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
@@ -1845,6 +1927,19 @@
 <script>
   initToolbar('#toolbar', { activeKey: 'constituents' });
   initIconLegends();
+
+  /* Shared transient success message */
+  var showToast = (function () {
+    var toast = document.getElementById('toast');
+    var toastText = document.getElementById('toast-text');
+    var timer = null;
+    return function (message) {
+      toastText.textContent = message;
+      toast.classList.add('is-visible');
+      clearTimeout(timer);
+      timer = setTimeout(function () { toast.classList.remove('is-visible'); }, 3000);
+    };
+  })();
 
   /* ------------------------------------------------------------------ */
   /* Left rail navigation — shows one panel at a time.                   */
@@ -1972,17 +2067,7 @@
     var modalCancel = document.getElementById('add-flag-cancel');
     var panelAdd = document.getElementById('flags-panel-add');
 
-    var toast = document.getElementById('toast');
-    var toastText = document.getElementById('toast-text');
-    var toastTimer = null;
     var lastFocused = null;
-
-    function showToast(message) {
-      toastText.textContent = message;
-      toast.classList.add('is-visible');
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(function () { toast.classList.remove('is-visible'); }, 3000);
-    }
 
     /* Solid flag when flags are active, outline when clear */
     function renderIcon() {
@@ -2232,6 +2317,182 @@
     });
 
     renderAll();
+  })();
+
+  /* ------------------------------------------------------------------ */
+  /* Documents — Upload Document modal. Document Type reveals its Sub    */
+  /* Type, Record Type reveals the Associated Record, matching the       */
+  /* document locker prototype.                                          */
+  /* ------------------------------------------------------------------ */
+  (function () {
+    var SUB_TYPES = {
+      'Compliance':  ['Annual Report', 'Violation Notice', 'Inspection Record'],
+      'Court':       ['Citation', 'Order', 'Summons'],
+      'Educational': ['Certificate', 'Transcript', 'Course Material'],
+      'Training':    ['Completion Record', 'Training Plan', 'Sign-in Sheet'],
+      'Photo':       ['Site Photo', 'Equipment Photo', 'ID Photo']
+    };
+
+    var RECORDS = {
+      'License':    ['RN-0041872', 'CNA-0019344'],
+      'Submission': ['SUB-0092817', 'SUB-0089140'],
+      'Case':       ['CS-0002214'],
+      'Inspection': ['INS-0015803']
+    };
+
+    var openBtn = document.getElementById('upload-document-btn');
+    var modal = document.getElementById('upload-document-modal');
+    var form = document.getElementById('upload-document-form');
+    var closeBtn = document.getElementById('upload-document-close');
+    var cancelBtn = document.getElementById('upload-document-cancel');
+
+    var titleInput = document.getElementById('document-title');
+    var typeSelect = document.getElementById('document-type');
+    var subTypeSelect = document.getElementById('document-sub-type');
+    var subTypeGroup = document.getElementById('document-sub-type-group');
+    var recordTypeSelect = document.getElementById('document-record-type');
+    var recordSelect = document.getElementById('document-record');
+    var recordGroup = document.getElementById('document-record-group');
+    var fileInput = document.getElementById('document-file');
+    var notesInput = document.getElementById('document-notes');
+
+    var tbody = document.getElementById('documents-tbody');
+    var countEl = document.getElementById('documents-count');
+    if (!openBtn) return;
+
+    function fill(select, options) {
+      select.innerHTML = '<option value="">Please Select</option>';
+      options.forEach(function (value) {
+        var opt = document.createElement('option');
+        opt.value = value;
+        opt.textContent = value;
+        select.appendChild(opt);
+      });
+    }
+
+    /* Dependent selects: hidden until their parent has a value */
+    typeSelect.addEventListener('change', function () {
+      var options = SUB_TYPES[typeSelect.value];
+      if (options) {
+        fill(subTypeSelect, options);
+        subTypeGroup.hidden = false;
+      } else {
+        subTypeSelect.value = '';
+        subTypeGroup.hidden = true;
+      }
+    });
+
+    recordTypeSelect.addEventListener('change', function () {
+      var options = RECORDS[recordTypeSelect.value];
+      if (options) {
+        fill(recordSelect, options.map(function (o) { return recordTypeSelect.value + ' ' + o; }));
+        recordGroup.hidden = false;
+      } else {
+        recordSelect.value = '';
+        recordGroup.hidden = true;
+      }
+    });
+
+    function markError(groupId, errorId, invalid) {
+      document.getElementById(groupId).classList.toggle('field--error', invalid);
+      document.getElementById(errorId).hidden = !invalid;
+      return invalid;
+    }
+
+    function clearErrors() {
+      ['document-title', 'document-type', 'document-sub-type', 'document-record', 'document-file'].forEach(function (name) {
+        var group = document.getElementById(name + '-group');
+        var error = document.getElementById(name + '-error');
+        if (group) group.classList.remove('field--error');
+        if (error) error.hidden = true;
+      });
+    }
+
+    function openModal() {
+      form.reset();
+      clearErrors();
+      subTypeGroup.hidden = true;
+      recordGroup.hidden = true;
+      modal.hidden = false;
+      document.body.style.overflow = 'hidden';
+      setTimeout(function () { titleInput.focus(); }, 50);
+    }
+
+    function closeModal() {
+      modal.hidden = true;
+      document.body.style.overflow = '';
+      form.reset();
+      clearErrors();
+    }
+
+    function today() {
+      var d = new Date();
+      function pad(n) { return (n < 10 ? '0' : '') + n; }
+      return pad(d.getMonth() + 1) + '/' + pad(d.getDate()) + '/' + d.getFullYear();
+    }
+
+    function updateCount() {
+      var rows = tbody.querySelectorAll('tr').length;
+      countEl.textContent = 'Showing 1 - ' + rows + ' of ' + rows + ' Entries';
+      var navCount = document.querySelector('.profile-nav__link[data-panel="panel-documents"] .profile-nav__count');
+      if (navCount) navCount.textContent = rows;
+    }
+
+    openBtn.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !modal.hidden) closeModal();
+    });
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      clearErrors();
+
+      var invalid = false;
+      invalid = markError('document-title-group', 'document-title-error', !titleInput.value.trim()) || invalid;
+      invalid = markError('document-type-group', 'document-type-error', !typeSelect.value) || invalid;
+      if (!subTypeGroup.hidden) {
+        invalid = markError('document-sub-type-group', 'document-sub-type-error', !subTypeSelect.value) || invalid;
+      }
+      if (!recordGroup.hidden) {
+        invalid = markError('document-record-group', 'document-record-error', !recordSelect.value) || invalid;
+      }
+      invalid = markError('document-file-group', 'document-file-error', !fileInput.files.length) || invalid;
+      if (invalid) return;
+
+      var visibility = form.querySelector('input[name="document-visibility"]:checked').value;
+      var title = titleInput.value.trim();
+      var lock = visibility === 'Agency Only'
+        ? ' <img src="assets/lock-icon.png" alt="Agency Only" width="16" height="16" class="doc-lock">'
+        : '';
+
+      var row = document.createElement('tr');
+      row.dataset.notes = notesInput.value;
+      row.innerHTML =
+        '<td></td>' +
+        '<td>' + typeSelect.value + (subTypeSelect.value ? ' / ' + subTypeSelect.value : '') + '</td>' +
+        '<td>' + (recordSelect.value || '&mdash;') + '</td>' +
+        '<td class="filename-cell"></td>' +
+        '<td>' + today() + '</td>' +
+        '<td>ASP Admin Two</td>' +
+        '<td class="controls-cell">' +
+          '<a href="#" class="icon-btn" aria-label="Download Document"><img src="assets/download-certificate.png" alt="" width="30" height="30"></a>' +
+          '<a href="#" class="icon-btn" aria-label="Edit Document Details"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>' +
+          '<a href="#" class="icon-btn" aria-label="Replace Document"><img src="assets/upload-icon.png" alt="" width="30" height="30"></a>' +
+          '<a href="#" class="icon-btn" aria-label="View Document History"><img src="assets/view-history.png" alt="" width="30" height="30"></a>' +
+          '<a href="#" class="icon-btn" aria-label="Delete Document"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>' +
+        '</td>';
+      row.cells[0].textContent = title;
+      row.cells[0].insertAdjacentHTML('beforeend', lock);
+      row.cells[3].textContent = fileInput.files[0].name;
+
+      tbody.insertBefore(row, tbody.firstChild);
+      updateCount();
+      closeModal();
+      showToast('Document "' + title + '" has been uploaded.');
+    });
   })();
 
   /* ------------------------------------------------------------------ */
