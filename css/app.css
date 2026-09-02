@@ -927,6 +927,48 @@ button {
   color: #fff;
 }
 
+/* Segmented button group — a set of mutually exclusive options where one is
+   always selected (e.g. the Inspections category filter). Distinct from
+   .filter-tabs, which is a neutral-bordered filter that can be cleared. */
+
+.btn-group {
+  display: inline-flex;
+  border: 1px solid var(--c-blue);
+  border-radius: var(--r-pill);
+  overflow: hidden;
+}
+
+.btn-group__btn {
+  height: 40px;
+  padding: 0 20px;
+  border: none;
+  border-left: 1px solid var(--c-blue);
+  background: #fff;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--c-blue);
+  cursor: pointer;
+}
+
+.btn-group__btn:first-child {
+  border-left: none;
+}
+
+.btn-group__btn:hover {
+  background: #eaf1f8;
+}
+
+.btn-group__btn:focus-visible {
+  outline: 2px solid var(--c-blue);
+  outline-offset: -2px;
+}
+
+.btn-group__btn.is-active {
+  background: var(--c-blue);
+  color: #fff;
+}
+
 /* Form fields (search / filter forms) */
 
 .field-grid {
@@ -1354,6 +1396,7 @@ button {
 .status-text--paid,
 .status-text--completed,
 .status-text--passed,
+.status-text--pass,
 .status-text--sent,
 .status-text--sold {
   color: var(--c-status-green);
@@ -1370,6 +1413,8 @@ button {
 }
 
 .status-text--rejected,
+.status-text--fail,
+.status-text--failed,
 .status-text--denied,
 .status-text--cancelled,
 .status-text--past-due,
@@ -1823,6 +1868,11 @@ button {
 .tag--resubmission {
   background: #e5edf7;
   color: var(--c-status-cool-blue);
+}
+
+.tag--muted {
+  background: var(--c-hairline-2);
+  color: var(--c-text-secondary);
 }
 
 .tag[hidden] {
