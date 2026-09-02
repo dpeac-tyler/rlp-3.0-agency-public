@@ -40,11 +40,11 @@
 
     <fieldset class="fieldset" style="margin-top: 24px">
       <legend>Search Type <span class="field-required">Required</span></legend>
-      <div class="radio-group">
-        <label class="radio-option"><input type="radio" name="search-type" value="constituent"> Constituent</label>
-        <label class="radio-option"><input type="radio" name="search-type" value="invoice"> Invoice</label>
-        <label class="radio-option"><input type="radio" name="search-type" value="license"> License</label>
-        <label class="radio-option"><input type="radio" name="search-type" value="submission" checked> Submission</label>
+      <div class="search-toggle">
+        <button type="button" class="search-toggle__segment" data-search-type="constituent" aria-pressed="false">Constituent</button>
+        <button type="button" class="search-toggle__segment" data-search-type="invoice" aria-pressed="false">Invoice</button>
+        <button type="button" class="search-toggle__segment" data-search-type="license" aria-pressed="false">License</button>
+        <button type="button" class="search-toggle__segment is-active" data-search-type="submission" aria-pressed="true">Submission</button>
       </div>
     </fieldset>
 
@@ -318,6 +318,18 @@
 
   // Control icon legend
   initIconLegends();
+
+  // Search type segmented control
+  document.querySelectorAll('.search-toggle__segment').forEach(function (segment) {
+    segment.addEventListener('click', function () {
+      document.querySelectorAll('.search-toggle__segment').forEach(function (s) {
+        s.classList.remove('is-active');
+        s.setAttribute('aria-pressed', 'false');
+      });
+      segment.classList.add('is-active');
+      segment.setAttribute('aria-pressed', 'true');
+    });
+  });
 
   // Accordions (Additional Criteria)
   document.querySelectorAll('.accordion__button').forEach(function (button) {
