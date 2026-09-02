@@ -1741,28 +1741,30 @@ button {
   background: #fff;
   border-radius: var(--r-panel);
   width: 100%;
-  max-width: 640px;
+  max-width: 700px;
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: var(--shadow-menu);
 }
 
+/* Navy header band, matching the page header */
 .modal-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 20px 24px;
-  border-bottom: 1px solid var(--c-border);
+  background: var(--c-header-navy);
 }
 
 .modal-title {
   font-size: 20px;
   font-weight: 700;
   margin: 0;
+  color: #fff;
 }
 
 .modal-close {
-  color: var(--c-text-secondary);
+  color: #fff;
   font-size: 18px;
   width: 32px;
   height: 32px;
@@ -1773,7 +1775,7 @@ button {
 }
 
 .modal-close:hover {
-  background: var(--c-tile-bg);
+  background: rgba(255, 255, 255, .16);
 }
 
 .modal-body {
@@ -1797,6 +1799,42 @@ button {
   gap: 12px;
   padding: 20px 24px;
   border-top: 1px solid var(--c-border);
+}
+
+/* Read-only "who this action is for" block — confirms the pre-selected
+   subject when staff act on a constituent's behalf. */
+.modal-subject {
+  background: var(--c-tile-bg);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-panel);
+  padding: 14px 16px;
+}
+
+.modal-subject__label {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  color: var(--c-toolbar-navy);
+}
+
+.modal-subject__value {
+  margin-top: 4px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--c-text-primary);
+}
+
+/* Same treatment as the profile identity bar's meta line — field labels carry
+   the weight, values stay regular, statuses use the status text palette. */
+.modal-subject__meta {
+  margin-top: 4px;
+  font-size: 16px;
+  color: var(--c-text-secondary);
+}
+
+.modal-subject__meta strong {
+  font-weight: 700;
 }
 
 /* ---------------------------------------------------------------------- */

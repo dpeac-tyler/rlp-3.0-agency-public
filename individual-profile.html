@@ -73,7 +73,7 @@
       <div class="task-bar__actions">
         <button type="button" class="btn btn--danger">Delete Account</button>
         <span class="detail-actions__divider" aria-hidden="true"></span>
-        <button type="button" class="btn btn--primary">Start Submission</button>
+        <button type="button" class="btn btn--primary start-submission-trigger">Start Submission</button>
       </div>
     </div>
   </div>
@@ -1628,7 +1628,7 @@
         </div>
 
         <div class="profile-panel__actions">
-          <button type="button" class="btn btn--primary">Start Submission</button>
+          <button type="button" class="btn btn--primary start-submission-trigger">Start Submission</button>
         </div>
 
         <div class="profile-panel__table">
@@ -1817,7 +1817,7 @@
 
 <!-- Add Flag Modal -->
 <div id="add-flag-modal" class="modal-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="add-flag-modal-title">
-  <div class="modal-content" style="max-width: 520px">
+  <div class="modal-content" style="max-width: 700px">
     <div class="modal-header">
       <h2 class="modal-title" id="add-flag-modal-title">Add Flag</h2>
       <button type="button" class="modal-close" id="add-flag-modal-close" aria-label="Close modal">
@@ -1930,6 +1930,54 @@
       <div class="modal-footer">
         <button type="submit" class="btn btn--primary">Save</button>
         <button type="button" class="btn btn--secondary" id="upload-document-cancel">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Start Submission Modal — staff starting a submission on the constituent's behalf -->
+<div id="start-submission-modal" class="modal-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="start-submission-title">
+  <div class="modal-content" style="max-width: 560px">
+    <div class="modal-header">
+      <h2 class="modal-title" id="start-submission-title">Start Submission on Behalf of Sarah Johnson</h2>
+      <button type="button" class="modal-close" id="start-submission-close" aria-label="Close modal">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+    <form id="start-submission-form" onsubmit="return false;">
+      <div class="modal-body">
+
+        <div class="modal-subject">
+          <div class="modal-subject__label">Submitting For</div>
+          <div class="modal-subject__value">Sarah Johnson</div>
+          <div class="modal-subject__meta"><strong>Individual</strong> &middot; <strong>Customer:</strong> 000172601 &middot; <strong>Username:</strong> qa.ind.10900 <span class="status-text--active">(Active)</span></div>
+        </div>
+
+        <div class="field" style="margin-top: 20px" id="submission-license-type-group">
+          <label for="submission-license-type">License Type <span class="field-required">Required</span></label>
+          <span class="field-error" id="submission-license-type-error" hidden>Please select a license type.</span>
+          <select id="submission-license-type" aria-describedby="submission-license-type-error">
+            <option value="">Please Select</option>
+            <option value="Registered Nurse">Registered Nurse</option>
+            <option value="Licensed Practical Nurse">Licensed Practical Nurse</option>
+            <option value="Certified Nurse Aide">Certified Nurse Aide</option>
+            <option value="Home Health Aide">Home Health Aide</option>
+          </select>
+          <p class="field-hint">Only license types available to individual submitters are listed.</p>
+        </div>
+
+        <div class="field" style="margin-top: 20px" id="submission-application-type-group">
+          <label for="submission-application-type">Application Type <span class="field-required">Required</span></label>
+          <span class="field-error" id="submission-application-type-error" hidden>Please select an application type.</span>
+          <select id="submission-application-type" aria-describedby="submission-application-type-error" disabled>
+            <option value="">Select a license type first</option>
+          </select>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn--primary">Start Submission</button>
+        <button type="button" class="btn btn--danger" id="start-submission-cancel">Cancel</button>
       </div>
     </form>
   </div>
@@ -2565,6 +2613,120 @@
       b.setAttribute('aria-pressed', String(b.classList.contains('is-active')));
     });
     apply('Application');
+  })();
+
+  /* ------------------------------------------------------------------ */
+  /* Start Submission modal — staff starting a submission on this        */
+  /* constituent's behalf. The subject is fixed (they came from this     */
+  /* profile), so only License Type and Application Type are chosen;     */
+  /* Application Type is filtered by the license type selected.          */
+  /* ------------------------------------------------------------------ */
+  (function () {
+    var APPLICATION_TYPES = {
+      'Registered Nurse': ['Original', 'Renewal', 'Reinstatement', 'Address Change'],
+      'Licensed Practical Nurse': ['Original', 'Renewal', 'Address Change'],
+      'Certified Nurse Aide': ['Original', 'Renewal'],
+      'Home Health Aide': ['Original', 'Renewal', 'Reinstatement'],
+    };
+
+    var modal = document.getElementById('start-submission-modal');
+    var form = document.getElementById('start-submission-form');
+    var closeBtn = document.getElementById('start-submission-close');
+    var cancelBtn = document.getElementById('start-submission-cancel');
+    var licenseGroup = document.getElementById('submission-license-type-group');
+    var licenseSelect = document.getElementById('submission-license-type');
+    var licenseError = document.getElementById('submission-license-type-error');
+    var appGroup = document.getElementById('submission-application-type-group');
+    var appSelect = document.getElementById('submission-application-type');
+    var appError = document.getElementById('submission-application-type-error');
+    var lastFocused = null;
+
+    function clearErrors() {
+      licenseGroup.classList.remove('field--error');
+      appGroup.classList.remove('field--error');
+      licenseError.hidden = true;
+      appError.hidden = true;
+    }
+
+    function resetApplicationTypes() {
+      appSelect.innerHTML = '<option value="">Select a license type first</option>';
+      appSelect.disabled = true;
+    }
+
+    function populateApplicationTypes(licenseType) {
+      var types = APPLICATION_TYPES[licenseType];
+      if (!types) { resetApplicationTypes(); return; }
+      appSelect.innerHTML = '<option value="">Please Select</option>';
+      types.forEach(function (type) {
+        var opt = document.createElement('option');
+        opt.value = type;
+        opt.textContent = type;
+        appSelect.appendChild(opt);
+      });
+      appSelect.disabled = false;
+    }
+
+    function openModal() {
+      form.reset();
+      clearErrors();
+      resetApplicationTypes();
+      lastFocused = document.activeElement;
+      modal.hidden = false;
+      document.body.style.overflow = 'hidden';
+      setTimeout(function () { licenseSelect.focus(); }, 50);
+    }
+
+    function closeModal() {
+      modal.hidden = true;
+      document.body.style.overflow = '';
+      form.reset();
+      clearErrors();
+      resetApplicationTypes();
+      if (lastFocused) lastFocused.focus();
+    }
+
+    document.querySelectorAll('.start-submission-trigger').forEach(function (btn) {
+      btn.addEventListener('click', openModal);
+    });
+    closeBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !modal.hidden) closeModal();
+    });
+
+    licenseSelect.addEventListener('change', function () {
+      licenseGroup.classList.remove('field--error');
+      licenseError.hidden = true;
+      populateApplicationTypes(this.value);
+    });
+
+    appSelect.addEventListener('change', function () {
+      appGroup.classList.remove('field--error');
+      appError.hidden = true;
+    });
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      clearErrors();
+
+      if (!licenseSelect.value) {
+        licenseGroup.classList.add('field--error');
+        licenseError.hidden = false;
+        licenseSelect.focus();
+        return;
+      }
+      if (!appSelect.value) {
+        appGroup.classList.add('field--error');
+        appError.hidden = false;
+        appSelect.focus();
+        return;
+      }
+
+      var summary = licenseSelect.value + ' ' + appSelect.value;
+      closeModal();
+      showToast('Draft submission started for Sarah Johnson — ' + summary + '.');
+    });
   })();
 </script>
 
