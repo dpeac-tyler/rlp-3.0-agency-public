@@ -2307,7 +2307,7 @@ button {
   font-weight: 700;
   letter-spacing: .4px;
   text-transform: uppercase;
-  color: var(--c-text-secondary);
+  color: var(--c-toolbar-navy);
   margin-bottom: 4px;
 }
 

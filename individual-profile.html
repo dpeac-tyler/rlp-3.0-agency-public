@@ -135,16 +135,11 @@
           </li>
 
           <li>
-            <button type="button" class="profile-nav__link" aria-expanded="false" aria-controls="nav-group-certificates">
+            <a href="#certificates" class="profile-nav__link" data-panel="panel-certificates">
               <i class="fa-solid fa-certificate profile-nav__icon" aria-hidden="true"></i>
               <span class="profile-nav__label">Certificates</span>
               <span class="profile-nav__count">4</span>
-              <i class="fa-solid fa-chevron-down profile-nav__chevron" aria-hidden="true"></i>
-            </button>
-            <ul class="profile-nav__sublist" id="nav-group-certificates" hidden>
-              <li><a href="#certificates-active" class="profile-nav__sublink" data-panel="panel-certificates-active"><span class="profile-nav__label">Active Certificates</span><span class="profile-nav__count">2</span></a></li>
-              <li><a href="#certificates-history" class="profile-nav__sublink" data-panel="panel-certificates-history"><span class="profile-nav__label">Expired &amp; Historical</span><span class="profile-nav__count">2</span></a></li>
-            </ul>
+            </a>
           </li>
 
           <li>
@@ -224,13 +219,13 @@
 
         <div class="islands">
           <div class="island">
-            <div class="island__eyebrow-row"><span class="island__eyebrow">Active Certificates</span></div>
-            <div class="island__headline">2</div>
+            <div class="island__eyebrow-row"><span class="island__eyebrow">Certificates</span></div>
+            <div class="island__headline">4</div>
             <div class="island__kv">
+              <div class="island__kv-row"><span class="island__kv-key">Active:</span> <span class="island__kv-value">2</span></div>
               <div class="island__kv-row"><span class="island__kv-key">Next expiration:</span> <span class="island__kv-value">04/18/2027</span></div>
-              <div class="island__kv-row"><span class="island__kv-key">Historical:</span> <span class="island__kv-value">2</span></div>
             </div>
-            <a href="#certificates-active" class="island__footer-link" data-panel="panel-certificates-active">View certificates</a>
+            <a href="#certificates" class="island__footer-link" data-panel="panel-certificates">View certificates</a>
           </div>
 
           <div class="island">
@@ -778,32 +773,27 @@
       </section>
 
       <!-- ---------------------------------------------------------------- -->
-      <!-- Certificates — Active                                            -->
+      <!-- Certificates — every credential, any status, in one table        -->
       <!-- ---------------------------------------------------------------- -->
-      <section class="profile-panel" id="panel-certificates-active" aria-label="Active Certificates" hidden>
+      <section class="profile-panel" id="panel-certificates" aria-label="Certificates" hidden>
         <div class="profile-panel__head">
-          <div class="profile-panel__eyebrow">Certificates</div>
-          <h1 class="profile-panel__title">Active Certificates</h1>
-          <p class="profile-panel__desc">Credentials currently issued to this individual by your agency.</p>
-        </div>
-
-        <div class="profile-panel__actions">
-          <button type="button" class="btn btn--primary">Issue Certificate</button>
-          <button type="button" class="btn btn--secondary">Bulk Print</button>
+          <div class="profile-panel__eyebrow">Records</div>
+          <h1 class="profile-panel__title">Certificates</h1>
+          <p class="profile-panel__desc">Every credential issued to this individual by your agency. Expired and revoked certificates stay on the record for audit and eligibility review.</p>
         </div>
 
         <div class="profile-panel__table">
           <div class="table-controls">
             <div class="table-controls__count">
-              Showing 1 - 2 of 2 Entries
-              <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--certificates-active">
+              Showing 1 - 4 of 4 Entries
+              <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--certificates">
                 What do the control icons mean?
                 <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
               </button>
             </div>
             <div class="table-controls__right">
-              <label for="entries-certificates-active">Show</label>
-              <select id="entries-certificates-active">
+              <label for="entries-certificates">Show</label>
+              <select id="entries-certificates">
                 <option value="100" selected>100</option>
                 <option value="50">50</option>
                 <option value="25">25</option>
@@ -812,7 +802,7 @@
             </div>
           </div>
 
-          <div class="icon-legend" id="icon-legend--certificates-active" hidden>
+          <div class="icon-legend" id="icon-legend--certificates" hidden>
             <div class="icon-legend__item"><img src="assets/download-certificate.png" alt=""> Download Certificate</div>
             <div class="icon-legend__item"><img src="assets/manage-agency-license-fields.png" alt=""> Manage Agency License Fields</div>
             <div class="icon-legend__item"><img src="assets/manage-license.png" alt=""> Manage License</div>
@@ -868,68 +858,6 @@
                   <a href="#" class="icon-btn" aria-label="Create Invoice"><img src="assets/create-invoice.png" alt="" width="30" height="30"></a>
                 </td>
               </tr>
-            </tbody>
-          </table>
-
-          <nav aria-label="Pagination">
-            <ul class="pagination">
-              <li><a href="#" class="pagination__arrow" aria-label="Previous page">&lsaquo; Previous</a></li>
-              <li><a href="#" class="is-current" aria-label="Page 1" aria-current="page">1</a></li>
-              <li><a href="#" class="pagination__arrow" aria-label="Next page">Next &rsaquo;</a></li>
-            </ul>
-          </nav>
-        </div>
-      </section>
-
-      <!-- ---------------------------------------------------------------- -->
-      <!-- Certificates — Expired & Historical                              -->
-      <!-- ---------------------------------------------------------------- -->
-      <section class="profile-panel" id="panel-certificates-history" aria-label="Expired and Historical Certificates" hidden>
-        <div class="profile-panel__head">
-          <div class="profile-panel__eyebrow">Certificates</div>
-          <h1 class="profile-panel__title">Expired &amp; Historical</h1>
-          <p class="profile-panel__desc">Credentials that are no longer in force. Retained for audit and eligibility review.</p>
-        </div>
-
-        <div class="profile-panel__table">
-          <div class="table-controls">
-            <div class="table-controls__count">
-              Showing 1 - 2 of 2 Entries
-              <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--certificates-history">
-                What do the control icons mean?
-                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
-              </button>
-            </div>
-            <div class="table-controls__right">
-              <label for="entries-certificates-history">Show</label>
-              <select id="entries-certificates-history">
-                <option value="100" selected>100</option>
-                <option value="50">50</option>
-                <option value="25">25</option>
-                <option value="10">10</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="icon-legend" id="icon-legend--certificates-history" hidden>
-            <div class="icon-legend__item"><img src="assets/download-certificate.png" alt=""> Download Certificate</div>
-            <div class="icon-legend__item"><img src="assets/view-history.png" alt=""> View History</div>
-            <div class="icon-legend__item"><img src="assets/view-submission.png" alt=""> View Submission</div>
-          </div>
-
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>License Type <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
-                <th>License Number <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
-                <th>Application Type <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
-                <th>Start Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
-                <th>End Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
-                <th>Status <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
-                <th>Controls</th>
-              </tr>
-            </thead>
-            <tbody>
               <tr>
                 <td>Student Nurse Permit</td>
                 <td>SNP-0008122</td>
@@ -948,7 +876,7 @@
                 <td>HHA-0002218</td>
                 <td>Original (One)</td>
                 <td>02/03/2018</td>
-                <td>10/22/2020</td>
+                <td>02/03/2020</td>
                 <td class="status-text--revoked">Revoked</td>
                 <td class="controls-cell">
                   <a href="#" class="icon-btn" aria-label="Download Certificate"><img src="assets/download-certificate.png" alt="" width="30" height="30"></a>
