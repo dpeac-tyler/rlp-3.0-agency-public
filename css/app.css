@@ -2555,16 +2555,8 @@ button {
   border-bottom: 2px solid var(--c-border);
 }
 
-.profile-panel__eyebrow {
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: .5px;
-  text-transform: uppercase;
-  color: var(--c-text-secondary);
-}
-
 .profile-panel__title {
-  margin: 4px 0 0;
+  margin: 0;
   font-size: 28px;
   font-weight: 700;
   color: var(--c-text-primary);
