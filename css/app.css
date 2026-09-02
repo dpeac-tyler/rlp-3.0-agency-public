@@ -2235,6 +2235,11 @@ button {
   background: var(--c-tile-bg);
 }
 
+/* Field labels in the meta line carry the weight; values stay regular */
+.task-bar--profile .task-bar__meta strong {
+  font-weight: 700;
+}
+
 .profile-shell {
   display: grid;
   grid-template-columns: 320px minmax(0, 1fr);
