@@ -1639,6 +1639,10 @@ button {
   grid-template-columns: repeat(2, 1fr);
 }
 
+.info-grid__item--span-2 {
+  grid-column: span 2;
+}
+
 .info-grid__item {
   display: flex;
   flex-direction: column;
@@ -1971,6 +1975,11 @@ button {
   margin-top: 4px;
 }
 
+/* Field labels in the meta line carry the weight; values stay regular */
+.task-bar__meta strong {
+  font-weight: 700;
+}
+
 .task-bar__actions {
   display: flex;
   align-items: center;
@@ -1985,7 +1994,6 @@ button {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
-  margin-top: 24px;
 }
 
 .islands--3col {
@@ -2096,6 +2104,129 @@ button {
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+/* Agency license fields (~60%) beside a right-aligned Inspections rail (~40%) */
+
+.work-split {
+  display: grid;
+  grid-template-columns: 70fr 30fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.work-split > .work-card {
+  min-width: 0;
+}
+
+.work-split__side {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+/* The side rail sits flush with the top of the work card */
+.work-split__side .accordion {
+  margin-top: 0;
+}
+
+/* Inspections data reflows to 2 narrow columns in the side rail */
+.work-split__side .info-grid {
+  gap: 16px 20px;
+}
+
+/* Inspections rail — a task can carry several inspections, so each is its own
+   collapsible item. Fields shared across them are hoisted to the top. */
+
+.accordion__button-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.accordion__content--flush {
+  padding: 0;
+}
+
+.inspection-shared {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px 20px;
+  background: var(--c-tile-bg);
+  border-bottom: 1px solid var(--c-border);
+}
+
+.inspection-item + .inspection-item,
+.inspection-note {
+  border-top: 1px solid var(--c-hairline-2);
+}
+
+.inspection-item__button {
+  padding: 16px 20px;
+  align-items: flex-start;
+}
+
+.inspection-item__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.inspection-item__type {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--c-text-primary);
+}
+
+.inspection-item__id {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--c-text-secondary);
+}
+
+.inspection-item__body {
+  padding: 0 20px 18px;
+  border-top: 0;
+}
+
+.inspection-item__links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.inspection-item__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.inspection-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0;
+  padding: 14px 20px;
+  font-size: 16px;
+  color: var(--c-text-secondary);
+  background: var(--c-tile-bg);
+}
+
+/* Address rows drop from 4 to 2 columns in the narrower work card */
+.work-split .address-group__body {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media (max-width: 1100px) {
+  .work-split {
+    grid-template-columns: 1fr;
+  }
 }
 
 .work-card {
@@ -2364,22 +2495,17 @@ button {
 /* ---------------------------------------------------------------------- */
 
 /* The rail is the sticky element on this page, so the identity bar above it
-   opts out of .task-bar's sticky positioning and sits on the tile grey so it
-   reads as a band above the white panel area. */
+   opts out of .task-bar's sticky positioning; the background stays white to
+   match task-detail. */
 .task-bar--profile {
   position: static;
-  background: var(--c-tile-bg);
-}
-
-/* Field labels in the meta line carry the weight; values stay regular */
-.task-bar--profile .task-bar__meta strong {
-  font-weight: 700;
 }
 
 .profile-shell {
   display: grid;
   grid-template-columns: 320px minmax(0, 1fr);
   align-items: start;
+  gap: 20px;
   min-height: 640px;
 }
 
@@ -2393,13 +2519,15 @@ button {
 
 .profile-rail {
   position: sticky;
-  top: 0;
+  top: 20px;
   align-self: start;
-  max-height: 100vh;
+  max-height: calc(100vh - 40px);
   overflow-y: auto;
   background: #fff;
-  border-right: 1px solid var(--c-border);
-  padding-bottom: 28px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-panel);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .06);
+  padding-bottom: 14px;
 }
 
 @media (max-width: 1100px) {
@@ -2629,7 +2757,11 @@ button {
 /* Panels — one per record type */
 
 .profile-panel {
-  padding: 26px 32px 56px;
+  background: #fff;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-panel);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .06);
+  padding: 0 0 24px;
 }
 
 .profile-panel[hidden] {
@@ -2637,21 +2769,27 @@ button {
 }
 
 .profile-panel__head {
-  padding-bottom: 16px;
-  border-bottom: 2px solid var(--c-border);
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--c-hairline-2);
 }
 
 .profile-panel__title {
   margin: 0;
-  font-size: 28px;
+  font-size: 19px;
   font-weight: 700;
   color: var(--c-text-primary);
 }
 
 .profile-panel__desc {
-  margin: 8px 0 0;
+  margin: 4px 0 0;
   font-size: 16px;
   color: var(--c-text-secondary);
+}
+
+/* Panel body content sits inside the card padding the head already establishes */
+.profile-panel > *:not(.profile-panel__head) {
+  margin-left: 24px;
+  margin-right: 24px;
 }
 
 /* Panel action bar — left-aligned, primary action first (RLP standard) */
@@ -2667,9 +2805,35 @@ button {
   margin-top: 24px;
 }
 
-/* Islands sit on the tile grey inside a profile panel */
+/* Islands sit on the tile grey inside a profile panel, and still need to
+   clear the panel head (the page-level islands do not) */
 .profile-panel .island {
   background: var(--c-tile-bg);
+}
+
+.profile-panel .islands {
+  margin-top: 24px;
+}
+
+/* Profile page adopts the task-detail shell: grey canvas, content as cards */
+
+.page-body--profile {
+  background: #fafafa;
+}
+
+.page-body--profile .profile-shell {
+  margin-top: 20px;
+}
+
+/* The rail is a card now, so "Records" reads as an island eyebrow */
+.profile-rail .profile-nav__heading {
+  padding: 18px 20px 10px;
+  letter-spacing: .04em;
+}
+
+/* Long values (email) wrap instead of overflowing a quarter-width island */
+.island__headline--wrap {
+  overflow-wrap: anywhere;
 }
 
 /* Inline filter row above a panel table (search box + selects) */

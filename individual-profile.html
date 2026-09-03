@@ -78,28 +78,60 @@
     </div>
   </div>
 
-  <!-- Contact facts + the link to the full profile record -->
-  <div class="profile-facts">
-    <div class="profile-facts__item">
-      <div class="profile-facts__label">Email</div>
-      <div class="profile-facts__value">sarah.johnson@mercyridge.org</div>
-      <a href="#" class="profile-facts__link">Change email</a>
+  <!-- Page content (grey canvas, content as cards — matches task-detail) -->
+  <div class="page-body page-body--profile">
+
+    <!-- Summary islands -->
+    <div class="islands">
+
+      <div class="island">
+        <div class="island__eyebrow-row">
+          <span class="island__eyebrow">Email</span>
+        </div>
+        <div class="island__headline island__headline--wrap">sarah.johnson@mercyridge.org</div>
+        <div class="island__kv">
+          <div class="island__kv-row"><span class="island__kv-key">Alternate:</span> <span class="island__kv-value">s.johnson1988@gmail.com</span></div>
+          <div class="island__kv-row"><span class="island__kv-key">Preferred:</span> <span class="island__kv-value">Email</span></div>
+        </div>
+        <a href="#" class="island__footer-link">Change email</a>
+      </div>
+
+      <div class="island">
+        <div class="island__eyebrow-row">
+          <span class="island__eyebrow">Primary Phone</span>
+        </div>
+        <div class="island__headline">(304) 555-0182</div>
+        <div class="island__kv">
+          <div class="island__kv-row"><span class="island__kv-key">Mobile:</span> <span class="island__kv-value">(304) 555-0247</span></div>
+        </div>
+      </div>
+
+      <div class="island">
+        <div class="island__eyebrow-row">
+          <span class="island__eyebrow">Mailing Address</span>
+        </div>
+        <div class="island__headline">648 East Rocky Old Road</div>
+        <div class="island__kv">
+          <div class="island__kv-row"><span class="island__kv-key">Suite:</span> <span class="island__kv-value">210</span></div>
+          <div class="island__kv-row"><span class="island__kv-key">City:</span> <span class="island__kv-value">Charleston</span></div>
+          <div class="island__kv-row"><span class="island__kv-key">State:</span> <span class="island__kv-value">West Virginia</span></div>
+          <div class="island__kv-row"><span class="island__kv-key">Zip Code:</span> <span class="island__kv-value">25301</span></div>
+        </div>
+      </div>
+
+      <div class="island">
+        <div class="island__eyebrow-row">
+          <span class="island__eyebrow">Profile</span>
+        </div>
+        <div class="island__headline">Sarah Elizabeth Johnson</div>
+        <div class="island__kv">
+          <div class="island__kv-row"><span class="island__kv-key">Date of Birth:</span> <span class="island__kv-value">06/14/1988</span></div>
+          <div class="island__kv-row"><span class="island__kv-key">SSN:</span> <span class="island__kv-value">&bull;&bull;&bull;&ndash;&bull;&bull;&ndash;4471</span></div>
+        </div>
+        <a href="#details" class="island__footer-link" data-panel="panel-details">View Profile Details</a>
+      </div>
+
     </div>
-    <div class="profile-facts__item">
-      <div class="profile-facts__label">Primary Phone</div>
-      <div class="profile-facts__value">(304) 555-0182<br>Mobile (304) 555-0247</div>
-    </div>
-    <div class="profile-facts__item">
-      <div class="profile-facts__label">Mailing Address</div>
-      <div class="profile-facts__value">648 East Rocky Old Road, Suite 210<br>Charleston, WV 25301</div>
-    </div>
-    <div class="profile-facts__item">
-      <div class="profile-facts__label">Profile</div>
-      <a href="#details" class="profile-facts__link profile-facts__link--action" data-panel="panel-details">
-        <i class="fa-solid fa-address-card" aria-hidden="true"></i> View Profile Details
-      </a>
-    </div>
-  </div>
 
   <div class="profile-shell">
 
@@ -1811,6 +1843,7 @@
       </section>
 
     </main>
+    </div>
   </div>
 
 </div>
@@ -2025,7 +2058,7 @@
   (function () {
     var panels = Array.prototype.slice.call(document.querySelectorAll('#profile-main .profile-panel'));
     var navLinks = Array.prototype.slice.call(document.querySelectorAll('.profile-nav__link[data-panel], .profile-nav__sublink[data-panel]'));
-    var factsLinks = Array.prototype.slice.call(document.querySelectorAll('.profile-facts__link[data-panel]'));
+    var islandLinks = Array.prototype.slice.call(document.querySelectorAll('.island__footer-link[data-panel]'));
     var groupToggles = Array.prototype.slice.call(document.querySelectorAll('.profile-nav__link[aria-controls]'));
 
     function setGroupExpanded(toggle, expanded) {
@@ -2047,10 +2080,10 @@
       panels.forEach(function (p) { p.hidden = p !== panel; });
 
       navLinks.forEach(function (l) { l.classList.remove('is-current'); });
-      factsLinks.forEach(function (l) { l.classList.remove('is-current'); });
+      islandLinks.forEach(function (l) { l.classList.remove('is-current'); });
       groupToggles.forEach(function (t) { t.classList.remove('is-open'); });
 
-      var link = document.querySelector('.profile-nav__link[data-panel="' + panelId + '"], .profile-nav__sublink[data-panel="' + panelId + '"], .profile-facts__link[data-panel="' + panelId + '"]');
+      var link = document.querySelector('.profile-nav__link[data-panel="' + panelId + '"], .profile-nav__sublink[data-panel="' + panelId + '"], .island__footer-link[data-panel="' + panelId + '"]');
       if (link) {
         link.classList.add('is-current');
         var parent = groupToggleFor(link);
@@ -2083,7 +2116,7 @@
 
     /* Deep link: #certificates-active etc. */
     if (window.location.hash) {
-      var target = document.querySelector('.profile-nav__link[href="' + window.location.hash + '"], .profile-nav__sublink[href="' + window.location.hash + '"], .profile-facts__link[href="' + window.location.hash + '"]');
+      var target = document.querySelector('.profile-nav__link[href="' + window.location.hash + '"], .profile-nav__sublink[href="' + window.location.hash + '"], .island__footer-link[href="' + window.location.hash + '"]');
       if (target) showPanel(target.getAttribute('data-panel'), false);
     }
 

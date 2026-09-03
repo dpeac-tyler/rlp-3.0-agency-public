@@ -43,7 +43,7 @@
         <span id="header-application-title">Loading&hellip;</span>
         <span class="tag tag--resubmission" id="resubmission-tag" hidden>Resubmission</span>
       </div>
-      <div class="task-bar__meta">Submission <span id="header-submission-number">Loading&hellip;</span> &middot; <span id="header-application-type">Loading&hellip;</span></div>
+      <div class="task-bar__meta"><strong>Submission:</strong> <span id="header-submission-number">Loading&hellip;</span> &middot; <span id="header-application-type">Loading&hellip;</span></div>
     </div>
     <div class="task-bar__right">
       <div class="task-bar__claimant"><strong>Claimant &ndash; ASP Admin Two</strong></div>
@@ -123,6 +123,8 @@
     <div class="work-grid">
 
       <div class="work-column">
+
+      <div class="work-split">
       <div class="work-card">
         <div class="work-card__header">
           <div class="work-card__title">Review agency license fields</div>
@@ -162,9 +164,6 @@
             <div class="address-group" style="margin-top: 24px">
               <div class="address-group__header">
                 <span class="address-group__label">Addresses</span>
-                <label class="checkbox-option__label">
-                  <input type="checkbox" id="alf-same-as-mailing" checked> Physical same as mailing
-                </label>
               </div>
               <div class="address-group__body">
                 <div class="field">
@@ -202,34 +201,6 @@
                 </div>
               </div>
 
-              <div class="address-group__sub-label" id="physical-address-label" hidden>Physical Address</div>
-              <div class="address-group__body" id="physical-address-fields" hidden>
-                <div class="field">
-                  <label for="alf-physical-address-1">Address 1 <span class="field-required">Required</span></label>
-                  <input type="text" id="alf-physical-address-1" name="alf-physical-address-1" value="100 Congress Ave">
-                </div>
-                <div class="field">
-                  <label for="alf-physical-city">City <span class="field-required">Required</span></label>
-                  <input type="text" id="alf-physical-city" name="alf-physical-city" value="Austin">
-                </div>
-                <div class="field">
-                  <label for="alf-physical-state">State <span class="field-required">Required</span></label>
-                  <select id="alf-physical-state" name="alf-physical-state">
-                    <option value="">Please Select</option>
-                    <option value="texas" selected>Texas</option>
-                    <option value="illinois">Illinois</option>
-                    <option value="utah">Utah</option>
-                  </select>
-                </div>
-                <div class="field">
-                  <label for="alf-physical-zip">Zip Code <span class="field-required">Required</span></label>
-                  <input type="text" id="alf-physical-zip" name="alf-physical-zip" value="78701">
-                </div>
-                <div class="field field--span-2">
-                  <label for="alf-physical-address-2">Address 2</label>
-                  <input type="text" id="alf-physical-address-2" name="alf-physical-address-2" placeholder="Optional">
-                </div>
-              </div>
             </div>
 
             <div class="field" style="margin-top: 24px">
@@ -248,37 +219,15 @@
         </div>
       </div>
 
+      <aside class="work-split__side">
       <div class="accordion">
         <button type="button" class="accordion__button island__eyebrow" aria-expanded="true" aria-controls="inspection-content">
-          Inspections
+          <span class="accordion__button-label">Inspections <span class="toolbar-badge" id="inspections-count">3</span></span>
           <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
         </button>
-        <div id="inspection-content" class="accordion__content">
-          <div class="info-grid">
-            <div class="info-grid__item">
-              <span class="info-grid__label">ID</span>
-              <span class="info-grid__value">INS-2026-A1B2C</span>
-            </div>
-            <div class="info-grid__item">
-              <span class="info-grid__label">Type</span>
-              <span class="info-grid__value">Initial</span>
-            </div>
-            <div class="info-grid__item">
-              <span class="info-grid__label">Status</span>
-              <span class="info-grid__value">Complete</span>
-            </div>
-            <div class="info-grid__item">
-              <span class="info-grid__label">Outcome</span>
-              <span class="info-grid__value status-text--passed">Passed</span>
-            </div>
-            <div class="info-grid__item">
-              <span class="info-grid__label">Due Date</span>
-              <span class="info-grid__value">03/15/2026</span>
-            </div>
-            <div class="info-grid__item">
-              <span class="info-grid__label">Completion Date</span>
-              <span class="info-grid__value">03/01/2026</span>
-            </div>
+        <div id="inspection-content" class="accordion__content accordion__content--flush">
+
+          <div class="inspection-shared">
             <div class="info-grid__item">
               <span class="info-grid__label">Inspection For</span>
               <span class="info-grid__value">Sarah Johnson</span>
@@ -287,17 +236,150 @@
               <span class="info-grid__label">Site</span>
               <span class="info-grid__value">100 Congress Ave, Austin, TX 78701</span>
             </div>
-            <div class="info-grid__item">
-              <span class="info-grid__label">Responsible Party</span>
-              <span class="info-grid__value">Sarah Johnson</span>
+          </div>
+
+        <div class="inspection-item">
+          <button type="button" class="accordion__button inspection-item__button" aria-expanded="true" aria-controls="inspection-1">
+            <span class="inspection-item__heading">
+              <span class="inspection-item__type"><img src="assets/lock-icon.png" alt="Agency Only" width="16" height="16" class="doc-lock"> Facility Site Visit</span>
+              <span class="inspection-item__id">INS-2026-A1B2C</span>
+            </span>
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div id="inspection-1" class="accordion__content inspection-item__body">
+            <div class="info-grid info-grid--2">
+              <div class="info-grid__item">
+                <span class="info-grid__label">Status</span>
+                <span class="info-grid__value status-text--completed">Completed</span>
+              </div>
+              <div class="info-grid__item">
+                <span class="info-grid__label">Outcome</span>
+                <span class="info-grid__value status-text--pass">Pass</span>
+              </div>
+              <div class="info-grid__item">
+                <span class="info-grid__label">Due Date</span>
+                <span class="info-grid__value">03/15/2026</span>
+              </div>
+              <div class="info-grid__item">
+                <span class="info-grid__label">Completion Date</span>
+                <span class="info-grid__value">03/01/2026</span>
+              </div>
+              <div class="info-grid__item info-grid__item--span-2">
+                <span class="info-grid__label">Inspector</span>
+                <span class="info-grid__value">Marcus Webb</span>
+              </div>
+              <div class="info-grid__item info-grid__item--span-2">
+                <span class="info-grid__label">Source</span>
+                <span class="info-grid__value">Submission: SUB-004321</span>
+              </div>
             </div>
-            <div class="info-grid__item">
-              <span class="info-grid__label">Source</span>
-              <span class="info-grid__value">Submission #: SUB-004321</span>
+            <div class="inspection-item__links">
+              <a href="individual-profile.html#inspections" class="inspection-item__link">
+                <img src="assets/eye-icon.png" alt="" width="20" height="20"> View Inspection
+              </a>
+            <a href="#" class="inspection-item__link" target="_blank" rel="noopener noreferrer">
+              <img src="assets/external-link-icon.png" alt="" width="20" height="20"> External Report
+            </a>
             </div>
           </div>
         </div>
+        <div class="inspection-item">
+          <button type="button" class="accordion__button inspection-item__button" aria-expanded="false" aria-controls="inspection-2">
+            <span class="inspection-item__heading">
+              <span class="inspection-item__type">Equipment Reinspection</span>
+              <span class="inspection-item__id">INS-2026-D4E5F</span>
+            </span>
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div id="inspection-2" class="accordion__content inspection-item__body" hidden>
+            <div class="info-grid info-grid--2">
+              <div class="info-grid__item">
+                <span class="info-grid__label">Status</span>
+                <span class="info-grid__value status-text--in-progress">In Progress</span>
+              </div>
+              <div class="info-grid__item">
+                <span class="info-grid__label">Outcome</span>
+                <span class="info-grid__value">&mdash;</span>
+              </div>
+              <div class="info-grid__item">
+                <span class="info-grid__label">Due Date</span>
+                <span class="info-grid__value">04/20/2026</span>
+              </div>
+              <div class="info-grid__item">
+                <span class="info-grid__label">Completion Date</span>
+                <span class="info-grid__value">&mdash;</span>
+              </div>
+              <div class="info-grid__item info-grid__item--span-2">
+                <span class="info-grid__label">Inspector</span>
+                <span class="info-grid__value">Priya Nair</span>
+              </div>
+              <div class="info-grid__item info-grid__item--span-2">
+                <span class="info-grid__label">Source</span>
+                <span class="info-grid__value">Submission: SUB-004321</span>
+              </div>
+            </div>
+            <div class="inspection-item__links">
+              <a href="individual-profile.html#inspections" class="inspection-item__link">
+                <img src="assets/eye-icon.png" alt="" width="20" height="20"> View Inspection
+              </a>
+            <a href="#" class="inspection-item__link" target="_blank" rel="noopener noreferrer">
+              <img src="assets/external-link-icon.png" alt="" width="20" height="20"> External Report
+            </a>
+            </div>
+          </div>
+        </div>
+        <div class="inspection-item">
+          <button type="button" class="accordion__button inspection-item__button" aria-expanded="false" aria-controls="inspection-3">
+            <span class="inspection-item__heading">
+              <span class="inspection-item__type"><img src="assets/lock-icon.png" alt="Agency Only" width="16" height="16" class="doc-lock"> Records Audit</span>
+              <span class="inspection-item__id">INS-2026-G7H8J</span>
+            </span>
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div id="inspection-3" class="accordion__content inspection-item__body" hidden>
+            <div class="info-grid info-grid--2">
+              <div class="info-grid__item">
+                <span class="info-grid__label">Status</span>
+                <span class="info-grid__value status-text--assigned">Assigned</span>
+              </div>
+              <div class="info-grid__item">
+                <span class="info-grid__label">Outcome</span>
+                <span class="info-grid__value">&mdash;</span>
+              </div>
+              <div class="info-grid__item">
+                <span class="info-grid__label">Due Date</span>
+                <span class="info-grid__value">05/02/2026</span>
+              </div>
+              <div class="info-grid__item">
+                <span class="info-grid__label">Completion Date</span>
+                <span class="info-grid__value">&mdash;</span>
+              </div>
+              <div class="info-grid__item info-grid__item--span-2">
+                <span class="info-grid__label">Inspector</span>
+                <span class="info-grid__value">Renee Castillo</span>
+              </div>
+              <div class="info-grid__item info-grid__item--span-2">
+                <span class="info-grid__label">Source</span>
+                <span class="info-grid__value">License: CNA-0019344</span>
+              </div>
+            </div>
+            <div class="inspection-item__links">
+              <a href="individual-profile.html#inspections" class="inspection-item__link">
+                <img src="assets/eye-icon.png" alt="" width="20" height="20"> View Inspection
+              </a>
+            </div>
+          </div>
+        </div>
+
+          <p class="inspection-note">
+            <img src="assets/lock-icon.png" alt="" width="14" height="14" class="doc-lock">
+            Visibility: Agency Only &mdash; not shown to the constituent.
+          </p>
+        </div>
       </div>
+      </aside>
+
+      </div><!-- /work-split -->
 
         <div class="rail-card">
           <div class="detail-tabs detail-tabs--compact" role="tablist">
@@ -690,31 +772,6 @@
         tab.setAttribute('aria-selected', 'true');
         Object.keys(panels).forEach(function (k) { panels[k].hidden = k !== key; });
       });
-    });
-  })();
-
-  // Physical address fields — hidden and mirrored to mailing values while "Physical same as
-  // mailing" is checked; revealed as their own editable set when unchecked.
-  (function () {
-    var checkbox = document.getElementById('alf-same-as-mailing');
-    var physicalFields = document.getElementById('physical-address-fields');
-    var physicalLabel = document.getElementById('physical-address-label');
-    var mailingToPhysical = {
-      'alf-mailing-address-1': 'alf-physical-address-1',
-      'alf-mailing-address-2': 'alf-physical-address-2',
-      'alf-mailing-city': 'alf-physical-city',
-      'alf-mailing-state': 'alf-physical-state',
-      'alf-mailing-zip': 'alf-physical-zip'
-    };
-    checkbox.addEventListener('change', function () {
-      var sameAsMailing = checkbox.checked;
-      physicalFields.hidden = sameAsMailing;
-      physicalLabel.hidden = sameAsMailing;
-      if (sameAsMailing) {
-        Object.keys(mailingToPhysical).forEach(function (mailingId) {
-          document.getElementById(mailingToPhysical[mailingId]).value = document.getElementById(mailingId).value;
-        });
-      }
     });
   })();
 
