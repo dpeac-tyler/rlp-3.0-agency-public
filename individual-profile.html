@@ -65,6 +65,9 @@
           </div>
         </span>
         Sarah Johnson
+        <a href="#details" class="task-bar__title-link" data-panel="panel-details">
+          <i class="fa-solid fa-address-card" aria-hidden="true"></i> View Profile Details
+        </a>
       </div>
       <div class="task-bar__meta"><strong>Individual</strong> &middot; <strong>Customer:</strong> 000172601 &middot; <strong>Username:</strong> qa.ind.10900 <span class="status-text--active">(Active)</span> &middot; <strong>Registered:</strong> 03/28/2023</div>
     </div>
@@ -119,16 +122,27 @@
         </div>
       </div>
 
+      <!-- PLACEHOLDER CONTENT — the top 3-4 agency interactions will come from the
+           system. Swap the four .island__action links below when that data lands;
+           no other markup or CSS needs to change. -->
       <div class="island">
         <div class="island__eyebrow-row">
-          <span class="island__eyebrow">Profile</span>
+          <span class="island__eyebrow">Common Activities</span>
         </div>
-        <div class="island__headline">Sarah Elizabeth Johnson</div>
-        <div class="island__kv">
-          <div class="island__kv-row"><span class="island__kv-key">Date of Birth:</span> <span class="island__kv-value">06/14/1988</span></div>
-          <div class="island__kv-row"><span class="island__kv-key">SSN:</span> <span class="island__kv-value">&bull;&bull;&bull;&ndash;&bull;&bull;&ndash;4471</span></div>
+        <div class="island__actions">
+          <a href="#" class="island__action">
+            <i class="fa-solid fa-envelope" aria-hidden="true"></i> Change Email
+          </a>
+          <a href="#submissions" class="island__action" data-panel="panel-submissions">
+            <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i> Edit Registered Nurse Submission
+          </a>
+          <a href="#invoices" class="island__action" data-panel="panel-invoices">
+            <i class="fa-solid fa-file-invoice-dollar" aria-hidden="true"></i> View Invoices
+          </a>
+          <a href="#documents" class="island__action" data-panel="panel-documents">
+            <i class="fa-solid fa-arrow-up-from-bracket" aria-hidden="true"></i> Upload Document
+          </a>
         </div>
-        <a href="#details" class="island__footer-link" data-panel="panel-details">View Profile Details</a>
       </div>
 
     </div>
@@ -2058,7 +2072,7 @@
   (function () {
     var panels = Array.prototype.slice.call(document.querySelectorAll('#profile-main .profile-panel'));
     var navLinks = Array.prototype.slice.call(document.querySelectorAll('.profile-nav__link[data-panel], .profile-nav__sublink[data-panel]'));
-    var islandLinks = Array.prototype.slice.call(document.querySelectorAll('.island__footer-link[data-panel]'));
+    var islandLinks = Array.prototype.slice.call(document.querySelectorAll('.island__footer-link[data-panel], .island__action[data-panel], .task-bar__title-link[data-panel]'));
     var groupToggles = Array.prototype.slice.call(document.querySelectorAll('.profile-nav__link[aria-controls]'));
 
     function setGroupExpanded(toggle, expanded) {
@@ -2083,7 +2097,7 @@
       islandLinks.forEach(function (l) { l.classList.remove('is-current'); });
       groupToggles.forEach(function (t) { t.classList.remove('is-open'); });
 
-      var link = document.querySelector('.profile-nav__link[data-panel="' + panelId + '"], .profile-nav__sublink[data-panel="' + panelId + '"], .island__footer-link[data-panel="' + panelId + '"]');
+      var link = document.querySelector('.profile-nav__link[data-panel="' + panelId + '"], .profile-nav__sublink[data-panel="' + panelId + '"], .island__footer-link[data-panel="' + panelId + '"], .task-bar__title-link[data-panel="' + panelId + '"]');
       if (link) {
         link.classList.add('is-current');
         var parent = groupToggleFor(link);
@@ -2116,7 +2130,7 @@
 
     /* Deep link: #certificates-active etc. */
     if (window.location.hash) {
-      var target = document.querySelector('.profile-nav__link[href="' + window.location.hash + '"], .profile-nav__sublink[href="' + window.location.hash + '"], .island__footer-link[href="' + window.location.hash + '"]');
+      var target = document.querySelector('.profile-nav__link[href="' + window.location.hash + '"], .profile-nav__sublink[href="' + window.location.hash + '"], .island__footer-link[href="' + window.location.hash + '"], .island__action[href="' + window.location.hash + '"], .task-bar__title-link[href="' + window.location.hash + '"]');
       if (target) showPanel(target.getAttribute('data-panel'), false);
     }
 

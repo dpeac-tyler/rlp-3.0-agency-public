@@ -1946,6 +1946,17 @@ button {
   color: var(--c-text-primary);
 }
 
+/* Sits beside the name but keeps the smaller link scale so it stays
+   visually distinct from the 24px title */
+.task-bar__title-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-left: 4px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
 .tag {
   display: inline-flex;
   align-items: center;
@@ -2070,6 +2081,30 @@ button {
   margin-top: 14px;
   font-size: 16px;
   font-weight: 600;
+}
+
+/* Common Activities — a short stack of shortcut links filling an island */
+.island__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.island__action {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.island__action i {
+  flex: 0 0 auto;
+  width: 16px;
+  margin-top: 2px;
+  text-align: center;
+  color: var(--c-text-secondary);
 }
 
 .island__related-link {
