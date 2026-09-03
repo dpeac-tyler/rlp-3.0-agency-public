@@ -155,8 +155,13 @@
     <aside class="profile-rail">
       <nav class="profile-nav" aria-label="Profile records">
 
-        <div class="profile-nav__heading" id="nav-heading-records">Records</div>
-        <ul class="profile-nav__list" aria-labelledby="nav-heading-records">
+        <div class="profile-nav__heading-row">
+          <div class="profile-nav__heading" id="nav-heading-records">Records</div>
+          <button type="button" class="profile-nav__collapse" id="profile-nav-collapse" aria-expanded="true" aria-controls="nav-records-list" aria-label="Collapse Records navigation" title="Collapse Records navigation">
+            <i class="fa-solid fa-angles-left" aria-hidden="true"></i>
+          </button>
+        </div>
+        <ul class="profile-nav__list" id="nav-records-list" aria-labelledby="nav-heading-records">
           <li>
             <button type="button" class="profile-nav__link" aria-expanded="false" aria-controls="nav-group-affiliations">
               <i class="fa-solid fa-users profile-nav__icon" aria-hidden="true"></i>
@@ -1673,10 +1678,6 @@
           <p class="profile-panel__desc">Every application this individual has started or submitted, including drafts that have not yet reached your agency.</p>
         </div>
 
-        <div class="profile-panel__actions">
-          <button type="button" class="btn btn--primary start-submission-trigger">Start Submission</button>
-        </div>
-
         <div class="profile-panel__table">
           <div class="table-controls">
             <div class="table-controls__count">
@@ -2103,16 +2104,23 @@
         var parent = groupToggleFor(link);
         if (parent) {
           parent.classList.add('is-open');
-          setGroupExpanded(parent, true);
+          /* Collapsed, the navy group icon alone carries the active state */
+          if (!document.querySelector('.profile-shell.is-collapsed')) setGroupExpanded(parent, true);
         }
       }
 
       if (scroll) window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    /* Group headers expand / collapse without changing the panel */
+    /* Group headers expand / collapse without changing the panel. Collapsed,
+       the rail is too narrow for an inline sublist, so the group opens as a
+       flyout beside its icon instead. */
     groupToggles.forEach(function (toggle) {
       toggle.addEventListener('click', function () {
+        if (document.querySelector('.profile-shell.is-collapsed')) {
+          if (window.toggleNavFlyout) window.toggleNavFlyout(toggle);
+          return;
+        }
         setGroupExpanded(toggle, toggle.getAttribute('aria-expanded') !== 'true');
       });
     });
@@ -2663,6 +2671,108 @@
   })();
 
   /* ------------------------------------------------------------------ */
+  /* ------------------------------------------------------------------ */
+  /* Records rail collapse — trades the label column for ~256px of      */
+  /* panel width. Collapsed, each item is icon-over-count, and an       */
+  /* expandable group opens its sublist as a fixed flyout beside the    */
+  /* icon (the rail scrolls, so an absolute one would be clipped).      */
+  /* ------------------------------------------------------------------ */
+  (function () {
+    var STORE_KEY = 'rlp.profileNav.collapsed';
+    var shell = document.querySelector('.profile-shell');
+    var rail = document.querySelector('.profile-rail');
+    var btn = document.getElementById('profile-nav-collapse');
+    if (!shell || !btn) return;
+
+    var openList = null;
+
+    function closeFlyout() {
+      if (!openList) return;
+      var title = openList.querySelector('.profile-nav__flyout-title');
+      if (title) title.parentNode.removeChild(title);
+      openList.classList.remove('profile-nav__sublist--flyout');
+      openList.hidden = true;
+      openList.style.top = '';
+      openList.style.left = '';
+      var toggle = document.querySelector('.profile-nav__link[aria-controls="' + openList.id + '"]');
+      if (toggle) toggle.setAttribute('aria-expanded', 'false');
+      openList = null;
+    }
+
+    window.toggleNavFlyout = function (toggle) {
+      var list = document.getElementById(toggle.getAttribute('aria-controls'));
+      if (!list) return;
+      if (openList === list) { closeFlyout(); return; }
+      closeFlyout();
+
+      var label = toggle.querySelector('.profile-nav__label');
+      var title = document.createElement('li');
+      title.className = 'profile-nav__flyout-title';
+      title.textContent = label ? label.textContent : 'Records';
+      list.insertBefore(title, list.firstChild);
+
+      list.classList.add('profile-nav__sublist--flyout');
+      list.hidden = false;
+      toggle.setAttribute('aria-expanded', 'true');
+      openList = list;
+
+      var r = toggle.getBoundingClientRect();
+      list.style.left = (r.right + 8) + 'px';
+      list.style.top = Math.max(12, Math.min(r.top, window.innerHeight - list.offsetHeight - 12)) + 'px';
+    };
+
+    function setCollapsed(collapsed) {
+      closeFlyout();
+      shell.classList.toggle('is-collapsed', collapsed);
+      btn.setAttribute('aria-expanded', String(!collapsed));
+
+      var verb = collapsed ? 'Expand' : 'Collapse';
+      btn.setAttribute('aria-label', verb + ' Records navigation');
+      btn.setAttribute('title', verb + ' Records navigation');
+      btn.querySelector('i').className = collapsed ? 'fa-solid fa-angles-right' : 'fa-solid fa-angles-left';
+
+      /* The icons lose their text, so each label becomes a tooltip */
+      document.querySelectorAll('.profile-nav__link').forEach(function (link) {
+        var label = link.querySelector('.profile-nav__label');
+        if (!label) return;
+        if (collapsed) link.setAttribute('title', label.textContent);
+        else link.removeAttribute('title');
+      });
+
+      /* A group left open inline would spill out of the narrow rail */
+      if (collapsed) {
+        document.querySelectorAll('.profile-nav__link[aria-controls]').forEach(function (toggle) {
+          toggle.setAttribute('aria-expanded', 'false');
+          var list = document.getElementById(toggle.getAttribute('aria-controls'));
+          if (list) list.hidden = true;
+        });
+      }
+
+      try { localStorage.setItem(STORE_KEY, collapsed ? '1' : '0'); } catch (e) {}
+    }
+
+    btn.addEventListener('click', function () {
+      setCollapsed(!shell.classList.contains('is-collapsed'));
+    });
+
+    /* Dismiss the flyout on outside click, Esc, rail scroll or resize */
+    document.addEventListener('click', function (e) {
+      if (!openList || openList.contains(e.target)) return;
+      if (e.target.closest && e.target.closest('.profile-nav__link[aria-controls]')) return;
+      closeFlyout();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeFlyout();
+    });
+    document.querySelectorAll('.profile-nav__sublink').forEach(function (link) {
+      link.addEventListener('click', closeFlyout);
+    });
+    if (rail) rail.addEventListener('scroll', closeFlyout);
+    window.addEventListener('resize', closeFlyout);
+
+    try { if (localStorage.getItem(STORE_KEY) === '1') setCollapsed(true); } catch (e) {}
+  })();
+
   /* Start Submission modal — staff starting a submission on this        */
   /* constituent's behalf. The subject is fixed (they came from this     */
   /* profile), so only License Type and Application Type are chosen;     */

@@ -2756,6 +2756,110 @@ button {
   display: none;
 }
 
+/* ------------------------------------------------------------------ */
+/* Records rail collapse — labels give way to icon-over-count so the   */
+/* panel gains ~256px. Toggle lives at the right of the "Records" row. */
+/* ------------------------------------------------------------------ */
+
+.profile-nav__heading-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-right: 12px;
+}
+
+.profile-nav__heading-row .profile-nav__heading {
+  flex: 1 1 auto;
+}
+
+.profile-nav__collapse {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--r-pill);
+  color: var(--c-text-secondary);
+  font-size: 14px;
+}
+
+.profile-nav__collapse:hover {
+  background: var(--c-tile-bg);
+  color: var(--c-header-navy);
+}
+
+/* Below 1100px the shell is already one column, so collapsing buys nothing */
+@media (max-width: 1100px) {
+  .profile-nav__collapse {
+    display: none;
+  }
+}
+
+.profile-shell.is-collapsed {
+  grid-template-columns: 64px minmax(0, 1fr);
+}
+
+.profile-shell.is-collapsed .profile-nav__heading {
+  display: none;
+}
+
+.profile-shell.is-collapsed .profile-nav__heading-row {
+  justify-content: center;
+  padding: 6px 0 2px;
+}
+
+.profile-shell.is-collapsed .profile-nav__label,
+.profile-shell.is-collapsed .profile-nav__chevron {
+  display: none;
+}
+
+.profile-shell.is-collapsed .profile-nav__link {
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px 4px;
+}
+
+.profile-shell.is-collapsed .profile-nav__icon {
+  width: auto;
+  font-size: 17px;
+}
+
+.profile-shell.is-collapsed .profile-nav__count {
+  min-width: 0;
+  padding: 0 6px;
+  font-size: 14px;
+}
+
+/* Inline sublists never fit the narrow rail — they open as a flyout instead */
+.profile-shell.is-collapsed .profile-nav__sublist:not(.profile-nav__sublist--flyout) {
+  display: none;
+}
+
+.profile-nav__sublist--flyout {
+  position: fixed;
+  z-index: 40;
+  min-width: 236px;
+  padding: 6px 0 8px;
+  background: #fff;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-panel);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .14);
+}
+
+.profile-nav__sublist--flyout .profile-nav__sublink {
+  margin-left: 0;
+}
+
+.profile-nav__flyout-title {
+  padding: 8px 16px 10px;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--c-text-secondary);
+}
+
 /* Sub-item — gold left bar when current, indented to the icon column */
 .profile-nav__sublink {
   display: flex;
