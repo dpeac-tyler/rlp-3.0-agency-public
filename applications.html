@@ -43,20 +43,72 @@
 
     <div class="search-panel" style="margin-top: 16px">
       <div class="search-panel__top">
-        <div class="search-toggle" role="group" aria-label="Search type">
-          <button type="button" class="search-toggle__segment is-active" data-search-type="constituent">Constituent</button>
-          <button type="button" class="search-toggle__segment" data-search-type="invoice">Invoice</button>
-          <button type="button" class="search-toggle__segment" data-search-type="license">License</button>
-          <button type="button" class="search-toggle__segment" data-search-type="submission">Submission</button>
+        <div class="search-toggle-set">
+          <div class="search-toggle" role="group" aria-label="Search type">
+            <button type="button" class="search-toggle__segment is-active" data-search-type="constituent">Constituent</button>
+            <button type="button" class="search-toggle__segment" data-search-type="invoice">Invoice</button>
+            <button type="button" class="search-toggle__segment" data-search-type="license">License</button>
+            <button type="button" class="search-toggle__segment" data-search-type="submission">Submission</button>
+          </div>
+          <span class="search-toggle-set__divider" aria-hidden="true"></span>
+          <div class="search-toggle" role="group" aria-label="Configurable search types">
+            <button type="button" class="search-toggle__segment" data-search-type="assets">Assets</button>
+            <button type="button" class="search-toggle__segment" data-search-type="inspections">Inspections</button>
+          </div>
         </div>
-        <a class="search-advanced" href="#">Advanced search <i class="fa-solid fa-chevron-down" aria-hidden="true"></i></a>
       </div>
-      <form class="search-field-row" action="#" onsubmit="return false;">
+      <!-- Constituent / Invoice / License / Submission -->
+      <form class="search-field-row" data-search-row="standard" action="#" onsubmit="return false;">
         <label class="search-box" for="global-search">
           <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
           <input type="text" id="global-search" placeholder="Last name, first name, business, DBA, license #, or email…">
           <span class="search-kbd" aria-hidden="true">⌘K</span>
         </label>
+        <button type="submit" class="search-btn">Search</button>
+      </form>
+
+      <!-- Assets -->
+      <form class="search-field-row search-field-row--assets" data-search-row="assets" action="#" onsubmit="return false;" hidden>
+        <select class="search-select" id="panel-assets-search-by" aria-label="Search By">
+          <option value="">Search By</option>
+          <option value="asset-type">Asset Type</option>
+          <option value="id-type">ID Type</option>
+          <option value="status">Status</option>
+        </select>
+        <label class="search-box" for="panel-assets-search-term">
+          <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+          <input type="text" id="panel-assets-search-term" placeholder="Asset type, ID value, or status…">
+        </label>
+        <button type="submit" class="search-btn">Search</button>
+      </form>
+
+      <!-- Inspections -->
+      <form class="search-field-row search-field-row--inspections" data-search-row="inspections" action="#" onsubmit="return false;" hidden>
+        <label class="search-box" for="panel-inspections-search-term">
+          <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+          <input type="text" id="panel-inspections-search-term" placeholder="Inspection ID, subject, site, or inspector…">
+        </label>
+        <div class="search-filters">
+          <select class="search-select" id="panel-inspection-type" aria-label="Inspection Type">
+            <option value="">Inspection Type</option>
+            <option value="facility-site-visit">Facility Site Visit</option>
+            <option value="clinical-competency-review">Clinical Competency Review</option>
+            <option value="license-verification">License Verification</option>
+            <option value="equipment">Equipment</option>
+          </select>
+          <select class="search-select" id="panel-inspection-status" aria-label="Inspection Status">
+            <option value="">Inspection Status</option>
+            <option value="assigned">Assigned</option>
+            <option value="in-progress">In Progress</option>
+            <option value="completed">Completed</option>
+            <option value="terminated">Terminated</option>
+          </select>
+          <select class="search-select" id="panel-inspection-outcome" aria-label="Inspection Outcome">
+            <option value="">Inspection Outcome</option>
+            <option value="pass">Pass</option>
+            <option value="fail">Fail</option>
+          </select>
+        </div>
         <button type="submit" class="search-btn">Search</button>
       </form>
     </div>
@@ -413,20 +465,14 @@
 </div>
 
 <script src="js/toolbar.js"></script>
+<script src="js/search-panel.js"></script>
 <script src="js/column-select.js"></script>
 <script src="js/icon-legend.js"></script>
 <script>
   initToolbar('#toolbar', { activeKey: 'applications' });
 
-  // Search type segmented control
-  document.querySelectorAll('.search-toggle__segment').forEach(function (segment) {
-    segment.addEventListener('click', function () {
-      document.querySelectorAll('.search-toggle__segment').forEach(function (s) {
-        s.classList.remove('is-active');
-      });
-      segment.classList.add('is-active');
-    });
-  });
+  // Search type segmented control + the field row each type swaps in
+  initSearchPanel('.search-panel');
 
   // Control icon legends (Drafts and Live views)
   initIconLegends();

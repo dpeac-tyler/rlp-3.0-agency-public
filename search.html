@@ -36,21 +36,31 @@
 
     <h1 class="page-title">Search</h1>
 
-    <p class="help-text" style="margin-top: 24px">Use the Search Type options below to choose either Constituent, Invoice, License, or Submission. Then enter your search terms.</p>
+    <p class="help-text" style="margin-top: 24px">Use the Search Type options below to choose a search category, then enter your search terms. Types to the right of the divider come from features your agency has enabled.</p>
 
     <fieldset class="fieldset" style="margin-top: 24px">
       <legend>Search Type <span class="field-required">Required</span></legend>
-      <div class="search-toggle">
-        <button type="button" class="search-toggle__segment" data-search-type="constituent" aria-pressed="false">Constituent</button>
-        <button type="button" class="search-toggle__segment" data-search-type="invoice" aria-pressed="false">Invoice</button>
-        <button type="button" class="search-toggle__segment" data-search-type="license" aria-pressed="false">License</button>
-        <button type="button" class="search-toggle__segment is-active" data-search-type="submission" aria-pressed="true">Submission</button>
+      <div class="search-toggle-set">
+        <div class="search-toggle" role="group" aria-label="Search type">
+          <button type="button" class="search-toggle__segment" data-search-type="constituent" aria-pressed="false">Constituent</button>
+          <button type="button" class="search-toggle__segment" data-search-type="invoice" aria-pressed="false">Invoice</button>
+          <button type="button" class="search-toggle__segment" data-search-type="license" aria-pressed="false">License</button>
+          <button type="button" class="search-toggle__segment is-active" data-search-type="submission" aria-pressed="true">Submission</button>
+        </div>
+        <span class="search-toggle-set__divider" aria-hidden="true"></span>
+        <div class="search-toggle" role="group" aria-label="Configurable search types">
+          <button type="button" class="search-toggle__segment" data-search-type="assets" aria-pressed="false">Assets</button>
+          <button type="button" class="search-toggle__segment" data-search-type="inspections" aria-pressed="false">Inspections</button>
+        </div>
       </div>
     </fieldset>
 
     <p class="help-text" style="margin-top: 24px">Please enter the search category and search terms below.</p>
 
     <form style="margin-top: 20px" onsubmit="return false;">
+
+      <!-- Constituent / Invoice / License / Submission all share this form -->
+      <div class="search-fields-group" data-search-group="standard">
       <div class="field">
         <label for="constituent-name">Constituent Name</label>
         <div class="field-hint">Last Name, First Name, Business Name, or DBA Name</div>
@@ -167,13 +177,75 @@
         </div>
       </div>
 
+      </div>
+      <!-- End standard search fields -->
+
+      <!-- Assets — available when the agency has the Assets feature enabled -->
+      <div class="search-fields-group" data-search-group="assets" hidden>
+        <div class="field-grid" style="grid-template-columns: 20% 1fr">
+          <div class="field">
+            <label for="assets-search-by">Search By</label>
+            <select id="assets-search-by" name="assets-search-by">
+              <option value="">Please Select</option>
+              <option value="asset-type">Asset Type</option>
+              <option value="id-type">ID Type</option>
+              <option value="status">Status</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="assets-search-term">Search</label>
+            <input type="text" id="assets-search-term" name="assets-search-term">
+          </div>
+        </div>
+      </div>
+
+      <!-- Inspections — available when the agency has the Inspections feature enabled -->
+      <div class="search-fields-group" data-search-group="inspections" hidden>
+        <div class="field">
+          <label for="inspections-search-term">Search</label>
+          <div class="field-hint">Inspection ID, subject, site, or inspector</div>
+          <input type="text" id="inspections-search-term" name="inspections-search-term">
+        </div>
+
+        <div class="field-grid" style="margin-top: 20px">
+          <div class="field">
+            <label for="inspection-type">Inspection Type</label>
+            <select id="inspection-type" name="inspection-type">
+              <option value="">Please Select</option>
+              <option value="facility-site-visit">Facility Site Visit</option>
+              <option value="clinical-competency-review">Clinical Competency Review</option>
+              <option value="license-verification">License Verification</option>
+              <option value="equipment">Equipment</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="inspection-status">Inspection Status</label>
+            <select id="inspection-status" name="inspection-status">
+              <option value="">Please Select</option>
+              <option value="assigned">Assigned</option>
+              <option value="in-progress">In Progress</option>
+              <option value="completed">Completed</option>
+              <option value="terminated">Terminated</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="inspection-outcome">Inspection Outcome</label>
+            <select id="inspection-outcome" name="inspection-outcome">
+              <option value="">Please Select</option>
+              <option value="pass">Pass</option>
+              <option value="fail">Fail</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
       <div class="form-actions">
         <button type="submit" class="btn btn--primary">Search</button>
         <button type="button" class="btn btn--secondary" id="clear-search">Clear</button>
       </div>
     </form>
 
-    <div style="margin-top: 32px">
+    <div class="results-group" data-results-group="standard" style="margin-top: 32px">
       <div class="table-controls">
         <div class="table-controls__count">
           Showing 1 - 5 of 5 Entries
@@ -298,6 +370,210 @@
       </nav>
     </div>
 
+    <!-- Assets results -->
+    <div class="results-group" data-results-group="assets" style="margin-top: 32px" hidden>
+      <div class="table-controls">
+        <div class="table-controls__count">
+          Showing 1 - 3 of 3 Entries
+          <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--assets">
+            What do the control icons mean?
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="table-controls__right">
+          <label for="assets-column-select-button">Columns</label>
+          <div class="multiselect table-controls__column-select">
+            <button type="button" class="multiselect-trigger" id="assets-column-select-button" aria-haspopup="listbox" aria-expanded="false">
+              <span class="multiselect-trigger-text">All Columns</span>
+              <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+            </button>
+            <div class="multiselect-panel" id="assets-column-select-panel" hidden>
+              <input type="text" class="multiselect-filter" id="assets-column-filter-input" placeholder="Filter columns…" autocomplete="off">
+              <label class="multiselect-option"><input type="checkbox" class="column-checkbox" data-column="0" checked><span>ID Type</span></label>
+              <label class="multiselect-option"><input type="checkbox" class="column-checkbox" data-column="1" checked><span>ID Value</span></label>
+              <label class="multiselect-option"><input type="checkbox" class="column-checkbox" data-column="2" checked><span>Asset Type</span></label>
+              <label class="multiselect-option"><input type="checkbox" class="column-checkbox" data-column="3" checked><span>Modified By</span></label>
+              <label class="multiselect-option"><input type="checkbox" class="column-checkbox" data-column="4" checked><span>Modified Date</span></label>
+              <label class="multiselect-option"><input type="checkbox" class="column-checkbox" data-column="5" checked><span>Status</span></label>
+              <label class="multiselect-option"><input type="checkbox" class="column-checkbox" data-column="6" checked><span>Active Licenses</span></label>
+            </div>
+          </div>
+          <label for="entries-per-page-assets">Show</label>
+          <select id="entries-per-page-assets">
+            <option value="100" selected>100</option>
+            <option value="50">50</option>
+            <option value="25">25</option>
+            <option value="10">10</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="icon-legend" id="icon-legend--assets" hidden>
+        <div class="icon-legend__item"><img src="assets/eye-icon.png" alt=""> View Asset</div>
+        <div class="icon-legend__item"><img src="assets/edit-icon.png" alt=""> Edit Asset</div>
+        <div class="icon-legend__item"><img src="assets/manage-license.png" alt=""> Manage Associated License</div>
+      </div>
+
+      <p class="empty-state" id="assets-empty-state" hidden>No asset information available.</p>
+
+      <table class="data-table" id="assets-results-table">
+        <thead>
+          <tr>
+            <th>ID Type <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>ID Value <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Asset Type <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Modified By <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Modified Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Status <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Active Licenses <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Controls</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>VIN</td>
+            <td>1HGCM82633A004352</td>
+            <td>Vehicle</td>
+            <td>Marcus Webb</td>
+            <td>08/14/2026</td>
+            <td class="status-text--active">Active</td>
+            <td>2</td>
+            <td class="controls-cell">
+              <a href="#" class="icon-btn" aria-label="View Asset"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+              <a href="#" class="icon-btn" aria-label="Edit Asset"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>
+            </td>
+          </tr>
+          <tr>
+            <td>Serial Number</td>
+            <td>SN-4471-XR</td>
+            <td>Radiographic Equipment</td>
+            <td>Priya Nair</td>
+            <td>07/29/2026</td>
+            <td class="status-text--active">Active</td>
+            <td>1</td>
+            <td class="controls-cell">
+              <a href="#" class="icon-btn" aria-label="View Asset"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+              <a href="#" class="icon-btn" aria-label="Edit Asset"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>
+            </td>
+          </tr>
+          <tr>
+            <td>Parcel ID</td>
+            <td>042-118-0097</td>
+            <td>Facility</td>
+            <td>Renee Castillo</td>
+            <td>06/03/2026</td>
+            <td class="status-text--inactive">Inactive</td>
+            <td>0</td>
+            <td class="controls-cell">
+              <a href="#" class="icon-btn" aria-label="View Asset"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Inspections results -->
+    <div class="results-group" data-results-group="inspections" style="margin-top: 32px" hidden>
+      <div class="table-controls">
+        <div class="table-controls__count">
+          Showing 1 - 3 of 3 Entries
+          <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--inspections">
+            What do the control icons mean?
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="table-controls__right">
+          <label for="inspections-column-select-button">Columns</label>
+          <div class="multiselect table-controls__column-select">
+            <button type="button" class="multiselect-trigger" id="inspections-column-select-button" aria-haspopup="listbox" aria-expanded="false">
+              <span class="multiselect-trigger-text">All Columns</span>
+              <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+            </button>
+            <div class="multiselect-panel" id="inspections-column-select-panel" hidden>
+              <input type="text" class="multiselect-filter" id="inspections-column-filter-input" placeholder="Filter columns…" autocomplete="off">
+              <label class="multiselect-option"><input type="checkbox" class="column-checkbox" data-column="0" checked><span>ID</span></label>
+              <label class="multiselect-option"><input type="checkbox" class="column-checkbox" data-column="1" checked><span>Type</span></label>
+              <label class="multiselect-option"><input type="checkbox" class="column-checkbox" data-column="2" checked><span>Outcome</span></label>
+              <label class="multiselect-option"><input type="checkbox" class="column-checkbox" data-column="3" checked><span>Due Date</span></label>
+              <label class="multiselect-option"><input type="checkbox" class="column-checkbox" data-column="4" checked><span>Completion Date</span></label>
+              <label class="multiselect-option"><input type="checkbox" class="column-checkbox" data-column="5" checked><span>Inspection Subject</span></label>
+              <label class="multiselect-option"><input type="checkbox" class="column-checkbox" data-column="6" checked><span>Status</span></label>
+            </div>
+          </div>
+          <label for="entries-per-page-inspections">Show</label>
+          <select id="entries-per-page-inspections">
+            <option value="100" selected>100</option>
+            <option value="50">50</option>
+            <option value="25">25</option>
+            <option value="10">10</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="icon-legend" id="icon-legend--inspections" hidden>
+        <div class="icon-legend__item"><img src="assets/eye-icon.png" alt=""> View Inspection</div>
+        <div class="icon-legend__item"><img src="assets/initiate-inspection.png" alt=""> Initiate Inspection</div>
+        <div class="icon-legend__item"><img src="assets/external-link-icon.png" alt=""> External Link</div>
+      </div>
+
+      <p class="empty-state" id="inspections-empty-state" hidden>No inspection information available.</p>
+
+      <table class="data-table" id="inspections-results-table">
+        <thead>
+          <tr>
+            <th>ID <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Type <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Outcome <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Due Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Completion Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Inspection Subject <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Status <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Controls</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>INS-2026-0148</td>
+            <td>Facility Site Visit</td>
+            <td class="status-text--pass">Pass</td>
+            <td>03/15/2026</td>
+            <td>03/10/2026</td>
+            <td>Sarah Johnson</td>
+            <td class="status-text--completed">Completed</td>
+            <td class="controls-cell">
+              <a href="#" class="icon-btn" aria-label="View Inspection"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+              <a href="#" class="icon-btn" aria-label="Facility Site Visit — Open in AFO" target="_blank" rel="noopener noreferrer"><img src="assets/external-link-icon.png" alt="" width="30" height="30"></a>
+            </td>
+          </tr>
+          <tr>
+            <td>INS-2026-0163</td>
+            <td>Clinical Competency Review</td>
+            <td>—</td>
+            <td>04/15/2026</td>
+            <td>—</td>
+            <td>Michael Chen</td>
+            <td class="status-text--in-progress">In Progress</td>
+            <td class="controls-cell">
+              <a href="#" class="icon-btn" aria-label="View Inspection"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+            </td>
+          </tr>
+          <tr>
+            <td>INS-2025-0982</td>
+            <td>Equipment</td>
+            <td class="status-text--fail">Fail</td>
+            <td>12/15/2025</td>
+            <td>12/20/2025</td>
+            <td>Jennifer Williams</td>
+            <td class="status-text--terminated">Terminated</td>
+            <td class="controls-cell">
+              <a href="#" class="icon-btn" aria-label="View Inspection"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+              <a href="#" class="icon-btn" aria-label="Equipment — Open in AFO" target="_blank" rel="noopener noreferrer"><img src="assets/external-link-icon.png" alt="" width="30" height="30"></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
   </main>
 
 </div>
@@ -319,7 +595,32 @@
   // Control icon legend
   initIconLegends();
 
-  // Search type segmented control
+  // Column visibility multiselects (configurable-feature results tables)
+  initColumnSelect({
+    triggerId: 'assets-column-select-button',
+    panelId: 'assets-column-select-panel',
+    filterId: 'assets-column-filter-input',
+    tableId: 'assets-results-table',
+  });
+  initColumnSelect({
+    triggerId: 'inspections-column-select-button',
+    panelId: 'inspections-column-select-panel',
+    filterId: 'inspections-column-filter-input',
+    tableId: 'inspections-results-table',
+  });
+
+  // Search type segmented control. The four standard types share one search
+  // form and results table; Assets and Inspections each bring their own,
+  // since those come from separately configured features.
+  var SEARCH_TYPE_GROUP = {
+    constituent: 'standard',
+    invoice: 'standard',
+    license: 'standard',
+    submission: 'standard',
+    assets: 'assets',
+    inspections: 'inspections',
+  };
+
   document.querySelectorAll('.search-toggle__segment').forEach(function (segment) {
     segment.addEventListener('click', function () {
       document.querySelectorAll('.search-toggle__segment').forEach(function (s) {
@@ -328,6 +629,14 @@
       });
       segment.classList.add('is-active');
       segment.setAttribute('aria-pressed', 'true');
+
+      var group = SEARCH_TYPE_GROUP[segment.getAttribute('data-search-type')];
+      document.querySelectorAll('.search-fields-group').forEach(function (el) {
+        el.hidden = el.getAttribute('data-search-group') !== group;
+      });
+      document.querySelectorAll('.results-group').forEach(function (el) {
+        el.hidden = el.getAttribute('data-results-group') !== group;
+      });
     });
   });
 
