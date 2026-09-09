@@ -36,7 +36,7 @@
   <main class="page-content">
 
     <section class="greeting">
-      <h1 class="greeting__title">Good morning, Dana.</h1>
+      <h1 class="greeting__title"><span class="greeting__salutation">Good morning</span>, Dana.</h1>
       <div class="greeting__date">Wednesday, July 23</div>
 
       <div class="search-panel">
@@ -157,6 +157,24 @@
 
   // Search type segmented control + the field row each type swaps in
   initSearchPanel('.search-panel');
+
+  // Time-aware salutation; the name stays in the markup
+  var salutationEl = document.querySelector('.greeting__salutation');
+  if (salutationEl) {
+    var hour = new Date().getHours();
+    salutationEl.textContent =
+      hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+  }
+
+  // Live date in the greeting, e.g. "Wednesday, July 23"
+  var dateEl = document.querySelector('.greeting__date');
+  if (dateEl) {
+    dateEl.textContent = new Date().toLocaleDateString('en-US', {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric'
+    });
+  }
 </script>
 
 </body>
