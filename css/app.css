@@ -1299,6 +1299,9 @@ a.stat:focus-visible {
   margin-top: 24px;
 }
 
+/* Each variant pins its text colour in :hover as well as at rest — an
+   <a class="btn"> is otherwise repainted by the global a:hover rule, which
+   outranks the variant's base colour and hides the label. */
 .btn {
   height: 44px;
   padding: 0 26px;
@@ -1318,6 +1321,7 @@ a.stat:focus-visible {
 
 .btn--primary:hover {
   background: var(--c-blue-hover);
+  color: #fff;
 }
 
 .btn:disabled {
@@ -1335,6 +1339,7 @@ a.stat:focus-visible {
 
 .btn--secondary:hover {
   border-color: #9ea3a8;
+  color: var(--c-text-primary);
 }
 
 /* Red — Cancel in a modal, and destructive actions (Delete Account) */
@@ -1347,6 +1352,7 @@ a.stat:focus-visible {
 .btn--cancel:hover,
 .btn--danger:hover {
   background: #b50909;
+  color: #fff;
 }
 
 .btn--accent-cool {
@@ -1356,6 +1362,7 @@ a.stat:focus-visible {
 
 .btn--accent-cool:hover {
   background: #c3dbf0;
+  color: var(--c-text-primary);
 }
 
 /* Multiselect dropdown (User Group, etc.) */
@@ -1747,6 +1754,7 @@ a.stat:focus-visible {
 
 .btn--warm:hover {
   background: #cf9109;
+  color: var(--c-gold-text);
 }
 
 /* Read-only label/value grid — Submitter Profile, Inspection Information, Submission summary */
@@ -1919,6 +1927,12 @@ a.stat:focus-visible {
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: var(--shadow-menu);
+}
+
+/* Wider modal for a dialog built around a table — the group user-picker
+   needs the room so Username and Email don't wrap. */
+.modal-content--wide {
+  max-width: 1000px;
 }
 
 /* Navy header band, matching the page header */

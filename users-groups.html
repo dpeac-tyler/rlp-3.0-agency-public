@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Users/Groups &mdash; RLP Agency Console</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Header (shared chrome) -->
+  <header class="app-header">
+    <a class="app-header__brand" href="index.html">
+      <img class="app-header__logo" src="assets/tyler-t.png" alt="Tenant logo">
+      <span class="app-header__brand-name">Name of Agency</span>
+    </a>
+    <nav class="app-header__links" aria-label="Account">
+      <a href="settings.html">Settings</a>
+      <span class="app-header__divider" aria-hidden="true"></span>
+      <a href="search.html">Search</a>
+      <span class="app-header__divider" aria-hidden="true"></span>
+      <a href="#">Help</a>
+      <span class="app-header__divider" aria-hidden="true"></span>
+      <a href="#">Logout</a>
+    </nav>
+  </header>
+
+  <!-- Customizable toolbar (shared chrome, rendered by js/toolbar.js) -->
+  <div id="toolbar"></div>
+
+  <!-- Page content -->
+  <main class="page-body">
+
+    <ol class="breadcrumb" aria-label="Breadcrumb">
+      <li class="breadcrumb__item"><a href="settings.html">Settings</a></li>
+      <li class="breadcrumb__item"><span class="breadcrumb__current">Users/Groups</span></li>
+    </ol>
+
+    <h1 class="page-title">Users/Groups</h1>
+
+    <div class="detail-tabs" role="tablist">
+      <button type="button" class="detail-tabs__btn is-active" data-tab="users" role="tab" aria-selected="true">Users</button>
+      <button type="button" class="detail-tabs__btn" data-tab="groups" role="tab" aria-selected="false">User Groups</button>
+    </div>
+
+    <!-- Users tab -->
+    <div class="tab-panel" id="users-panel">
+
+      <a href="#" class="btn btn--primary">Add User</a>
+
+      <div class="table-controls" style="margin-top: 24px">
+        <div class="table-controls__count">
+          Showing 1 - 5 of 5 Entries
+          <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--users">
+            What do the control icons mean?
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="table-controls__right">
+          <label for="users-column-select-button">Columns</label>
+          <div class="multiselect table-controls__column-select">
+            <button type="button" class="multiselect-trigger" id="users-column-select-button" aria-haspopup="listbox" aria-expanded="false">
+              <span class="multiselect-trigger-text">All Columns</span>
+              <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+            </button>
+            <div class="multiselect-panel" id="users-column-select-panel" hidden>
+              <input type="text" class="multiselect-filter" id="users-column-filter-input" placeholder="Filter columns&hellip;" autocomplete="off">
+              <label class="multiselect-option"><input type="checkbox" class="column-checkbox" data-column="0" checked><span>Username</span></label>
+              <label class="multiselect-option"><input type="checkbox" class="column-checkbox" data-column="1" checked><span>First Name</span></label>
+              <label class="multiselect-option"><input type="checkbox" class="column-checkbox" data-column="2" checked><span>Last Name</span></label>
+              <label class="multiselect-option"><input type="checkbox" class="column-checkbox" data-column="3" checked><span>Email</span></label>
+              <label class="multiselect-option"><input type="checkbox" class="column-checkbox" data-column="4" checked><span>Rules</span></label>
+              <label class="multiselect-option"><input type="checkbox" class="column-checkbox" data-column="5" checked><span>Roles</span></label>
+              <label class="multiselect-option"><input type="checkbox" class="column-checkbox" data-column="6" checked><span>User Groups</span></label>
+              <label class="multiselect-option"><input type="checkbox" class="column-checkbox" data-column="7" checked><span>Status</span></label>
+            </div>
+          </div>
+          <label for="entries-per-page-users">Show</label>
+          <select id="entries-per-page-users">
+            <option value="100" selected>100</option>
+            <option value="50">50</option>
+            <option value="25">25</option>
+            <option value="10">10</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="icon-legend" id="icon-legend--users" hidden>
+        <div class="icon-legend__item"><img src="assets/edit-icon.png" alt=""> Edit User</div>
+        <div class="icon-legend__item"><img src="assets/icon-delete.png" alt=""> Delete User</div>
+      </div>
+
+      <p class="empty-state" id="users-empty-state" hidden>No users found.</p>
+
+      <table class="data-table" id="users-table">
+        <thead>
+          <tr>
+            <th>Username <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>First Name <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Last Name <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Email <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Rules <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Roles <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>User Groups <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Status <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Controls</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>sjohnson</td>
+            <td>Sarah</td>
+            <td>Johnson</td>
+            <td>sarah.johnson@dnr.il.gov</td>
+            <td>License Management</td>
+            <td>Administrator</td>
+            <td>Administrators</td>
+            <td class="status-text--active">Active</td>
+            <td class="controls-cell">
+              <a href="#" class="icon-btn" aria-label="Edit User"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>
+              <a href="#" class="icon-btn" aria-label="Delete User"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>
+            </td>
+          </tr>
+          <tr>
+            <td>mchen</td>
+            <td>Michael</td>
+            <td>Chen</td>
+            <td>michael.chen@dnr.il.gov</td>
+            <td>Application Review</td>
+            <td>Administrator</td>
+            <td>Administrators, Review Team</td>
+            <td class="status-text--active">Active</td>
+            <td class="controls-cell">
+              <a href="#" class="icon-btn" aria-label="Edit User"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>
+              <a href="#" class="icon-btn" aria-label="Delete User"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>
+            </td>
+          </tr>
+          <tr>
+            <td>jwilliams</td>
+            <td>Jennifer</td>
+            <td>Williams</td>
+            <td>jennifer.williams@dnr.il.gov</td>
+            <td>Inspection Management</td>
+            <td>Administrator</td>
+            <td>Administrators, Field Operations</td>
+            <td class="status-text--active">Active</td>
+            <td class="controls-cell">
+              <a href="#" class="icon-btn" aria-label="Edit User"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>
+              <a href="#" class="icon-btn" aria-label="Delete User"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>
+            </td>
+          </tr>
+          <tr>
+            <td>dmartinez</td>
+            <td>David</td>
+            <td>Martinez</td>
+            <td>david.martinez@dnr.il.gov</td>
+            <td>Payment Processing</td>
+            <td>Finance Officer</td>
+            <td>Administrators, Finance Team</td>
+            <td class="status-text--active">Active</td>
+            <td class="controls-cell">
+              <a href="#" class="icon-btn" aria-label="Edit User"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>
+              <a href="#" class="icon-btn" aria-label="Delete User"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>
+            </td>
+          </tr>
+          <tr>
+            <td>ebrown</td>
+            <td>Emily</td>
+            <td>Brown</td>
+            <td>emily.brown@dnr.il.gov</td>
+            <td>Application Review</td>
+            <td>Reviewer</td>
+            <td>Review Team, Customer Service</td>
+            <td class="status-text--inactive">Inactive</td>
+            <td class="controls-cell">
+              <a href="#" class="icon-btn" aria-label="Edit User"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>
+              <a href="#" class="icon-btn" aria-label="Delete User"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <nav aria-label="Pagination">
+        <ul class="pagination">
+          <li><a href="#" class="pagination__arrow" aria-label="Previous page">&lsaquo; Previous</a></li>
+          <li><a href="#" class="is-current" aria-label="Page 1" aria-current="page">1</a></li>
+          <li><a href="#" class="pagination__arrow" aria-label="Next page">Next &rsaquo;</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <!-- User Groups tab -->
+    <div class="tab-panel" id="groups-panel" hidden>
+
+      <button type="button" class="btn btn--primary" id="create-group-btn">Create Group</button>
+
+      <div class="table-controls" style="margin-top: 24px">
+        <div class="table-controls__count">
+          Showing 1 - 5 of 5 Entries
+          <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--groups">
+            What do the control icons mean?
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="table-controls__right">
+          <label for="entries-per-page-groups">Show</label>
+          <select id="entries-per-page-groups">
+            <option value="100" selected>100</option>
+            <option value="50">50</option>
+            <option value="25">25</option>
+            <option value="10">10</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="icon-legend" id="icon-legend--groups" hidden>
+        <div class="icon-legend__item"><img src="assets/edit-icon.png" alt=""> Edit Group</div>
+        <div class="icon-legend__item"><img src="assets/eye-icon.png" alt=""> View Group</div>
+      </div>
+
+      <p class="empty-state" id="groups-empty-state" hidden>No user groups found.</p>
+
+      <table class="data-table" id="groups-table">
+        <thead>
+          <tr>
+            <th>User Group Name <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Group Count <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Created Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Auto Assigned <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Controls</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Administrators</td>
+            <td id="group-count-administrators">4</td>
+            <td>01/07/2026</td>
+            <td>No</td>
+            <td class="controls-cell">
+              <a href="#" class="icon-btn edit-group-btn" data-group="administrators" aria-label="Edit Group"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>
+              <a href="#" class="icon-btn view-group-btn" data-group="administrators" aria-label="View Group"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+            </td>
+          </tr>
+          <tr>
+            <td>Review Team</td>
+            <td id="group-count-review-team">2</td>
+            <td>01/15/2026</td>
+            <td>Yes</td>
+            <td class="controls-cell">
+              <a href="#" class="icon-btn edit-group-btn" data-group="review-team" aria-label="Edit Group"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>
+              <a href="#" class="icon-btn view-group-btn" data-group="review-team" aria-label="View Group"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+            </td>
+          </tr>
+          <tr>
+            <td>Field Operations</td>
+            <td id="group-count-field-operations">1</td>
+            <td>02/03/2026</td>
+            <td>Yes</td>
+            <td class="controls-cell">
+              <a href="#" class="icon-btn edit-group-btn" data-group="field-operations" aria-label="Edit Group"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>
+              <a href="#" class="icon-btn view-group-btn" data-group="field-operations" aria-label="View Group"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+            </td>
+          </tr>
+          <tr>
+            <td>Finance Team</td>
+            <td id="group-count-finance-team">1</td>
+            <td>02/10/2026</td>
+            <td>No</td>
+            <td class="controls-cell">
+              <a href="#" class="icon-btn edit-group-btn" data-group="finance-team" aria-label="Edit Group"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>
+              <a href="#" class="icon-btn view-group-btn" data-group="finance-team" aria-label="View Group"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+            </td>
+          </tr>
+          <tr>
+            <td>Customer Service</td>
+            <td id="group-count-customer-service">1</td>
+            <td>02/20/2026</td>
+            <td>Yes</td>
+            <td class="controls-cell">
+              <a href="#" class="icon-btn edit-group-btn" data-group="customer-service" aria-label="Edit Group"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>
+              <a href="#" class="icon-btn view-group-btn" data-group="customer-service" aria-label="View Group"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <nav aria-label="Pagination">
+        <ul class="pagination">
+          <li><a href="#" class="pagination__arrow" aria-label="Previous page">&lsaquo; Previous</a></li>
+          <li><a href="#" class="is-current" aria-label="Page 1" aria-current="page">1</a></li>
+          <li><a href="#" class="pagination__arrow" aria-label="Next page">Next &rsaquo;</a></li>
+        </ul>
+      </nav>
+    </div>
+
+  </main>
+
+</div>
+
+<!-- View User Group modal — one modal, populated from GROUPS by JS -->
+<div id="view-group-modal" class="modal-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="view-group-title">
+  <div class="modal-content modal-content--wide">
+    <div class="modal-header">
+      <h2 class="modal-title" id="view-group-title">View User Group</h2>
+      <button type="button" class="modal-close" id="view-group-close" aria-label="Close modal">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <h3 id="view-group-count">Showing 0 Users</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Auto Assigned</th>
+          </tr>
+        </thead>
+        <tbody id="view-group-rows"></tbody>
+      </table>
+      <p class="empty-state" id="view-group-empty" hidden>This group has no users.</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn--primary" id="view-group-done">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Create / Edit User Group modal — same form serves both -->
+<div id="group-form-modal" class="modal-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="group-form-title">
+  <div class="modal-content modal-content--wide">
+    <div class="modal-header">
+      <h2 class="modal-title" id="group-form-title">Create User Group</h2>
+      <button type="button" class="modal-close" id="group-form-close" aria-label="Close modal">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+    <form id="group-form" onsubmit="return false;">
+      <div class="modal-body">
+        <p>Give the group a unique name and add at least one user to it.</p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px">
+          <div class="field" id="group-name-field">
+            <label for="group-name">Group Name <span class="field-required">Required</span></label>
+            <span class="field-error" id="group-name-error" hidden>Please enter a group name.</span>
+            <input type="text" id="group-name" name="group-name" autocomplete="off">
+          </div>
+          <fieldset class="fieldset">
+            <legend>Automatic Task Assignment <span class="field-required">Required</span></legend>
+            <span class="field-error" id="auto-assign-error" hidden>Please choose an option.</span>
+            <div class="radio-group">
+              <label class="radio-option"><input type="radio" name="group-auto-assign" value="yes"> Yes</label>
+              <label class="radio-option"><input type="radio" name="group-auto-assign" value="no"> No</label>
+            </div>
+          </fieldset>
+        </div>
+
+        <h3 style="margin-top: 24px">Select the users to add to this group</h3>
+        <span class="field-error" id="group-users-error" hidden>Please select at least one user.</span>
+        <p id="group-user-count">Showing 5 Users - 0 user(s) selected</p>
+
+        <table class="data-table" id="group-user-picker">
+          <thead>
+            <tr>
+              <th class="select-column"><input type="checkbox" id="select-all-users" aria-label="Select all users"></th>
+              <th>User <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+              <th>Username <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+              <th>Email <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+              <th>Auto Assign</th>
+            </tr>
+          </thead>
+          <tbody id="group-user-rows"></tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn--primary" id="group-form-submit">Create Group</button>
+        <button type="button" class="btn btn--cancel" id="group-form-cancel">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+  <span id="toast-text"></span>
+</div>
+
+<script src="js/toolbar.js"></script>
+<script src="js/icon-legend.js"></script>
+<script src="js/column-select.js"></script>
+<script>
+  initToolbar('#toolbar', { activeKey: null });
+
+  // Control icon legends (Users and User Groups tables)
+  initIconLegends();
+
+  // Column visibility multiselect (Users table)
+  initColumnSelect({
+    triggerId: 'users-column-select-button',
+    panelId: 'users-column-select-panel',
+    filterId: 'users-column-filter-input',
+    tableId: 'users-table',
+  });
+
+  /* Shared transient success message */
+  var showToast = (function () {
+    var toast = document.getElementById('toast');
+    var toastText = document.getElementById('toast-text');
+    var timer = null;
+    return function (message) {
+      toastText.textContent = message;
+      toast.classList.add('is-visible');
+      clearTimeout(timer);
+      timer = setTimeout(function () { toast.classList.remove('is-visible'); }, 3000);
+    };
+  })();
+
+  /* ------------------------------------------------------------------ */
+  /* Users / User Groups tabs                                            */
+  /* ------------------------------------------------------------------ */
+  (function () {
+    var tabs = document.querySelectorAll('.detail-tabs__btn');
+    var panels = {
+      users: document.getElementById('users-panel'),
+      groups: document.getElementById('groups-panel'),
+    };
+
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        var key = tab.getAttribute('data-tab');
+
+        tabs.forEach(function (t) {
+          t.classList.remove('is-active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        tab.classList.add('is-active');
+        tab.setAttribute('aria-selected', 'true');
+
+        Object.keys(panels).forEach(function (k) {
+          panels[k].hidden = k !== key;
+        });
+      });
+    });
+  })();
+
+  /* ------------------------------------------------------------------ */
+  /* Group modals — the users table and the group memberships are the    */
+  /* single source of truth, so View / Edit / Create all read from here.  */
+  /* ------------------------------------------------------------------ */
+  var USERS = [
+    { name: 'Sarah Johnson',    username: 'sjohnson',  email: 'sarah.johnson@dnr.il.gov' },
+    { name: 'Michael Chen',     username: 'mchen',     email: 'michael.chen@dnr.il.gov' },
+    { name: 'Jennifer Williams', username: 'jwilliams', email: 'jennifer.williams@dnr.il.gov' },
+    { name: 'David Martinez',   username: 'dmartinez', email: 'david.martinez@dnr.il.gov' },
+    { name: 'Emily Brown',      username: 'ebrown',    email: 'emily.brown@dnr.il.gov' },
+  ];
+
+  var GROUPS = {
+    'administrators':   { name: 'Administrators',   autoAssign: false, members: ['sjohnson', 'mchen', 'jwilliams', 'dmartinez'], autoAssigned: [] },
+    'review-team':      { name: 'Review Team',      autoAssign: true,  members: ['mchen', 'ebrown'],  autoAssigned: ['mchen'] },
+    'field-operations': { name: 'Field Operations', autoAssign: true,  members: ['jwilliams'],        autoAssigned: ['jwilliams'] },
+    'finance-team':     { name: 'Finance Team',     autoAssign: false, members: ['dmartinez'],        autoAssigned: [] },
+    'customer-service': { name: 'Customer Service', autoAssign: true,  members: ['ebrown'],           autoAssigned: ['ebrown'] },
+  };
+
+  function userByUsername(username) {
+    return USERS.filter(function (u) { return u.username === username; })[0];
+  }
+
+  /* ---------------------------- View modal --------------------------- */
+  (function () {
+    var modal = document.getElementById('view-group-modal');
+    var title = document.getElementById('view-group-title');
+    var count = document.getElementById('view-group-count');
+    var rows = document.getElementById('view-group-rows');
+    var empty = document.getElementById('view-group-empty');
+
+    function close() { modal.hidden = true; }
+
+    document.querySelectorAll('.view-group-btn').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        var group = GROUPS[btn.getAttribute('data-group')];
+        if (!group) return;
+
+        title.textContent = 'View User Group - ' + group.name;
+        count.textContent = 'Showing ' + group.members.length + ' User' + (group.members.length === 1 ? '' : 's');
+
+        rows.innerHTML = '';
+        group.members.forEach(function (username) {
+          var user = userByUsername(username);
+          var tr = document.createElement('tr');
+          tr.innerHTML = '<td>' + user.name + '</td><td>' + user.username + '</td><td>' + user.email +
+            '</td><td>' + (group.autoAssigned.indexOf(username) > -1 ? 'Yes' : 'No') + '</td>';
+          rows.appendChild(tr);
+        });
+
+        empty.hidden = group.members.length > 0;
+        modal.hidden = false;
+      });
+    });
+
+    document.getElementById('view-group-close').addEventListener('click', close);
+    document.getElementById('view-group-done').addEventListener('click', close);
+    modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !modal.hidden) close();
+    });
+  })();
+
+  /* ----------------------- Create / Edit modal ----------------------- */
+  (function () {
+    var modal = document.getElementById('group-form-modal');
+    var title = document.getElementById('group-form-title');
+    var submit = document.getElementById('group-form-submit');
+    var nameInput = document.getElementById('group-name');
+    var nameError = document.getElementById('group-name-error');
+    var autoError = document.getElementById('auto-assign-error');
+    var usersError = document.getElementById('group-users-error');
+    var countText = document.getElementById('group-user-count');
+    var rows = document.getElementById('group-user-rows');
+    var selectAll = document.getElementById('select-all-users');
+    var editingSlug = null;
+
+    /* One picker row per user, rebuilt each time the modal opens */
+    function renderRows(group) {
+      rows.innerHTML = '';
+      USERS.forEach(function (user, i) {
+        var isMember = group && group.members.indexOf(user.username) > -1;
+        var isAuto = group && group.autoAssigned.indexOf(user.username) > -1;
+        var tr = document.createElement('tr');
+        tr.innerHTML =
+          '<td class="select-cell"><input type="checkbox" class="group-user-checkbox" data-username="' + user.username +
+            '" aria-label="Add ' + user.name + ' to group"' + (isMember ? ' checked' : '') + '></td>' +
+          '<td>' + user.name + '</td>' +
+          '<td>' + user.username + '</td>' +
+          '<td>' + user.email + '</td>' +
+          '<td class="select-cell"><input type="checkbox" class="group-auto-checkbox" id="group-auto-' + i +
+            '" aria-label="Auto assign tasks to ' + user.name + '"' + (isAuto ? ' checked' : '') + '></td>';
+        rows.appendChild(tr);
+      });
+
+      rows.querySelectorAll('.group-user-checkbox').forEach(function (cb) {
+        cb.addEventListener('change', syncSelection);
+      });
+      syncSelection();
+      syncAutoAssign();
+    }
+
+    function memberCheckboxes() {
+      return Array.prototype.slice.call(rows.querySelectorAll('.group-user-checkbox'));
+    }
+
+    /* Select-all reflects the rows: checked when all are, indeterminate when some */
+    function syncSelection() {
+      var boxes = memberCheckboxes();
+      var selected = boxes.filter(function (cb) { return cb.checked; }).length;
+
+      selectAll.checked = selected === boxes.length && boxes.length > 0;
+      selectAll.indeterminate = selected > 0 && selected < boxes.length;
+      countText.textContent = 'Showing ' + boxes.length + ' Users - ' + selected + ' user(s) selected';
+      if (selected > 0) usersError.hidden = true;
+    }
+
+    /* Per-user auto-assign only applies when the group itself auto-assigns */
+    function syncAutoAssign() {
+      var yes = document.querySelector('input[name="group-auto-assign"][value="yes"]');
+      var enabled = yes && yes.checked;
+      rows.querySelectorAll('.group-auto-checkbox').forEach(function (cb) {
+        cb.disabled = !enabled;
+        if (!enabled) cb.checked = false;
+      });
+    }
+
+    selectAll.addEventListener('change', function () {
+      memberCheckboxes().forEach(function (cb) { cb.checked = selectAll.checked; });
+      syncSelection();
+    });
+
+    document.querySelectorAll('input[name="group-auto-assign"]').forEach(function (radio) {
+      radio.addEventListener('change', function () {
+        autoError.hidden = true;
+        syncAutoAssign();
+      });
+    });
+
+    function open(slug) {
+      var group = slug ? GROUPS[slug] : null;
+      editingSlug = slug;
+
+      title.textContent = group ? 'Edit User Group' : 'Create User Group';
+      submit.textContent = group ? 'Save' : 'Create Group';
+      nameInput.value = group ? group.name : '';
+
+      document.querySelectorAll('input[name="group-auto-assign"]').forEach(function (radio) {
+        radio.checked = group ? radio.value === (group.autoAssign ? 'yes' : 'no') : false;
+      });
+
+      nameError.hidden = true;
+      autoError.hidden = true;
+      usersError.hidden = true;
+      document.getElementById('group-name-field').classList.remove('field--error');
+
+      renderRows(group);
+      modal.hidden = false;
+    }
+
+    function close() { modal.hidden = true; }
+
+    document.getElementById('create-group-btn').addEventListener('click', function () { open(null); });
+
+    document.querySelectorAll('.edit-group-btn').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        open(btn.getAttribute('data-group'));
+      });
+    });
+
+    document.getElementById('group-form-close').addEventListener('click', close);
+    document.getElementById('group-form-cancel').addEventListener('click', close);
+    modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !modal.hidden) close();
+    });
+
+    nameInput.addEventListener('input', function () {
+      if (nameInput.value.trim()) {
+        nameError.hidden = true;
+        document.getElementById('group-name-field').classList.remove('field--error');
+      }
+    });
+
+    document.getElementById('group-form').addEventListener('submit', function () {
+      var name = nameInput.value.trim();
+      var autoAssign = document.querySelector('input[name="group-auto-assign"]:checked');
+      var selected = memberCheckboxes().filter(function (cb) { return cb.checked; });
+
+      nameError.hidden = !!name;
+      autoError.hidden = !!autoAssign;
+      usersError.hidden = selected.length > 0;
+      document.getElementById('group-name-field').classList.toggle('field--error', !name);
+
+      if (!name || !autoAssign || selected.length === 0) return;
+
+      /* Write the edit back so the table count and a re-opened modal agree */
+      if (editingSlug) {
+        var group = GROUPS[editingSlug];
+        group.name = name;
+        group.autoAssign = autoAssign.value === 'yes';
+        group.members = selected.map(function (cb) { return cb.getAttribute('data-username'); });
+        group.autoAssigned = [];
+        rows.querySelectorAll('tr').forEach(function (tr) {
+          var member = tr.querySelector('.group-user-checkbox');
+          var auto = tr.querySelector('.group-auto-checkbox');
+          if (member.checked && auto.checked) group.autoAssigned.push(member.getAttribute('data-username'));
+        });
+
+        var countCell = document.getElementById('group-count-' + editingSlug);
+        if (countCell) countCell.textContent = group.members.length;
+
+        close();
+        showToast('Changes saved successfully');
+        return;
+      }
+
+      close();
+      showToast('User group "' + name + '" created with ' + selected.length + ' user(s)');
+    });
+  })();
+</script>
+
+</body>
+</html>
