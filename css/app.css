@@ -3348,3 +3348,44 @@ a.stat:focus-visible {
 .toast i {
   color: var(--c-status-green);
 }
+
+/* ---------------------------------------------------------------------- */
+/* Full-width island — one page-wide tile of read-only kv line items,     */
+/* with an inline edit form for the values the agency may change.         */
+/* Used by Agency Profile and Application Contact.                        */
+/* ---------------------------------------------------------------------- */
+
+/* A page-level island that isn't sitting in the .islands grid.
+   Tinted so the single tile reads against the white page background. */
+.island--full {
+  margin-top: 24px;
+  background: #fafafa;
+}
+
+/* Rows here have the whole page width, so they wrap instead of
+   ellipsing the way they must in a quarter-width summary island */
+.island--full .island__kv-row {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+}
+
+/* Optional lead-in paragraph, sitting between the eyebrow and the rows */
+.island__intro {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--c-text-secondary);
+}
+
+/* Edit form drops into the kv stack in place of the rows it replaces */
+.island__kv-edit {
+  max-width: 620px;
+  margin-top: 6px;
+}
+
+.island__kv-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}

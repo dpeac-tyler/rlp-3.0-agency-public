@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agency Profile &mdash; RLP Agency Console</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Header (shared chrome) -->
+  <header class="app-header">
+    <a class="app-header__brand" href="index.html">
+      <img class="app-header__logo" src="assets/tyler-t.png" alt="Tenant logo">
+      <span class="app-header__brand-name">Name of Agency</span>
+    </a>
+    <nav class="app-header__links" aria-label="Account">
+      <a href="settings.html">Settings</a>
+      <span class="app-header__divider" aria-hidden="true"></span>
+      <a href="search.html">Search</a>
+      <span class="app-header__divider" aria-hidden="true"></span>
+      <a href="#">Help</a>
+      <span class="app-header__divider" aria-hidden="true"></span>
+      <a href="#">Logout</a>
+    </nav>
+  </header>
+
+  <!-- Customizable toolbar (shared chrome, rendered by js/toolbar.js) -->
+  <div id="toolbar"></div>
+
+  <!-- Page content -->
+  <main class="page-body">
+
+    <ol class="breadcrumb" aria-label="Breadcrumb">
+      <li class="breadcrumb__item"><a href="settings.html">Settings</a></li>
+      <li class="breadcrumb__item"><span class="breadcrumb__current">Agency Profile</span></li>
+    </ol>
+
+    <h1 class="page-title">Agency Profile</h1>
+
+    <!-- Agency information — the address is the only editable value -->
+    <div class="island island--full">
+      <div class="island__eyebrow-row">
+        <span class="island__eyebrow">Agency Information</span>
+        <button type="button" class="btn btn--primary" id="edit-address">Edit Address</button>
+      </div>
+
+      <div class="island__kv">
+
+        <div class="island__kv-row">
+          <span class="island__kv-key">Agency Name:</span>
+          <span class="island__kv-value">Texas Department of Licensing and Regulation</span>
+        </div>
+
+        <div class="island__kv-row">
+          <span class="island__kv-key">Website:</span>
+          <span class="island__kv-value"><a href="https://www.tdlr.texas.gov" target="_blank" rel="noopener">www.tdlr.texas.gov</a></span>
+        </div>
+
+        <div class="island__kv-row" id="address-row">
+          <span class="island__kv-key">Address:</span>
+          <span class="island__kv-value" id="address-display">920 Colorado Street, Suite 400, Austin, TX 78701</span>
+        </div>
+
+        <!-- Inline edit form, shown by the Edit Address button -->
+        <form class="island__kv-edit" id="address-form" onsubmit="return false;" hidden>
+          <div class="field" id="address-street-field">
+            <label for="address-street">Address Line 1 <span class="field-required">Required</span></label>
+            <span class="field-error" id="address-street-error" hidden>Please enter an address.</span>
+            <input type="text" id="address-street" value="920 Colorado Street" autocomplete="off">
+          </div>
+
+          <div class="field" style="margin-top: 16px">
+            <label for="address-street-2">Address Line 2</label>
+            <input type="text" id="address-street-2" value="Suite 400" autocomplete="off">
+          </div>
+
+          <div class="field-grid" style="margin-top: 16px">
+            <div class="field" id="address-city-field">
+              <label for="address-city">City <span class="field-required">Required</span></label>
+              <span class="field-error" id="address-city-error" hidden>Please enter a city.</span>
+              <input type="text" id="address-city" value="Austin" autocomplete="off">
+            </div>
+            <div class="field" id="address-state-field">
+              <label for="address-state">State <span class="field-required">Required</span></label>
+              <span class="field-error" id="address-state-error" hidden>Please choose a state.</span>
+              <select id="address-state">
+                <option value="">Please Select</option>
+                <option value="AZ">Arizona</option>
+                <option value="CA">California</option>
+                <option value="CO">Colorado</option>
+                <option value="FL">Florida</option>
+                <option value="NY">New York</option>
+                <option value="TX" selected>Texas</option>
+                <option value="WA">Washington</option>
+              </select>
+            </div>
+            <div class="field" id="address-zip-field">
+              <label for="address-zip">Zip Code <span class="field-required">Required</span></label>
+              <span class="field-error" id="address-zip-error" hidden>Please enter a 5-digit zip code.</span>
+              <input type="text" id="address-zip" value="78701" inputmode="numeric" maxlength="10" autocomplete="off">
+            </div>
+          </div>
+
+          <div class="island__kv-actions">
+            <button type="submit" class="btn btn--primary" id="address-save">Save</button>
+            <button type="button" class="btn btn--cancel" id="address-cancel">Cancel</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+
+    <!-- Application contact — what constituents see on an application.
+         Agency Name repeats the row above; only phone and email are editable. -->
+    <div class="island island--full" id="contact">
+      <div class="island__eyebrow-row">
+        <span class="island__eyebrow">Application Contact</span>
+        <button type="button" class="btn btn--primary" id="edit-contact">Edit Application Contact</button>
+      </div>
+
+      <p class="island__intro">The information presented here will appear on all your applications. It will provide a way for constituents to contact you.</p>
+
+      <div class="island__kv">
+
+        <div class="island__kv-row">
+          <span class="island__kv-key">Agency Name:</span>
+          <span class="island__kv-value">Texas Department of Licensing and Regulation</span>
+        </div>
+
+        <div class="island__kv-row" id="phone-row">
+          <span class="island__kv-key">Phone Number:</span>
+          <span class="island__kv-value" id="phone-display">(512) 463-6599</span>
+        </div>
+
+        <div class="island__kv-row" id="email-row">
+          <span class="island__kv-key">Email Address:</span>
+          <span class="island__kv-value" id="email-display">licensing@tdlr.texas.gov</span>
+        </div>
+
+        <!-- Inline edit form, shown by the Edit Application Contact button -->
+        <form class="island__kv-edit" id="contact-form" onsubmit="return false;" hidden>
+          <div class="field" id="contact-phone-field">
+            <label for="contact-phone">Phone Number <span class="field-required">Required</span></label>
+            <span class="field-error" id="contact-phone-error" hidden>Please enter a 10-digit phone number.</span>
+            <input type="text" id="contact-phone" value="(512) 463-6599" inputmode="tel" autocomplete="off">
+          </div>
+
+          <div class="field" id="contact-email-field" style="margin-top: 16px">
+            <label for="contact-email">Email Address <span class="field-required">Required</span></label>
+            <span class="field-error" id="contact-email-error" hidden>Please enter a valid email address.</span>
+            <input type="text" id="contact-email" value="licensing@tdlr.texas.gov" autocomplete="off">
+          </div>
+
+          <div class="island__kv-actions">
+            <button type="submit" class="btn btn--primary" id="contact-save">Save</button>
+            <button type="button" class="btn btn--cancel" id="contact-cancel">Cancel</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+  <span id="toast-text"></span>
+</div>
+
+<script src="js/toolbar.js"></script>
+<script>
+  initToolbar('#toolbar', { activeKey: null });
+
+  /* ------------------------------ Toast ------------------------------- */
+  var showToast = (function () {
+    var toast = document.getElementById('toast');
+    var toastText = document.getElementById('toast-text');
+    var timer;
+    return function (message) {
+      toastText.textContent = message;
+      toast.classList.add('is-visible');
+      clearTimeout(timer);
+      timer = setTimeout(function () { toast.classList.remove('is-visible'); }, 3000);
+    };
+  })();
+
+  /* --------------------------------------------------------------------- */
+  /* Inline island editing — both islands hide the rows they own, swap in   */
+  /* their form, and validate on Save. Only the field rules differ, so      */
+  /* each island passes its own fill / validate / save callbacks.           */
+  /* --------------------------------------------------------------------- */
+  function initIslandEdit(opts) {
+    var form = document.getElementById(opts.form);
+    var editBtn = document.getElementById(opts.editBtn);
+    var cancelBtn = document.getElementById(opts.cancelBtn);
+    var rows = opts.rows.map(function (id) { return document.getElementById(id); });
+
+    function setErrors(invalid) {
+      opts.fields.forEach(function (name) {
+        var bad = invalid.indexOf(name) !== -1;
+        document.getElementById(name + '-error').hidden = !bad;
+        document.getElementById(name + '-field').classList.toggle('field--error', bad);
+      });
+    }
+
+    function open() {
+      opts.fill();
+      setErrors([]);
+      rows.forEach(function (row) { row.hidden = true; });
+      form.hidden = false;
+      editBtn.hidden = true;
+      document.getElementById(opts.fields[0]).focus();
+    }
+
+    function close() {
+      form.hidden = true;
+      rows.forEach(function (row) { row.hidden = false; });
+      editBtn.hidden = false;
+      editBtn.focus();
+    }
+
+    editBtn.addEventListener('click', open);
+    cancelBtn.addEventListener('click', close);
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !form.hidden) close();
+    });
+
+    form.addEventListener('submit', function () {
+      var invalid = opts.validate();
+      setErrors(invalid);
+
+      if (invalid.length) {
+        document.getElementById(invalid[0]).focus();
+        return;
+      }
+
+      opts.save();
+      close();
+      showToast(opts.toast);
+    });
+  }
+
+  /* --------------------------- Address island -------------------------- */
+  (function () {
+    var display = document.getElementById('address-display');
+    var street = document.getElementById('address-street');
+    var street2 = document.getElementById('address-street-2');
+    var city = document.getElementById('address-city');
+    var state = document.getElementById('address-state');
+    var zip = document.getElementById('address-zip');
+
+    /* The saved address, so Cancel can put the fields back */
+    var saved = {
+      street: street.value,
+      street2: street2.value,
+      city: city.value,
+      state: state.value,
+      zip: zip.value
+    };
+
+    initIslandEdit({
+      form: 'address-form',
+      editBtn: 'edit-address',
+      cancelBtn: 'address-cancel',
+      rows: ['address-row'],
+      fields: ['address-street', 'address-city', 'address-state', 'address-zip'],
+      toast: 'Agency address updated successfully',
+
+      fill: function () {
+        street.value = saved.street;
+        street2.value = saved.street2;
+        city.value = saved.city;
+        state.value = saved.state;
+        zip.value = saved.zip;
+      },
+
+      validate: function () {
+        var invalid = [];
+        if (!street.value.trim()) invalid.push('address-street');
+        if (!city.value.trim()) invalid.push('address-city');
+        if (!state.value) invalid.push('address-state');
+        if (!/^\d{5}(-\d{4})?$/.test(zip.value.trim())) invalid.push('address-zip');
+        return invalid;
+      },
+
+      save: function () {
+        saved = {
+          street: street.value.trim(),
+          street2: street2.value.trim(),
+          city: city.value.trim(),
+          state: state.value,
+          zip: zip.value.trim()
+        };
+
+        var parts = [saved.street];
+        if (saved.street2) parts.push(saved.street2);
+        parts.push(saved.city + ', ' + saved.state + ' ' + saved.zip);
+        display.textContent = parts.join(', ');
+      }
+    });
+  })();
+
+  /* --------------------------- Contact island -------------------------- */
+  (function () {
+    var phoneDisplay = document.getElementById('phone-display');
+    var emailDisplay = document.getElementById('email-display');
+    var phone = document.getElementById('contact-phone');
+    var email = document.getElementById('contact-email');
+
+    /* The saved contact, so Cancel can put the fields back */
+    var saved = { phone: phone.value, email: email.value };
+
+    /* 10 digits in, (512) 463-6599 out */
+    function formatPhone(value) {
+      var digits = value.replace(/\D/g, '');
+      return '(' + digits.slice(0, 3) + ') ' + digits.slice(3, 6) + '-' + digits.slice(6);
+    }
+
+    initIslandEdit({
+      form: 'contact-form',
+      editBtn: 'edit-contact',
+      cancelBtn: 'contact-cancel',
+      rows: ['phone-row', 'email-row'],
+      fields: ['contact-phone', 'contact-email'],
+      toast: 'Application contact updated successfully',
+
+      fill: function () {
+        phone.value = saved.phone;
+        email.value = saved.email;
+      },
+
+      validate: function () {
+        var invalid = [];
+        if (phone.value.replace(/\D/g, '').length !== 10) invalid.push('contact-phone');
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.value.trim())) invalid.push('contact-email');
+        return invalid;
+      },
+
+      save: function () {
+        saved = { phone: formatPhone(phone.value), email: email.value.trim() };
+        phoneDisplay.textContent = saved.phone;
+        emailDisplay.textContent = saved.email;
+      }
+    });
+  })();
+</script>
+
+</body>
+</html>
