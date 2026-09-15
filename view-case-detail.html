@@ -45,12 +45,11 @@
       </div>
       <div class="task-bar__meta">
         <strong>Case:</strong> <span id="header-case-number">Loading&hellip;</span> &middot;
-        <strong>Status:</strong> <span id="header-status">Loading&hellip;</span> &middot;
-        <strong>Priority:</strong> <span id="header-priority">Loading&hellip;</span>
+        <strong>Status:</strong> <span id="header-status">Loading&hellip;</span>
       </div>
     </div>
     <div class="task-bar__right">
-      <div class="task-bar__claimant"><strong>Assigned &ndash; <span id="header-assigned-to">Unassigned</span></strong></div>
+      <div class="task-bar__claimant"><strong>Assigned To: <span id="header-assigned-to">Unassigned</span></strong></div>
       <div class="task-bar__actions">
         <button type="button" class="btn btn--warm" id="generate-invoice-btn">Generate Invoice</button>
         <span class="detail-actions__divider" aria-hidden="true"></span>
@@ -77,7 +76,6 @@
           <div class="island__kv-row"><span class="island__kv-key">Type:</span> <span class="island__kv-value" id="island-case-type">&mdash;</span></div>
           <div class="island__kv-row"><span class="island__kv-key">Status:</span> <span class="island__kv-value" id="island-status">&mdash;</span></div>
           <div class="island__kv-row"><span class="island__kv-key">Date Received:</span> <span class="island__kv-value" id="island-date-received">&mdash;</span></div>
-          <div class="island__kv-row"><span class="island__kv-key">Priority:</span> <span class="island__kv-value" id="island-priority">&mdash;</span></div>
         </div>
       </div>
 
@@ -616,18 +614,17 @@
     }
   ];
 
+  /* Status colours are the fixed palette in app.css and nothing else, so the
+     class is the status slugified: any parenthetical qualifier drops off
+     ("Closed (No Violations)" is still Closed grey) and spaces hyphenate. */
   function statusClass(status) {
-    return 'status-text--' + status.toLowerCase();
+    return 'status-text--' + String(status)
+      .replace(/\(.*\)/, '')
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
   }
-
-  /* Investigation statuses don't all match a status-text class one-for-one */
-  var INVESTIGATION_STATUS_CLASS = {
-    'Open': 'status-text--open',
-    'In Progress': 'status-text--in-progress',
-    'On Hold': 'status-text--on-hold',
-    'Completed': 'status-text--completed',
-    'Closed (No Violations)': 'status-text--closed'
-  };
 
   /* --------------------------------------------------------------------- */
   /* Header, islands and the case information card                         */
@@ -642,7 +639,6 @@
     document.getElementById('breadcrumb-case-number').textContent = c.caseNumber;
     document.getElementById('header-case-subject').textContent = c.caseSubject;
     document.getElementById('header-case-number').textContent = c.caseNumber;
-    document.getElementById('header-priority').textContent = c.priority;
     document.getElementById('header-assigned-to').textContent = c.assignedTo;
     document.getElementById('case-type-tag').textContent = c.caseType;
 
@@ -653,7 +649,6 @@
     document.getElementById('island-case-number').textContent = c.caseNumber;
     document.getElementById('island-case-type').textContent = c.caseType;
     document.getElementById('island-date-received').textContent = c.dateReceived;
-    document.getElementById('island-priority').textContent = c.priority;
 
     var islandStatus = document.getElementById('island-status');
     islandStatus.textContent = c.status;
@@ -713,16 +708,25 @@
     }).join('');
   }
 
-  /* Which case actions apply depends entirely on the status */
+  /* A case has to be claimed before it can be worked, so the actions follow
+     the claim state: an unclaimed case can only be claimed, a claimed case can
+     be unclaimed or closed, and a closed case can only be reopened. */
+  function isClaimed() {
+    return currentCase.status !== 'Closed' &&
+      !!currentCase.assignedTo && currentCase.assignedTo !== 'Unassigned';
+  }
+
   function renderActions() {
-    var status = currentCase.status;
-    document.getElementById('claim-case-btn').hidden = status !== 'Open';
-    document.getElementById('close-case-btn').hidden = status !== 'Pending';
-    document.getElementById('unclaim-case-btn').hidden = status !== 'Pending';
-    document.getElementById('reopen-case-btn').hidden = status !== 'Closed';
-    document.getElementById('closed-notice').hidden = status !== 'Closed';
-    document.getElementById('save-case-btn').disabled = status === 'Closed';
-    document.getElementById('input-legacy-case-number').disabled = status === 'Closed';
+    var closed = currentCase.status === 'Closed';
+    var claimed = isClaimed();
+
+    document.getElementById('claim-case-btn').hidden = closed || claimed;
+    document.getElementById('unclaim-case-btn').hidden = !claimed;
+    document.getElementById('close-case-btn').hidden = !claimed;
+    document.getElementById('reopen-case-btn').hidden = !closed;
+    document.getElementById('closed-notice').hidden = !closed;
+    document.getElementById('save-case-btn').disabled = closed;
+    document.getElementById('input-legacy-case-number').disabled = closed;
   }
 
   /* --------------------------------------------------------------------- */
@@ -753,7 +757,7 @@
       return '<tr>' +
         '<td>' + escapeHtml(inv.id) + '</td>' +
         '<td>' + escapeHtml(inv.title) + '</td>' +
-        '<td class="' + (INVESTIGATION_STATUS_CLASS[inv.status] || '') + '">' + escapeHtml(inv.status) + '</td>' +
+        '<td class="' + statusClass(inv.status) + '">' + escapeHtml(inv.status) + '</td>' +
         '<td>' + escapeHtml(inv.assignedTo) + '</td>' +
         '<td>' + escapeHtml(inv.startDate) + '</td>' +
         '<td>' + escapeHtml(inv.completionDate) + '</td>' +
@@ -920,6 +924,10 @@
     }
 
     document.getElementById('close-case-btn').addEventListener('click', function () {
+      if (!isClaimed()) {
+        showToast('Claim the case before closing it');
+        return;
+      }
       modal.hidden = false;
     });
 

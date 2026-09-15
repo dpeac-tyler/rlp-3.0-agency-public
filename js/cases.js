@@ -22,7 +22,7 @@ var CASE_SEED = [
   },
   {
     caseNumber: 'CM-2026-0348', dateReceived: '04/29/2026', caseSubject: 'Lone Star Security, Inc.',
-    status: 'Open', assignedTo: 'Sgt. Williams', caseType: 'Complaint', priority: 'Medium',
+    status: 'Open', assignedTo: 'Unassigned', caseType: 'Complaint', priority: 'Medium',
     complainantName: 'Davis, Patricia', licenseNumber: 'SB-2023-01145',
     physicalAddress: '4201 Rogers Ave, Fort Smith, AR 72903', emailAddress: 'lonestar@security.com',
     filingMethod: 'Telephone', incidentDate: '04/20/2026', legacyCaseNumber: '',

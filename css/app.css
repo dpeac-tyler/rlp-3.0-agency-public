@@ -36,12 +36,12 @@
   --shadow-menu: 0 10px 28px rgba(0, 0, 0, .22);
 
   /* status text colors — fixed palette, do not improvise new statuses off-palette */
-  --c-status-green: #417505;      /* Active, Approved, Live, Paid, Completed, Sent, Sold */
+  --c-status-green: #417505;      /* Active, Approved, Live, Paid, Completed, Sent, Sold, Done / Review Done */
   --c-status-yellow: #8f5800;     /* Pending, Open, Assigned, Approved-Awaiting Payment, Awaiting Application, Generated, Collecting */
   --c-status-red: #cd2026;        /* Rejected, Denied, Cancelled, Past Due, Terminated */
   --c-status-dark-red: #80252a;   /* Expired, Revoked, Withdrawn, Decommissioned, Retired, Exported */
-  --c-status-cool-blue: #205493;  /* In Progress, Rejected for Resubmission, In Cart, Submitted, Ready for Review */
-  --c-status-warm-orange: #a34900; /* On Hold, Suspended, Payment in Process, Inactive */
+  --c-status-cool-blue: #205493;  /* In Progress, Rejected for Resubmission, Inactive, In Cart, Submitted, Ready for Review */
+  --c-status-warm-orange: #a34900; /* On Hold / Review On Hold, Suspended, Payment in Process */
   --c-status-draft-blue: #13669a; /* In Review, Draft, Initiated */
   --c-status-gray: #5c5f66;       /* Archived, Closed */
 }
@@ -1328,6 +1328,11 @@ a.stat:focus-visible {
   text-decoration: none;
 }
 
+/* display: inline-flex above would otherwise beat the browser's [hidden] rule */
+.btn[hidden] {
+  display: none;
+}
+
 .btn--primary {
   background: var(--c-blue);
   color: #fff;
@@ -1682,7 +1687,9 @@ a.stat:focus-visible {
 .status-text--passed,
 .status-text--pass,
 .status-text--sent,
-.status-text--sold {
+.status-text--sold,
+.status-text--done,
+.status-text--review-done {
   color: var(--c-status-green);
 }
 
@@ -1702,7 +1709,8 @@ a.stat:focus-visible {
 .status-text--denied,
 .status-text--cancelled,
 .status-text--past-due,
-.status-text--terminated {
+.status-text--terminated,
+.status-text--review-rejected {
   color: var(--c-status-red);
 }
 
@@ -1717,6 +1725,7 @@ a.stat:focus-visible {
 
 .status-text--in-progress,
 .status-text--rejected-for-resubmission,
+.status-text--inactive,
 .status-text--in-cart,
 .status-text--submitted,
 .status-text--ready-for-review {
@@ -1726,11 +1735,12 @@ a.stat:focus-visible {
 .status-text--on-hold,
 .status-text--suspended,
 .status-text--payment-in-process,
-.status-text--inactive {
+.status-text--review-on-hold {
   color: var(--c-status-warm-orange);
 }
 
 .status-text--in-review,
+.status-text--review-in-progress,
 .status-text--draft,
 .status-text--initiated {
   color: var(--c-status-draft-blue);

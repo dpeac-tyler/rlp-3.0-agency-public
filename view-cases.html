@@ -44,58 +44,51 @@
     <p class="help-text" style="margin-top: 16px">Search for cases by case subject information. Use the view icon to
       open case details, or the claim icon to assign a case to yourself.</p>
 
-    <!-- Case subject search — collapsed by default so the results stay in view -->
-    <div class="accordion" style="margin-top: 20px">
-      <button type="button" class="accordion__button" aria-expanded="false" aria-controls="case-search-content">
-        Search by Case Subject
-        <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
-      </button>
-      <div class="accordion__content" id="case-search-content" hidden>
-        <form onsubmit="return false;">
-          <div class="field-grid field-grid--2">
-            <div class="field">
-              <label for="search-constituent-name">Constituent Name</label>
-              <input type="text" id="search-constituent-name" autocomplete="off">
-            </div>
-            <div class="field">
-              <label for="search-license-number">License Number</label>
-              <input type="text" id="search-license-number" autocomplete="off">
-            </div>
-          </div>
+    <h2 class="section-heading">Search by Case Subject</h2>
 
-          <div class="field" style="margin-top: 20px">
-            <label for="search-address">Address</label>
-            <input type="text" id="search-address" autocomplete="off">
-          </div>
-
-          <div class="field-grid" style="margin-top: 20px">
-            <div class="field">
-              <label for="search-city">City</label>
-              <input type="text" id="search-city" autocomplete="off">
-            </div>
-            <div class="field">
-              <label for="search-state">State</label>
-              <select id="search-state">
-                <option value="">Please Select</option>
-                <option value="AR">Arkansas</option>
-                <option value="IL">Illinois</option>
-                <option value="TX">Texas</option>
-                <option value="UT">Utah</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="search-zip">Zip Code</label>
-              <input type="text" id="search-zip" autocomplete="off">
-            </div>
-          </div>
-
-          <div class="form-actions">
-            <button type="button" class="btn btn--primary" id="search-btn">Search</button>
-            <button type="button" class="btn btn--secondary" id="clear-search-btn">Clear Search</button>
-          </div>
-        </form>
+    <form onsubmit="return false;">
+      <div class="field-grid field-grid--2">
+        <div class="field">
+          <label for="search-constituent-name">Constituent Name</label>
+          <input type="text" id="search-constituent-name" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="search-license-number">License Number</label>
+          <input type="text" id="search-license-number" autocomplete="off">
+        </div>
       </div>
-    </div>
+
+      <div class="field" style="margin-top: 20px">
+        <label for="search-address">Address</label>
+        <input type="text" id="search-address" autocomplete="off">
+      </div>
+
+      <div class="field-grid" style="margin-top: 20px">
+        <div class="field">
+          <label for="search-city">City</label>
+          <input type="text" id="search-city" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="search-state">State</label>
+          <select id="search-state">
+            <option value="">Please Select</option>
+            <option value="AR">Arkansas</option>
+            <option value="IL">Illinois</option>
+            <option value="TX">Texas</option>
+            <option value="UT">Utah</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="search-zip">Zip Code</label>
+          <input type="text" id="search-zip" autocomplete="off">
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn--primary" id="search-btn">Search</button>
+        <button type="button" class="btn btn--secondary" id="clear-search-btn">Clear Search</button>
+      </div>
+    </form>
 
     <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px">
       <a href="create-case.html" class="btn btn--primary">Create New Case</a>
@@ -177,17 +170,6 @@
     };
   })();
 
-  /* Search-by-case-subject accordion */
-  (function () {
-    var button = document.querySelector('[aria-controls="case-search-content"]');
-    var content = document.getElementById('case-search-content');
-    button.addEventListener('click', function () {
-      var expanded = button.getAttribute('aria-expanded') === 'true';
-      button.setAttribute('aria-expanded', String(!expanded));
-      content.hidden = expanded;
-    });
-  })();
-
   /* --------------------------------------------------------------------- */
   /* The table renders from CASES (js/cases.js), so claim and unclaim move  */
   /* a row between the status tabs and the counts stay honest.              */
@@ -196,8 +178,15 @@
   var activeFilter = sessionStorage.getItem('caseFilter') || 'open';
   var searchTerms = null;
 
+  /* Matches view-case-detail.html: the class is the status slugified, so the
+     colour always resolves to one of the palette entries in app.css. */
   function statusClass(status) {
-    return 'status-text--' + status.toLowerCase();
+    return 'status-text--' + String(status)
+      .replace(/\(.*\)/, '')
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
   }
 
   function matchesSearch(c) {
