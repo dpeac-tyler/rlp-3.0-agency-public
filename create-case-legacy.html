@@ -32,7 +32,7 @@
   <div id="toolbar"></div>
 
   <!-- Page content -->
-  <main class="page-body" style="background: #fafafa;">
+  <main class="page-body">
 
     <ol class="breadcrumb" aria-label="Breadcrumb">
       <li class="breadcrumb__item"><a href="index.html">Home</a></li>
@@ -54,181 +54,171 @@
     <form style="margin-top: 24px" onsubmit="return false;">
 
       <!-- ── Case Information ──────────────────────────────────────────── -->
-      <section class="island island--section">
-        <h2 class="section-heading">Case Information</h2>
+      <h2 class="section-heading">Case Information</h2>
 
-        <div class="info-grid">
-          <div class="info-grid__item">
-            <span class="info-grid__label">Case Number</span>
-            <span class="info-grid__value" id="case-number-display">&mdash;</span>
-          </div>
-          <div class="info-grid__item">
-            <span class="info-grid__label">Date Received</span>
-            <span class="info-grid__value" id="date-received-display">&mdash;</span>
-          </div>
-          <div class="info-grid__item">
-            <span class="info-grid__label">Status</span>
-            <span class="info-grid__value status-text--open">Open</span>
-          </div>
+      <div class="info-grid">
+        <div class="info-grid__item">
+          <span class="info-grid__label">Case Number</span>
+          <span class="info-grid__value" id="case-number-display">&mdash;</span>
         </div>
-
-        <fieldset class="fieldset" id="case-type-field" style="margin-top: 24px">
-          <legend>Case Type <span class="field-required">Required</span></legend>
-          <span class="field-error" id="case-type-error" hidden>Select a case type.</span>
-          <div class="radio-group">
-            <label class="radio-option"><input type="radio" name="case-type" value="Complaint"> Complaint</label>
-            <label class="radio-option"><input type="radio" name="case-type" value="Appeal"> Appeal</label>
-          </div>
-        </fieldset>
-
-        <div class="field-grid" style="margin-top: 24px">
-          <div class="field">
-            <label for="priority">Priority <span class="field-required">Required</span></label>
-            <select id="priority">
-              <option value="High">High</option>
-              <option value="Medium" selected>Medium</option>
-              <option value="Low">Low</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="filing-method">Filing Method</label>
-            <select id="filing-method">
-              <option value="Board Order">Board Order</option>
-              <option value="Email">Email</option>
-              <option value="Fax">Fax</option>
-              <option value="Judicial Decision">Judicial Decision</option>
-              <option value="Mail">Mail</option>
-              <option value="Online">Online</option>
-              <option value="Personal Visit">Personal Visit</option>
-              <option value="Staff Discovery">Staff Discovery</option>
-              <option value="Staff Entry" selected>Staff Entry</option>
-              <option value="Telephone">Telephone</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="legacy-case-number">Legacy Case Number</label>
-            <input type="text" id="legacy-case-number" autocomplete="off">
-          </div>
+        <div class="info-grid__item">
+          <span class="info-grid__label">Date Received</span>
+          <span class="info-grid__value" id="date-received-display">&mdash;</span>
         </div>
-      </section>
+        <div class="info-grid__item">
+          <span class="info-grid__label">Status</span>
+          <span class="info-grid__value status-text--open">Open</span>
+        </div>
+      </div>
+
+      <fieldset class="fieldset" id="case-type-field" style="margin-top: 24px">
+        <legend>Case Type <span class="field-required">Required</span></legend>
+        <span class="field-error" id="case-type-error" hidden>Select a case type.</span>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="case-type" value="Complaint"> Complaint</label>
+          <label class="radio-option"><input type="radio" name="case-type" value="Appeal"> Appeal</label>
+        </div>
+      </fieldset>
+
+      <div class="field-grid" style="margin-top: 24px">
+        <div class="field">
+          <label for="priority">Priority <span class="field-required">Required</span></label>
+          <select id="priority">
+            <option value="High">High</option>
+            <option value="Medium" selected>Medium</option>
+            <option value="Low">Low</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="filing-method">Filing Method</label>
+          <select id="filing-method">
+            <option value="Board Order">Board Order</option>
+            <option value="Email">Email</option>
+            <option value="Fax">Fax</option>
+            <option value="Judicial Decision">Judicial Decision</option>
+            <option value="Mail">Mail</option>
+            <option value="Online">Online</option>
+            <option value="Personal Visit">Personal Visit</option>
+            <option value="Staff Discovery">Staff Discovery</option>
+            <option value="Staff Entry" selected>Staff Entry</option>
+            <option value="Telephone">Telephone</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="legacy-case-number">Legacy Case Number</label>
+          <input type="text" id="legacy-case-number" autocomplete="off">
+        </div>
+      </div>
 
       <!-- ── Case Subject Information ──────────────────────────────────── -->
-      <section class="island island--section">
-        <h2 class="section-heading">Case Subject Information</h2>
-        <p class="help-text">A case may involve more than one subject. Search the licensee records to add them.</p>
+      <h2 class="section-heading">Case Subject Information</h2>
+      <p class="help-text">A case may involve more than one subject. Search the licensee records to add them.</p>
 
-        <div style="margin-top: 20px">
-          <button type="button" class="btn btn--warm" id="add-subject-btn">Create Case Subject</button>
+      <div style="margin-top: 20px">
+        <button type="button" class="btn btn--warm" id="add-subject-btn">Create Case Subject</button>
+      </div>
+
+      <div class="table-controls" style="margin-top: 20px">
+        <div class="table-controls__count">
+          <span id="subjects-count">Showing 0 - 0 of 0 Entries</span>
+          <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--subjects">
+            What do the control icons mean?
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
         </div>
+      </div>
 
-        <div class="table-controls" style="margin-top: 20px">
-          <div class="table-controls__count">
-            <span id="subjects-count">Showing 0 - 0 of 0 Entries</span>
-            <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--subjects">
-              What do the control icons mean?
-              <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
-            </button>
-          </div>
-        </div>
+      <div class="icon-legend" id="icon-legend--subjects" hidden>
+        <div class="icon-legend__item"><img src="assets/icon-delete.png" alt=""> Remove Case Subject</div>
+      </div>
 
-        <div class="icon-legend" id="icon-legend--subjects" hidden>
-          <div class="icon-legend__item"><img src="assets/icon-delete.png" alt=""> Remove Case Subject</div>
-        </div>
+      <p class="empty-state" id="subjects-empty-state">No case subjects added yet.</p>
 
-        <p class="empty-state" id="subjects-empty-state">No case subjects added yet.</p>
-
-        <table class="data-table" id="subjects-table" hidden>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>License Number</th>
-              <th>License Type</th>
-              <th>Practice Address</th>
-              <th>Email</th>
-              <th>Controls</th>
-            </tr>
-          </thead>
-          <tbody id="subjects-rows"></tbody>
-        </table>
-      </section>
+      <table class="data-table" id="subjects-table" hidden>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>License Number</th>
+            <th>License Type</th>
+            <th>Practice Address</th>
+            <th>Email</th>
+            <th>Controls</th>
+          </tr>
+        </thead>
+        <tbody id="subjects-rows"></tbody>
+      </table>
 
       <!-- ── Complainant Information ───────────────────────────────────── -->
-      <section class="island island--section">
-        <h2 class="section-heading">Complainant Information</h2>
+      <h2 class="section-heading">Complainant Information</h2>
 
-        <div class="field" id="complainant-name-field">
-          <label for="complainant-name">Complainant Name <span class="field-required">Required</span></label>
-          <span class="field-error" id="complainant-name-error" hidden>Enter a complainant name.</span>
-          <input type="text" id="complainant-name" autocomplete="off">
-        </div>
+      <div class="field" id="complainant-name-field">
+        <label for="complainant-name">Complainant Name <span class="field-required">Required</span></label>
+        <span class="field-error" id="complainant-name-error" hidden>Enter a complainant name.</span>
+        <input type="text" id="complainant-name" autocomplete="off">
+      </div>
 
-        <div class="field-grid" style="margin-top: 20px">
-          <div class="field">
-            <label for="incident-date">Incident Date</label>
-            <input type="date" id="incident-date">
-          </div>
-          <div class="field">
-            <label for="phone-number">Phone Number</label>
-            <input type="text" id="phone-number" inputmode="tel" autocomplete="off">
-          </div>
-          <div class="field">
-            <label for="email-address">Email Address</label>
-            <input type="text" id="email-address" autocomplete="off">
-          </div>
+      <div class="field-grid" style="margin-top: 20px">
+        <div class="field">
+          <label for="incident-date">Incident Date</label>
+          <input type="date" id="incident-date">
         </div>
-      </section>
+        <div class="field">
+          <label for="phone-number">Phone Number</label>
+          <input type="text" id="phone-number" inputmode="tel" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="email-address">Email Address</label>
+          <input type="text" id="email-address" autocomplete="off">
+        </div>
+      </div>
 
       <!-- ── Complaint Details ────────────────────────────────────────── -->
-      <section class="island island--section">
-        <h2 class="section-heading">Complaint Details</h2>
+      <h2 class="section-heading">Complaint Details</h2>
 
-        <div class="field">
-          <label for="complaint-description">Complaint Description</label>
-          <textarea id="complaint-description" rows="6" maxlength="2000"></textarea>
-          <div class="char-counter"><span id="description-remaining">2000</span> of 2000 remaining</div>
-        </div>
-      </section>
+      <div class="field">
+        <label for="complaint-description">Complaint Description</label>
+        <textarea id="complaint-description" rows="6" maxlength="2000"></textarea>
+        <div class="char-counter"><span id="description-remaining">2000</span> of 2000 remaining</div>
+      </div>
 
       <!-- ── Documents ────────────────────────────────────────────────── -->
-      <section class="island island--section">
-        <h2 class="section-heading">Documents</h2>
-        <p class="help-text">Upload supporting documents for this case.</p>
+      <h2 class="section-heading">Documents</h2>
+      <p class="help-text">Upload supporting documents for this case.</p>
 
-        <div style="margin-top: 20px">
-          <button type="button" class="btn btn--warm" id="upload-document-btn">Upload Document</button>
+      <div style="margin-top: 20px">
+        <button type="button" class="btn btn--warm" id="upload-document-btn">Upload Document</button>
+      </div>
+
+      <div class="table-controls" style="margin-top: 20px">
+        <div class="table-controls__count">
+          <span id="documents-count">Showing 0 - 0 of 0 Entries</span>
+          <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--documents">
+            What do the control icons mean?
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
         </div>
+      </div>
 
-        <div class="table-controls" style="margin-top: 20px">
-          <div class="table-controls__count">
-            <span id="documents-count">Showing 0 - 0 of 0 Entries</span>
-            <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--documents">
-              What do the control icons mean?
-              <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
-            </button>
-          </div>
-        </div>
+      <div class="icon-legend" id="icon-legend--documents" hidden>
+        <div class="icon-legend__item"><img src="assets/eye-icon.png" alt=""> View Document</div>
+        <div class="icon-legend__item"><img src="assets/icon-delete.png" alt=""> Delete Document</div>
+      </div>
 
-        <div class="icon-legend" id="icon-legend--documents" hidden>
-          <div class="icon-legend__item"><img src="assets/eye-icon.png" alt=""> View Document</div>
-          <div class="icon-legend__item"><img src="assets/icon-delete.png" alt=""> Delete Document</div>
-        </div>
+      <p class="empty-state" id="documents-empty-state">No documents uploaded yet.</p>
 
-        <p class="empty-state" id="documents-empty-state">No documents uploaded yet.</p>
-
-        <table class="data-table" id="documents-table" hidden>
-          <thead>
-            <tr>
-              <th>Document Name</th>
-              <th>Category</th>
-              <th>Description</th>
-              <th>Uploaded Date</th>
-              <th>File Name</th>
-              <th>Controls</th>
-            </tr>
-          </thead>
-          <tbody id="documents-rows"></tbody>
-        </table>
-      </section>
+      <table class="data-table" id="documents-table" hidden>
+        <thead>
+          <tr>
+            <th>Document Name</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Uploaded Date</th>
+            <th>File Name</th>
+            <th>Controls</th>
+          </tr>
+        </thead>
+        <tbody id="documents-rows"></tbody>
+      </table>
 
       <div class="form-actions">
         <button type="button" class="btn btn--primary" id="create-case-btn">Create New Case</button>

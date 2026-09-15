@@ -2304,6 +2304,19 @@ a.stat:focus-visible {
   min-width: 0;
 }
 
+/* Page-wide island wrapping a form section, so each block of fields reads as
+   its own card. Stays white against the tinted page — distinct from
+   .island--full further down, which is a tinted tile on a white page. */
+.island--section {
+  padding: 24px 28px;
+  margin-top: 24px;
+  background: var(--c-surface);
+}
+
+.island--section > .section-heading:first-child {
+  margin-top: 0;
+}
+
 .island__eyebrow-row {
   display: flex;
   align-items: center;
@@ -3493,7 +3506,8 @@ a.stat:focus-visible {
 /* ---------------------------------------------------------------------- */
 
 /* A page-level island that isn't sitting in the .islands grid.
-   Tinted so the single tile reads against the white page background. */
+   Tinted so the single tile reads against the white page background.
+   For a white section card on a tinted page use .island--section instead. */
 .island--full {
   margin-top: 24px;
   background: #fafafa;
