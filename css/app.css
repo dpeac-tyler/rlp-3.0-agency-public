@@ -1468,6 +1468,99 @@ a.stat:focus-visible {
   accent-color: var(--c-blue);
 }
 
+/* Combobox — single-select dropdown you can type to filter. Use in place of
+   a <select> once the list runs past ~10 options. Shares the .multiselect
+   visual language: same 44px trigger geometry, same floating panel. */
+
+.combobox {
+  position: relative;
+}
+
+/* .field input[type="text"] already supplies the geometry, so these rules only
+   need to beat it on the bits that differ — hence the doubled class. */
+.combobox .combobox__input {
+  width: 100%;
+  padding-right: 38px;
+  cursor: text;
+}
+
+.combobox .combobox__input:disabled {
+  background: var(--c-hairline);
+  color: var(--c-text-secondary);
+  cursor: not-allowed;
+}
+
+.combobox__toggle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 38px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  color: var(--c-text-secondary);
+  cursor: pointer;
+}
+
+.combobox__toggle i {
+  font-size: 14px;
+  transition: transform .15s;
+}
+
+.combobox__toggle:disabled {
+  cursor: not-allowed;
+  opacity: .5;
+}
+
+.combobox__input[aria-expanded="true"] ~ .combobox__toggle i {
+  transform: rotate(180deg);
+}
+
+.combobox__list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  z-index: 20;
+  margin: 6px 0 0;
+  padding: 8px;
+  list-style: none;
+  background: #fff;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-panel);
+  box-shadow: var(--shadow-menu);
+  max-height: 280px;
+  overflow: auto;
+}
+
+.combobox__list[hidden] {
+  display: none;
+}
+
+.combobox__option {
+  padding: 9px 10px;
+  border-radius: var(--r-pill);
+  font-size: 16px;
+  color: var(--c-text-primary);
+  cursor: pointer;
+}
+
+/* Hover and keyboard focus land on the same highlight */
+.combobox__option:hover,
+.combobox__option.is-active {
+  background: var(--c-tile-bg);
+}
+
+.combobox__option--empty,
+.combobox__option--empty:hover {
+  background: none;
+  color: var(--c-text-secondary);
+  cursor: default;
+}
+
 /* Table controls bar */
 
 .table-controls {
@@ -1834,6 +1927,16 @@ a.stat:focus-visible {
 
 .info-notice strong {
   font-weight: 700;
+}
+
+/* Error variant — the validation summary that scrolls into view on Save */
+.info-notice--error {
+  background: #f4e3db;
+  border-left-color: #d54309;
+}
+
+.info-notice--error i {
+  color: #d54309;
 }
 
 /* Textarea field */

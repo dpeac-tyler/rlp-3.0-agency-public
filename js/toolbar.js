@@ -28,6 +28,7 @@
     denials:        { label: 'Denials',          icon: 'fa-solid fa-ban' },
     appeals:        { label: 'Appeals',          icon: 'fa-solid fa-gavel' },
     correspondence: { label: 'Correspondence',   icon: 'fa-solid fa-envelope' },
+    packets:        { label: 'Packets',           icon: 'fa-solid fa-layer-group' },
   };
 
   var DEFAULT_ORDER = ['home', 'tasks', 'queues', 'constituents', 'licenses', 'applications', 'metrics'];
@@ -39,6 +40,7 @@
     queues: 'queues.html',
     licenses: 'license-types.html',
     applications: 'applications.html',
+    packets: 'packets.html',
   };
 
   function loadPersisted() {

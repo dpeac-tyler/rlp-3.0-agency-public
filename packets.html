@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>All Packets &mdash; RLP Agency Console</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Header (shared chrome) -->
+  <header class="app-header">
+    <a class="app-header__brand" href="index.html">
+      <img class="app-header__logo" src="assets/tyler-t.png" alt="Tenant logo">
+      <span class="app-header__brand-name">Name of Agency</span>
+    </a>
+    <nav class="app-header__links" aria-label="Account">
+      <a href="settings.html">Settings</a>
+      <span class="app-header__divider" aria-hidden="true"></span>
+      <a href="search.html">Search</a>
+      <span class="app-header__divider" aria-hidden="true"></span>
+      <a href="#">Help</a>
+      <span class="app-header__divider" aria-hidden="true"></span>
+      <a href="#">Logout</a>
+    </nav>
+  </header>
+
+  <!-- Customizable toolbar (shared chrome, rendered by js/toolbar.js) -->
+  <div id="toolbar"></div>
+
+  <!-- Page content -->
+  <main class="page-body">
+
+    <ol class="breadcrumb" aria-label="Breadcrumb">
+      <li class="breadcrumb__item"><a href="index.html">Home</a></li>
+      <li class="breadcrumb__item"><span class="breadcrumb__current">All Packets</span></li>
+    </ol>
+
+    <h1 class="page-title">All Packets</h1>
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px">
+      <a href="create-packet.html" class="btn btn--primary">Create New Packet</a>
+      <div class="filter-tabs" role="group" aria-label="Packet status filter" style="margin-top: 0">
+        <button type="button" class="filter-tabs__btn is-active" data-view="live">Live</button>
+        <button type="button" class="filter-tabs__btn" data-view="archived">Archived</button>
+      </div>
+    </div>
+
+    <!-- Live view -->
+    <div id="live-view" style="margin-top: 24px">
+      <div class="table-controls">
+        <div class="table-controls__count">
+          <span id="live-count">Showing 0 - 0 of 0 Entries</span>
+          <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--live">
+            What do the control icons mean?
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="table-controls__right">
+          <label for="entries-per-page-live">Show</label>
+          <select id="entries-per-page-live">
+            <option value="100" selected>100</option>
+            <option value="50">50</option>
+            <option value="25">25</option>
+            <option value="10">10</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="icon-legend" id="icon-legend--live" hidden>
+        <div class="icon-legend__item"><img src="assets/eye-icon.png" alt=""> View Packet</div>
+        <div class="icon-legend__item"><img src="assets/edit-icon.png" alt=""> Edit Packet</div>
+        <div class="icon-legend__item"><img src="assets/icon-archive.png" alt=""> Archive Packet</div>
+        <div class="icon-legend__item"><img src="assets/icon-delete.png" alt=""> Delete Packet</div>
+      </div>
+
+      <p class="empty-state" id="live-empty-state" hidden>No live packets found.</p>
+
+      <table class="data-table" id="live-table">
+        <thead>
+          <tr>
+            <th>Packet Name <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Owner Application <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Participant Applications</th>
+            <th>Auto-submit <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Created Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Created By <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Controls</th>
+          </tr>
+        </thead>
+        <tbody id="live-rows"></tbody>
+      </table>
+    </div>
+
+    <!-- Archived view -->
+    <div id="archived-view" style="margin-top: 24px" hidden>
+      <div class="table-controls">
+        <div class="table-controls__count">
+          <span id="archived-count">Showing 0 - 0 of 0 Entries</span>
+          <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--archived">
+            What do the control icons mean?
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="table-controls__right">
+          <label for="entries-per-page-archived">Show</label>
+          <select id="entries-per-page-archived">
+            <option value="100" selected>100</option>
+            <option value="50">50</option>
+            <option value="25">25</option>
+            <option value="10">10</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="icon-legend" id="icon-legend--archived" hidden>
+        <div class="icon-legend__item"><img src="assets/eye-icon.png" alt=""> View Packet</div>
+      </div>
+
+      <p class="empty-state" id="archived-empty-state" hidden>No archived packets found.</p>
+
+      <table class="data-table" id="archived-table">
+        <thead>
+          <tr>
+            <th>Packet Name <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Owner Application <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Participant Applications</th>
+            <th>Auto-submit <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Created Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Created By <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Archived Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Archived By <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Controls</th>
+          </tr>
+        </thead>
+        <tbody id="archived-rows"></tbody>
+      </table>
+    </div>
+
+  </main>
+</div>
+
+<!-- View Packet modal — populated from PACKETS by JS -->
+<div class="modal-overlay" id="view-packet-modal" hidden role="dialog" aria-modal="true" aria-labelledby="view-packet-title">
+  <div class="modal-content modal-content--wide">
+    <div class="modal-header">
+      <h2 class="modal-title" id="view-packet-title">View Packet</h2>
+      <button type="button" class="modal-close" id="view-packet-close" aria-label="Close modal">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="info-grid info-grid--2">
+        <div class="info-grid__item">
+          <span class="info-grid__label">Packet Name</span>
+          <span class="info-grid__value" id="view-packet-name"></span>
+        </div>
+        <div class="info-grid__item">
+          <span class="info-grid__label">Owner Application</span>
+          <span class="info-grid__value" id="view-packet-owner"></span>
+        </div>
+        <div class="info-grid__item">
+          <span class="info-grid__label">Auto-submit</span>
+          <span class="info-grid__value" id="view-packet-auto"></span>
+        </div>
+        <div class="info-grid__item">
+          <span class="info-grid__label">Created</span>
+          <span class="info-grid__value" id="view-packet-created"></span>
+        </div>
+      </div>
+
+      <h3 style="margin-top: 24px">Participant Applications</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Role</th>
+            <th>Application</th>
+            <th>Required</th>
+          </tr>
+        </thead>
+        <tbody id="view-packet-participants"></tbody>
+      </table>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn--primary" id="view-packet-close-btn">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm modal — serves both Archive and Delete -->
+<div class="modal-overlay" id="confirm-modal" hidden role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title" id="confirm-title">Archive Packet</h2>
+      <button type="button" class="modal-close" id="confirm-close" aria-label="Close modal">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p id="confirm-text"></p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn--primary" id="confirm-ok">Archive Packet</button>
+      <button type="button" class="btn btn--cancel" id="confirm-cancel">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+  <span id="toast-text"></span>
+</div>
+
+<script src="js/toolbar.js"></script>
+<script src="js/icon-legend.js"></script>
+<script>
+  initToolbar('#toolbar', { activeKey: null });
+  initIconLegends();
+
+  /* ------------------------------ Toast ------------------------------- */
+  var showToast = (function () {
+    var toast = document.getElementById('toast');
+    var toastText = document.getElementById('toast-text');
+    var timer;
+    return function (message) {
+      toastText.textContent = message;
+      toast.classList.add('is-visible');
+      clearTimeout(timer);
+      timer = setTimeout(function () { toast.classList.remove('is-visible'); }, 3000);
+    };
+  })();
+
+  /* --------------------------------------------------------------------- */
+  /* Packet data. Both tables render from this one array, so archiving and  */
+  /* deleting move a row between views and the counts stay honest.          */
+  /* --------------------------------------------------------------------- */
+  var PACKETS = [
+    {
+      name: 'Firearms Business Bundle',
+      owner: 'FBLA - Company',
+      participants: [
+        { role: 'Owner',   app: 'FBLA - Owner',   required: true },
+        { role: 'Manager', app: 'FBLA - Manager', required: true },
+        { role: 'Officer', app: 'FBLA - Officer', required: true }
+      ],
+      autoSubmit: false,
+      created: '01/15/2026',
+      createdBy: 'Agency Username',
+      archived: null
+    },
+    {
+      name: 'Professional Licensing Packet',
+      owner: 'Professional Engineer License',
+      participants: [
+        { role: 'Owner', app: 'Commercial Fishing Guide Permit', required: false }
+      ],
+      autoSubmit: false,
+      created: '02/03/2026',
+      createdBy: 'Sarah Johnson',
+      archived: null
+    },
+    {
+      name: 'Outdoor Commerce Packet',
+      owner: 'Commercial Fishing Guide Permit',
+      participants: [
+        { role: 'Owner', app: 'Wildlife Rehabilitation Facility License', required: true }
+      ],
+      autoSubmit: true,
+      created: '03/10/2026',
+      createdBy: 'Alan Jones',
+      archived: null
+    },
+    {
+      name: 'Full Licensing Suite',
+      owner: 'Firearm Business License',
+      participants: [
+        { role: 'Owner',   app: 'Professional Engineer License',             required: true },
+        { role: 'Manager', app: 'General Contractor License',               required: true },
+        { role: 'Officer', app: 'Commercial Fishing Guide Permit',          required: false },
+        { role: 'Owner',   app: 'Wildlife Rehabilitation Facility License', required: false }
+      ],
+      autoSubmit: false,
+      created: '04/22/2026',
+      createdBy: 'Michael Chen',
+      archived: null
+    },
+    {
+      name: 'Healthcare Provider Bundle',
+      owner: 'Physician License',
+      participants: [
+        { role: 'Owner',   app: 'Pharmacy License',    required: true },
+        { role: 'Manager', app: 'Food Handler Permit', required: false }
+      ],
+      autoSubmit: false,
+      created: '08/12/2025',
+      createdBy: 'Sarah Johnson',
+      archived: { date: '11/30/2025', by: 'Alan Jones' }
+    },
+    {
+      name: 'Contractor Compliance Packet',
+      owner: 'General Contractor License',
+      participants: [
+        { role: 'Owner',   app: 'Electrical Contractor License', required: true },
+        { role: 'Manager', app: 'Plumbing Contractor License',   required: true }
+      ],
+      autoSubmit: true,
+      created: '06/05/2025',
+      createdBy: 'Michael Chen',
+      archived: { date: '12/15/2025', by: 'Agency Username' }
+    }
+  ];
+
+  function escapeHtml(text) {
+    var div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  /* Participant applications read as one line per row in the list tables */
+  function participantSummary(packet) {
+    return packet.participants.map(function (p) {
+      return escapeHtml(p.app) + ' <span class="tag tag--muted">' + (p.required ? 'Required' : 'Optional') + '</span>';
+    }).join('<br>');
+  }
+
+  function countText(n) {
+    return n === 0 ? 'Showing 0 - 0 of 0 Entries' : 'Showing 1 - ' + n + ' of ' + n + ' Entries';
+  }
+
+  /* --------------------------------------------------------------------- */
+  /* Table rendering                                                       */
+  /* --------------------------------------------------------------------- */
+  function render() {
+    var live = [];
+    var archived = [];
+    PACKETS.forEach(function (packet, idx) {
+      (packet.archived ? archived : live).push({ packet: packet, idx: idx });
+    });
+
+    var liveRows = document.getElementById('live-rows');
+    liveRows.innerHTML = live.map(function (entry) {
+      var p = entry.packet;
+      return '<tr>' +
+        '<td>' + escapeHtml(p.name) + '</td>' +
+        '<td>' + escapeHtml(p.owner) + '</td>' +
+        '<td>' + participantSummary(p) + '</td>' +
+        '<td>' + (p.autoSubmit ? 'Yes' : 'No') + '</td>' +
+        '<td>' + escapeHtml(p.created) + '</td>' +
+        '<td>' + escapeHtml(p.createdBy) + '</td>' +
+        '<td class="controls-cell">' +
+          '<a href="#" class="icon-btn" aria-label="View Packet" data-view-idx="' + entry.idx + '"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>' +
+          '<a href="create-packet.html?packet=' + entry.idx + '" class="icon-btn" aria-label="Edit Packet"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>' +
+          '<a href="#" class="icon-btn" aria-label="Archive Packet" data-archive-idx="' + entry.idx + '"><img src="assets/icon-archive.png" alt="" width="30" height="30"></a>' +
+          '<a href="#" class="icon-btn" aria-label="Delete Packet" data-delete-idx="' + entry.idx + '"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+
+    var archivedRows = document.getElementById('archived-rows');
+    archivedRows.innerHTML = archived.map(function (entry) {
+      var p = entry.packet;
+      return '<tr>' +
+        '<td>' + escapeHtml(p.name) + '</td>' +
+        '<td>' + escapeHtml(p.owner) + '</td>' +
+        '<td>' + participantSummary(p) + '</td>' +
+        '<td>' + (p.autoSubmit ? 'Yes' : 'No') + '</td>' +
+        '<td>' + escapeHtml(p.created) + '</td>' +
+        '<td>' + escapeHtml(p.createdBy) + '</td>' +
+        '<td>' + escapeHtml(p.archived.date) + '</td>' +
+        '<td>' + escapeHtml(p.archived.by) + '</td>' +
+        '<td class="controls-cell">' +
+          '<a href="#" class="icon-btn" aria-label="View Packet" data-view-idx="' + entry.idx + '"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+
+    document.getElementById('live-count').textContent = countText(live.length);
+    document.getElementById('archived-count').textContent = countText(archived.length);
+
+    document.getElementById('live-empty-state').hidden = live.length > 0;
+    document.getElementById('live-table').hidden = live.length === 0;
+    document.getElementById('archived-empty-state').hidden = archived.length > 0;
+    document.getElementById('archived-table').hidden = archived.length === 0;
+  }
+
+  /* --------------------------------------------------------------------- */
+  /* Live / Archived filter tabs                                           */
+  /* --------------------------------------------------------------------- */
+  (function () {
+    var tabs = document.querySelectorAll('.filter-tabs__btn');
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        tabs.forEach(function (t) { t.classList.remove('is-active'); });
+        tab.classList.add('is-active');
+        var view = tab.getAttribute('data-view');
+        document.getElementById('live-view').hidden = view !== 'live';
+        document.getElementById('archived-view').hidden = view !== 'archived';
+      });
+    });
+  })();
+
+  /* --------------------------------------------------------------------- */
+  /* View Packet modal                                                     */
+  /* --------------------------------------------------------------------- */
+  var openViewModal = (function () {
+    var modal = document.getElementById('view-packet-modal');
+
+    function close() { modal.hidden = true; }
+
+    document.getElementById('view-packet-close').addEventListener('click', close);
+    document.getElementById('view-packet-close-btn').addEventListener('click', close);
+    modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !modal.hidden) close();
+    });
+
+    return function (idx) {
+      var p = PACKETS[idx];
+      document.getElementById('view-packet-name').textContent = p.name;
+      document.getElementById('view-packet-owner').textContent = p.owner;
+      document.getElementById('view-packet-auto').textContent = p.autoSubmit ? 'Yes' : 'No';
+      document.getElementById('view-packet-created').textContent = p.created + ' by ' + p.createdBy;
+
+      document.getElementById('view-packet-participants').innerHTML = p.participants.map(function (participant) {
+        return '<tr>' +
+          '<td>' + escapeHtml(participant.role) + '</td>' +
+          '<td>' + escapeHtml(participant.app) + '</td>' +
+          '<td>' + (participant.required ? 'Yes' : 'No') + '</td>' +
+        '</tr>';
+      }).join('');
+
+      modal.hidden = false;
+    };
+  })();
+
+  /* --------------------------------------------------------------------- */
+  /* Confirm modal — Archive and Delete both route through here            */
+  /* --------------------------------------------------------------------- */
+  var openConfirm = (function () {
+    var modal = document.getElementById('confirm-modal');
+    var title = document.getElementById('confirm-title');
+    var text = document.getElementById('confirm-text');
+    var okBtn = document.getElementById('confirm-ok');
+    var pending = null;
+
+    function close() {
+      modal.hidden = true;
+      pending = null;
+    }
+
+    document.getElementById('confirm-close').addEventListener('click', close);
+    document.getElementById('confirm-cancel').addEventListener('click', close);
+    modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !modal.hidden) close();
+    });
+
+    okBtn.addEventListener('click', function () {
+      if (pending) pending();
+      close();
+    });
+
+    return function (opts) {
+      title.textContent = opts.title;
+      text.textContent = opts.text;
+      okBtn.textContent = opts.confirmLabel;
+      pending = opts.onConfirm;
+      modal.hidden = false;
+    };
+  })();
+
+  /* --------------------------------------------------------------------- */
+  /* Row controls — delegated, so re-rendered rows stay wired              */
+  /* --------------------------------------------------------------------- */
+  document.addEventListener('click', function (e) {
+    var viewLink = e.target.closest('[data-view-idx]');
+    if (viewLink) {
+      e.preventDefault();
+      openViewModal(parseInt(viewLink.getAttribute('data-view-idx'), 10));
+      return;
+    }
+
+    var archiveLink = e.target.closest('[data-archive-idx]');
+    if (archiveLink) {
+      e.preventDefault();
+      var archiveIdx = parseInt(archiveLink.getAttribute('data-archive-idx'), 10);
+      openConfirm({
+        title: 'Archive Packet',
+        text: 'Archive "' + PACKETS[archiveIdx].name + '"? It moves to the Archived view and can no longer be edited.',
+        confirmLabel: 'Archive Packet',
+        onConfirm: function () {
+          PACKETS[archiveIdx].archived = { date: new Date().toLocaleDateString('en-US'), by: 'Agency Username' };
+          render();
+          showToast('Packet archived successfully');
+        }
+      });
+      return;
+    }
+
+    var deleteLink = e.target.closest('[data-delete-idx]');
+    if (deleteLink) {
+      e.preventDefault();
+      var deleteIdx = parseInt(deleteLink.getAttribute('data-delete-idx'), 10);
+      openConfirm({
+        title: 'Delete Packet',
+        text: 'Delete "' + PACKETS[deleteIdx].name + '"? This cannot be undone.',
+        confirmLabel: 'Delete Packet',
+        onConfirm: function () {
+          var name = PACKETS[deleteIdx].name;
+          PACKETS.splice(deleteIdx, 1);
+          render();
+          showToast('Packet "' + name + '" deleted');
+        }
+      });
+    }
+  });
+
+  render();
+</script>
+
+</body>
+</html>

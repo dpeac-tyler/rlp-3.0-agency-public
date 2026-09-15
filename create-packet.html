@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create New Packet &mdash; RLP Agency Console</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Header (shared chrome) -->
+  <header class="app-header">
+    <a class="app-header__brand" href="index.html">
+      <img class="app-header__logo" src="assets/tyler-t.png" alt="Tenant logo">
+      <span class="app-header__brand-name">Name of Agency</span>
+    </a>
+    <nav class="app-header__links" aria-label="Account">
+      <a href="settings.html">Settings</a>
+      <span class="app-header__divider" aria-hidden="true"></span>
+      <a href="search.html">Search</a>
+      <span class="app-header__divider" aria-hidden="true"></span>
+      <a href="#">Help</a>
+      <span class="app-header__divider" aria-hidden="true"></span>
+      <a href="#">Logout</a>
+    </nav>
+  </header>
+
+  <!-- Customizable toolbar (shared chrome, rendered by js/toolbar.js) -->
+  <div id="toolbar"></div>
+
+  <!-- Page content -->
+  <main class="page-body">
+
+    <ol class="breadcrumb" aria-label="Breadcrumb">
+      <li class="breadcrumb__item"><a href="packets.html">All Packets</a></li>
+      <li class="breadcrumb__item"><span class="breadcrumb__current" id="breadcrumb-current">Create New Packet</span></li>
+    </ol>
+
+    <h1 class="page-title" id="page-title">Create New Packet</h1>
+
+    <!-- Validation summary — scrolled into view when Save finds errors -->
+    <div class="info-notice info-notice--error" id="error-notice" hidden>
+      <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
+      <div><strong>Please correct the following errors before saving.</strong></div>
+    </div>
+
+    <p class="help-text" style="margin-top: 16px">Packets group an owner application type with one or more participant
+      application types. When a packet is created, the owner applicant completes the owner application, after which
+      affiliated users are prompted to complete the associated participant applications. Each participant application
+      can be marked as Required, meaning it must be completed before the packet can be submitted, or Optional, allowing
+      it to be skipped. At least one required participant application must be defined before a packet can be saved.</p>
+
+    <form style="margin-top: 24px" onsubmit="return false;">
+
+      <div class="field" id="packet-name-field">
+        <label for="packet-name">Packet Name <span class="field-required">Required</span></label>
+        <span class="field-error" id="packet-name-error" hidden>Enter a packet name.</span>
+        <input type="text" id="packet-name" name="packet-name" autocomplete="off">
+      </div>
+
+      <!-- ── Owner Application ─────────────────────────────────────────── -->
+      <h2 class="section-heading">Owner Application</h2>
+      <p class="help-text">Only application types configured with an AFQ review step are eligible.</p>
+
+      <div class="field-grid field-grid--2" style="margin-top: 20px">
+        <div class="field" id="owner-license-type-field">
+          <label for="owner-license-type">License Type <span class="field-required">Required</span></label>
+          <span class="field-error" id="owner-license-type-error" hidden>Select a license type.</span>
+          <select id="owner-license-type">
+            <option value="">Please Select</option>
+          </select>
+        </div>
+        <div class="field" id="owner-app-field">
+          <label for="owner-app-input">Owner Application <span class="field-required">Required</span></label>
+          <span class="field-error" id="owner-app-error" hidden>Select an owner application.</span>
+          <div class="combobox" id="owner-app">
+            <input type="text" class="combobox__input" id="owner-app-input" placeholder="Please Select"
+                   autocomplete="off" role="combobox" aria-expanded="false" aria-autocomplete="list"
+                   aria-controls="owner-app-list" disabled>
+            <input type="hidden" id="owner-app-value">
+            <button type="button" class="combobox__toggle" tabindex="-1" aria-hidden="true" disabled>
+              <i class="fa-solid fa-chevron-down"></i>
+            </button>
+            <ul class="combobox__list" id="owner-app-list" role="listbox" hidden></ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Participant Applications ──────────────────────────────────── -->
+      <h2 class="section-heading">Participant Application(s)</h2>
+      <p class="help-text">Define participant applications. At least one required participant application must be
+        defined before saving.</p>
+      <span class="field-error" id="participants-error" style="margin-top: 8px" hidden>Add at least one required
+        participant application.</span>
+
+      <div class="table-controls" style="margin-top: 20px">
+        <div class="table-controls__count">
+          <span id="participants-count">Showing 0 - 0 of 0 Entries</span>
+          <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--participants">
+            What do the control icons mean?
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="icon-legend" id="icon-legend--participants" hidden>
+        <div class="icon-legend__item"><img src="assets/edit-icon.png" alt=""> Edit Participant Application</div>
+        <div class="icon-legend__item"><img src="assets/icon-delete.png" alt=""> Remove Participant Application</div>
+      </div>
+
+      <p class="empty-state" id="participants-empty-state">No participant applications added yet.</p>
+
+      <table class="data-table" id="participants-table" hidden>
+        <thead>
+          <tr>
+            <th>Role</th>
+            <th>Application</th>
+            <th>Required</th>
+            <th>Controls</th>
+          </tr>
+        </thead>
+        <tbody id="participants-rows"></tbody>
+      </table>
+
+      <div style="margin-top: 20px">
+        <button type="button" class="btn btn--warm" id="add-participant-btn">Add Participant Application</button>
+      </div>
+
+      <!-- ── Packet Settings ───────────────────────────────────────────── -->
+      <h2 class="section-heading">Packet Settings</h2>
+      <p class="help-text">When enabled, the packet automatically submits to the agency once all required participant
+        submissions are complete. When disabled, the owner applicant must review and sign off before submission.</p>
+
+      <div class="checkbox-option" style="margin-top: 16px">
+        <label class="checkbox-option__label">
+          <input type="checkbox" id="auto-submit" name="auto-submit">
+          Auto-submit
+        </label>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn--primary" id="save-packet-btn">Save</button>
+        <a href="packets.html" class="btn btn--cancel">Cancel</a>
+      </div>
+
+    </form>
+
+  </main>
+</div>
+
+<!-- Add / Edit Participant Application modal — same form serves both -->
+<div class="modal-overlay" id="participant-modal" hidden role="dialog" aria-modal="true" aria-labelledby="participant-modal-title">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title" id="participant-modal-title">Add Participant Application</h2>
+      <button type="button" class="modal-close" id="participant-modal-close" aria-label="Close modal">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+    <form id="participant-form" onsubmit="return false;">
+      <div class="modal-body">
+
+        <div class="field" id="modal-role-field">
+          <label for="modal-role">Role <span class="field-required">Required</span></label>
+          <span class="field-error" id="modal-role-error" hidden>Select a role.</span>
+          <select id="modal-role">
+            <option value="">Please Select</option>
+            <option value="Owner">Owner</option>
+            <option value="Manager">Manager</option>
+            <option value="Officer">Officer</option>
+          </select>
+        </div>
+
+        <div class="field" id="modal-license-type-field" style="margin-top: 20px">
+          <label for="modal-license-type">License Type <span class="field-required">Required</span></label>
+          <span class="field-error" id="modal-license-type-error" hidden>Select a license type.</span>
+          <select id="modal-license-type">
+            <option value="">Please Select</option>
+          </select>
+        </div>
+
+        <div class="field" id="modal-app-field" style="margin-top: 20px">
+          <label for="modal-app-input">Application <span class="field-required">Required</span></label>
+          <span class="field-error" id="modal-app-error" hidden>Select an application.</span>
+          <div class="combobox" id="modal-app">
+            <input type="text" class="combobox__input" id="modal-app-input" placeholder="Please Select"
+                   autocomplete="off" role="combobox" aria-expanded="false" aria-autocomplete="list"
+                   aria-controls="modal-app-list" disabled>
+            <input type="hidden" id="modal-app-value">
+            <button type="button" class="combobox__toggle" tabindex="-1" aria-hidden="true" disabled>
+              <i class="fa-solid fa-chevron-down"></i>
+            </button>
+            <ul class="combobox__list" id="modal-app-list" role="listbox" hidden></ul>
+          </div>
+        </div>
+
+        <fieldset class="fieldset" style="margin-top: 20px">
+          <legend>Required</legend>
+          <div class="radio-group">
+            <label class="radio-option"><input type="radio" name="modal-required" value="yes" checked> Yes</label>
+            <label class="radio-option"><input type="radio" name="modal-required" value="no"> No</label>
+          </div>
+        </fieldset>
+
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn--primary" id="participant-save-btn">Save</button>
+        <button type="button" class="btn btn--cancel" id="participant-cancel-btn">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+  <span id="toast-text"></span>
+</div>
+
+<script src="js/toolbar.js"></script>
+<script src="js/icon-legend.js"></script>
+<script src="js/combobox.js"></script>
+<script>
+  initToolbar('#toolbar', { activeKey: null });
+  initIconLegends();
+
+  /* ------------------------------ Toast ------------------------------- */
+  var showToast = (function () {
+    var toast = document.getElementById('toast');
+    var toastText = document.getElementById('toast-text');
+    var timer;
+    return function (message) {
+      toastText.textContent = message;
+      toast.classList.add('is-visible');
+      clearTimeout(timer);
+      timer = setTimeout(function () { toast.classList.remove('is-visible'); }, 3000);
+    };
+  })();
+
+  /* --------------------------------------------------------------------- */
+  /* License types, and the application types each one offers              */
+  /* --------------------------------------------------------------------- */
+  var LICENSE_TYPES = [
+    { value: 'firearms',     label: 'Firearms & Weapons' },
+    { value: 'professional', label: 'Professional Services' },
+    { value: 'construction', label: 'Construction & Contracting' },
+    { value: 'outdoor',      label: 'Outdoor & Recreation' },
+    { value: 'healthcare',   label: 'Healthcare & Medical' },
+    { value: 'food-bev',     label: 'Food & Beverage' }
+  ];
+
+  var APP_TYPES = [
+    { value: 'fbla-company',          label: 'FBLA - Company',                           licenseType: 'firearms' },
+    { value: 'fbla-owner',            label: 'FBLA - Owner',                             licenseType: 'firearms' },
+    { value: 'fbla-manager',          label: 'FBLA - Manager',                           licenseType: 'firearms' },
+    { value: 'fbla-officer',          label: 'FBLA - Officer',                           licenseType: 'firearms' },
+    { value: 'firearm-business',      label: 'Firearm Business License',                 licenseType: 'firearms' },
+    { value: 'professional-engineer', label: 'Professional Engineer License',            licenseType: 'professional' },
+    { value: 'land-surveyor',         label: 'Land Surveyor License',                    licenseType: 'professional' },
+    { value: 'cpa',                   label: 'Certified Public Accountant License',      licenseType: 'professional' },
+    { value: 'general-contractor',    label: 'General Contractor License',               licenseType: 'construction' },
+    { value: 'electrical',            label: 'Electrical Contractor License',            licenseType: 'construction' },
+    { value: 'plumbing',              label: 'Plumbing Contractor License',              licenseType: 'construction' },
+    { value: 'fishing-guide',         label: 'Commercial Fishing Guide Permit',          licenseType: 'outdoor' },
+    { value: 'wildlife-rehab',        label: 'Wildlife Rehabilitation Facility License', licenseType: 'outdoor' },
+    { value: 'hunting-outfitter',     label: 'Hunting Outfitter License',                licenseType: 'outdoor' },
+    { value: 'physician',             label: 'Physician License',                         licenseType: 'healthcare' },
+    { value: 'pharmacy',              label: 'Pharmacy License',                          licenseType: 'healthcare' },
+    { value: 'restaurant',            label: 'Restaurant License',                        licenseType: 'food-bev' },
+    { value: 'food-handler',          label: 'Food Handler Permit',                       licenseType: 'food-bev' }
+  ];
+
+  function appLabel(value) {
+    var match = APP_TYPES.filter(function (a) { return a.value === value; })[0];
+    return match ? match.label : '';
+  }
+
+  function fillLicenseTypes(select) {
+    LICENSE_TYPES.forEach(function (lt) {
+      var opt = document.createElement('option');
+      opt.value = lt.value;
+      opt.textContent = lt.label;
+      select.appendChild(opt);
+    });
+  }
+  fillLicenseTypes(document.getElementById('owner-license-type'));
+  fillLicenseTypes(document.getElementById('modal-license-type'));
+
+  /* Each Application combobox is driven by the License Type select above it —
+     pick a type first and the combobox offers just that type's applications. */
+  function appsFor(licenseType) {
+    if (!licenseType) return [];
+    return APP_TYPES.filter(function (a) { return a.licenseType === licenseType; });
+  }
+
+  function bindDependentCombobox(typeSelectId, comboboxId, onChange) {
+    var typeSelect = document.getElementById(typeSelectId);
+
+    var combobox = initCombobox('#' + comboboxId, {
+      options: function () { return appsFor(typeSelect.value); },
+      onSelect: onChange
+    });
+
+    typeSelect.addEventListener('change', function () {
+      combobox.setDisabled(!typeSelect.value);
+      combobox.refresh();
+      if (onChange) onChange();
+    });
+
+    /* Prefill for edit mode: set the type, then hand the combobox its value */
+    combobox.load = function (licenseType, appValue) {
+      typeSelect.value = licenseType || '';
+      combobox.setDisabled(!licenseType);
+      combobox.setValue(appValue || '');
+    };
+
+    return combobox;
+  }
+
+  var ownerApp = bindDependentCombobox('owner-license-type', 'owner-app', clearFieldErrors);
+  var modalApp = bindDependentCombobox('modal-license-type', 'modal-app', clearModalErrors);
+
+  /* --------------------------------------------------------------------- */
+  /* Participant applications — the list the packet is built from          */
+  /* --------------------------------------------------------------------- */
+  var participants = [];
+
+  function escapeHtml(text) {
+    var div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  function renderParticipants() {
+    var rows = document.getElementById('participants-rows');
+    rows.innerHTML = participants.map(function (p, idx) {
+      return '<tr>' +
+        '<td>' + escapeHtml(p.role) + '</td>' +
+        '<td>' + escapeHtml(appLabel(p.app)) + '</td>' +
+        '<td>' + (p.required ? 'Yes' : 'No') + '</td>' +
+        '<td class="controls-cell">' +
+          '<a href="#" class="icon-btn" aria-label="Edit ' + escapeHtml(appLabel(p.app)) + '" data-edit-idx="' + idx + '"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>' +
+          '<a href="#" class="icon-btn" aria-label="Remove ' + escapeHtml(appLabel(p.app)) + '" data-remove-idx="' + idx + '"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+
+    var n = participants.length;
+    document.getElementById('participants-count').textContent =
+      n === 0 ? 'Showing 0 - 0 of 0 Entries' : 'Showing 1 - ' + n + ' of ' + n + ' Entries';
+    document.getElementById('participants-empty-state').hidden = n > 0;
+    document.getElementById('participants-table').hidden = n === 0;
+
+    if (participants.some(function (p) { return p.required; })) {
+      document.getElementById('participants-error').hidden = true;
+    }
+  }
+
+  /* --------------------------------------------------------------------- */
+  /* Add / Edit participant modal                                          */
+  /* --------------------------------------------------------------------- */
+  var MODAL_FIELDS = ['modal-role', 'modal-license-type', 'modal-app'];
+
+  function clearModalErrors() {
+    MODAL_FIELDS.forEach(function (name) {
+      document.getElementById(name + '-error').hidden = true;
+      document.getElementById(name + '-field').classList.remove('field--error');
+    });
+  }
+
+  /* A combobox is a wrapper div, so focus has to land on its inner input */
+  var FOCUS_TARGETS = { 'modal-app': 'modal-app-input', 'owner-app': 'owner-app-input' };
+
+  function focusField(name) {
+    document.getElementById(FOCUS_TARGETS[name] || name).focus();
+  }
+
+  var openParticipantModal = (function () {
+    var modal = document.getElementById('participant-modal');
+    var form = document.getElementById('participant-form');
+    var title = document.getElementById('participant-modal-title');
+    var role = document.getElementById('modal-role');
+    var licenseType = document.getElementById('modal-license-type');
+    var editingIdx = null;
+
+    function close() {
+      modal.hidden = true;
+      editingIdx = null;
+    }
+
+    document.getElementById('participant-modal-close').addEventListener('click', close);
+    document.getElementById('participant-cancel-btn').addEventListener('click', close);
+    modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !modal.hidden) close();
+    });
+
+    form.addEventListener('submit', function () {
+      clearModalErrors();
+
+      var appValue = modalApp.getValue();
+
+      var invalid = [];
+      if (!role.value) invalid.push('modal-role');
+      if (!licenseType.value) invalid.push('modal-license-type');
+      if (!appValue) {
+        invalid.push('modal-app');
+      } else {
+        var duplicate = participants.some(function (p, i) {
+          return p.app === appValue && i !== editingIdx;
+        });
+        if (duplicate) {
+          document.getElementById('modal-app-error').textContent = 'This application has already been added.';
+          invalid.push('modal-app');
+        }
+      }
+
+      invalid.forEach(function (name) {
+        document.getElementById(name + '-error').hidden = false;
+        document.getElementById(name + '-field').classList.add('field--error');
+      });
+
+      if (invalid.length) {
+        focusField(invalid[0]);
+        return;
+      }
+
+      var entry = {
+        role: role.value,
+        licenseType: licenseType.value,
+        app: appValue,
+        required: document.querySelector('input[name="modal-required"]:checked').value === 'yes'
+      };
+
+      var wasEditing = editingIdx !== null;
+      if (wasEditing) {
+        participants[editingIdx] = entry;
+      } else {
+        participants.push(entry);
+      }
+
+      close();
+      renderParticipants();
+      showToast(wasEditing ? 'Participant application updated successfully' : 'Participant application added successfully');
+    });
+
+    return function (idx) {
+      editingIdx = (idx === undefined) ? null : idx;
+      title.textContent = editingIdx === null ? 'Add Participant Application' : 'Edit Participant Application';
+
+      document.getElementById('modal-app-error').textContent = 'Select an application.';
+      clearModalErrors();
+
+      if (editingIdx === null) {
+        role.value = '';
+        modalApp.load('', '');
+        document.querySelector('input[name="modal-required"][value="yes"]').checked = true;
+      } else {
+        var entry = participants[editingIdx];
+        role.value = entry.role;
+        modalApp.load(entry.licenseType, entry.app);
+        document.querySelector('input[name="modal-required"][value="' + (entry.required ? 'yes' : 'no') + '"]').checked = true;
+      }
+
+      modal.hidden = false;
+      role.focus();
+    };
+  })();
+
+  document.getElementById('add-participant-btn').addEventListener('click', function () {
+    openParticipantModal();
+  });
+
+  /* Row controls are delegated, so re-rendered rows stay wired */
+  document.getElementById('participants-rows').addEventListener('click', function (e) {
+    var editLink = e.target.closest('[data-edit-idx]');
+    if (editLink) {
+      e.preventDefault();
+      openParticipantModal(parseInt(editLink.getAttribute('data-edit-idx'), 10));
+      return;
+    }
+
+    var removeLink = e.target.closest('[data-remove-idx]');
+    if (removeLink) {
+      e.preventDefault();
+      var idx = parseInt(removeLink.getAttribute('data-remove-idx'), 10);
+      var removed = appLabel(participants[idx].app);
+      participants.splice(idx, 1);
+      renderParticipants();
+      showToast('Removed ' + removed);
+    }
+  });
+
+  /* --------------------------------------------------------------------- */
+  /* Page-level validation                                                 */
+  /* --------------------------------------------------------------------- */
+  var PAGE_FIELDS = ['packet-name', 'owner-license-type', 'owner-app'];
+
+  function clearFieldErrors() {
+    PAGE_FIELDS.forEach(function (name) {
+      document.getElementById(name + '-error').hidden = true;
+      document.getElementById(name + '-field').classList.remove('field--error');
+    });
+    document.getElementById('error-notice').hidden = true;
+  }
+
+  document.getElementById('packet-name').addEventListener('input', function () {
+    if (this.value.trim()) {
+      document.getElementById('packet-name-error').hidden = true;
+      document.getElementById('packet-name-field').classList.remove('field--error');
+    }
+  });
+
+  document.getElementById('save-packet-btn').addEventListener('click', function () {
+    clearFieldErrors();
+    document.getElementById('participants-error').hidden = true;
+
+    var invalid = [];
+    if (!document.getElementById('packet-name').value.trim()) invalid.push('packet-name');
+    if (!document.getElementById('owner-license-type').value) invalid.push('owner-license-type');
+    if (!ownerApp.getValue()) invalid.push('owner-app');
+
+    invalid.forEach(function (name) {
+      document.getElementById(name + '-error').hidden = false;
+      document.getElementById(name + '-field').classList.add('field--error');
+    });
+
+    var missingRequired = !participants.some(function (p) { return p.required; });
+    if (missingRequired) document.getElementById('participants-error').hidden = false;
+
+    if (invalid.length || missingRequired) {
+      document.getElementById('error-notice').hidden = false;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    window.location.href = 'packets.html';
+  });
+
+  /* --------------------------------------------------------------------- */
+  /* Edit mode — ?packet=N prefills the form from the saved packet          */
+  /* Index-aligned with the PACKETS array in packets.html.                  */
+  /* --------------------------------------------------------------------- */
+  var PACKETS = [
+    {
+      name: 'Firearms Business Bundle',
+      ownerLicenseType: 'firearms',
+      ownerApp: 'fbla-company',
+      participants: [
+        { role: 'Owner',   licenseType: 'firearms', app: 'fbla-owner',   required: true },
+        { role: 'Manager', licenseType: 'firearms', app: 'fbla-manager', required: true },
+        { role: 'Officer', licenseType: 'firearms', app: 'fbla-officer', required: true }
+      ],
+      autoSubmit: false
+    },
+    {
+      name: 'Professional Licensing Packet',
+      ownerLicenseType: 'professional',
+      ownerApp: 'professional-engineer',
+      participants: [
+        { role: 'Owner', licenseType: 'outdoor', app: 'fishing-guide', required: false }
+      ],
+      autoSubmit: false
+    },
+    {
+      name: 'Outdoor Commerce Packet',
+      ownerLicenseType: 'outdoor',
+      ownerApp: 'fishing-guide',
+      participants: [
+        { role: 'Owner', licenseType: 'outdoor', app: 'wildlife-rehab', required: true }
+      ],
+      autoSubmit: true
+    },
+    {
+      name: 'Full Licensing Suite',
+      ownerLicenseType: 'firearms',
+      ownerApp: 'firearm-business',
+      participants: [
+        { role: 'Owner',   licenseType: 'professional', app: 'professional-engineer', required: true },
+        { role: 'Manager', licenseType: 'construction', app: 'general-contractor',    required: true },
+        { role: 'Officer', licenseType: 'outdoor',      app: 'fishing-guide',         required: false },
+        { role: 'Owner',   licenseType: 'outdoor',      app: 'wildlife-rehab',        required: false }
+      ],
+      autoSubmit: false
+    },
+    {
+      name: 'Healthcare Provider Bundle',
+      ownerLicenseType: 'healthcare',
+      ownerApp: 'physician',
+      participants: [
+        { role: 'Owner',   licenseType: 'healthcare', app: 'pharmacy',     required: true },
+        { role: 'Manager', licenseType: 'food-bev',   app: 'food-handler', required: false }
+      ],
+      autoSubmit: false
+    },
+    {
+      name: 'Contractor Compliance Packet',
+      ownerLicenseType: 'construction',
+      ownerApp: 'general-contractor',
+      participants: [
+        { role: 'Owner',   licenseType: 'construction', app: 'electrical', required: true },
+        { role: 'Manager', licenseType: 'construction', app: 'plumbing',   required: true }
+      ],
+      autoSubmit: true
+    }
+  ];
+
+  (function () {
+    var idx = new URLSearchParams(window.location.search).get('packet');
+    if (idx === null) {
+      renderParticipants();
+      return;
+    }
+
+    var packet = PACKETS[parseInt(idx, 10)];
+    if (!packet) {
+      renderParticipants();
+      return;
+    }
+
+    document.title = 'Edit Packet — RLP Agency Console';
+    document.getElementById('page-title').textContent = 'Edit Packet';
+    document.getElementById('breadcrumb-current').textContent = 'Edit Packet';
+
+    document.getElementById('packet-name').value = packet.name;
+    ownerApp.load(packet.ownerLicenseType, packet.ownerApp);
+    document.getElementById('auto-submit').checked = packet.autoSubmit;
+
+    packet.participants.forEach(function (p) { participants.push(p); });
+    renderParticipants();
+  })();
+</script>
+
+</body>
+</html>
