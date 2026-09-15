@@ -1281,6 +1281,20 @@ a.stat:focus-visible {
   margin: 0;
 }
 
+/* Bordered, scrollable list of non-exclusive options — a set too long to sit
+   loose in a modal (Close Case outcomes). Rows are .checkbox-option__label. */
+.checkbox-list {
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-panel);
+  padding: 6px 14px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.checkbox-list .checkbox-option__label {
+  padding: 8px 0;
+}
+
 .badge {
   font-size: 16px;
   font-weight: 700;
@@ -1937,6 +1951,16 @@ a.stat:focus-visible {
 
 .info-notice--error i {
   color: #d54309;
+}
+
+/* Warning variant — caution before a destructive action (Close Case) */
+.info-notice--warning {
+  background: #faf3d1;
+  border-left-color: #ffbe2e;
+}
+
+.info-notice--warning i {
+  color: #8f5800;
 }
 
 /* Textarea field */

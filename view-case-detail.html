@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case Details &mdash; RLP Agency Console</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Header (shared chrome) -->
+  <header class="app-header">
+    <a class="app-header__brand" href="index.html">
+      <img class="app-header__logo" src="assets/tyler-t.png" alt="Tenant logo">
+      <span class="app-header__brand-name">Name of Agency</span>
+    </a>
+    <nav class="app-header__links" aria-label="Account">
+      <a href="settings.html">Settings</a>
+      <span class="app-header__divider" aria-hidden="true"></span>
+      <a href="search.html">Search</a>
+      <span class="app-header__divider" aria-hidden="true"></span>
+      <a href="#">Help</a>
+      <span class="app-header__divider" aria-hidden="true"></span>
+      <a href="#">Logout</a>
+    </nav>
+  </header>
+
+  <!-- Customizable toolbar (shared chrome, rendered by js/toolbar.js) -->
+  <div id="toolbar"></div>
+
+  <!-- Sticky case bar -->
+  <div class="task-bar">
+    <div class="task-bar__info">
+      <div class="task-bar__breadcrumb">
+        <a href="view-cases.html">View Cases</a>
+        <span aria-hidden="true">&rsaquo;</span>
+        <span id="breadcrumb-case-number">Case</span>
+      </div>
+      <div class="task-bar__title">
+        <span id="header-case-subject">Loading&hellip;</span>
+        <span class="tag tag--muted" id="case-type-tag">Complaint</span>
+      </div>
+      <div class="task-bar__meta">
+        <strong>Case:</strong> <span id="header-case-number">Loading&hellip;</span> &middot;
+        <strong>Status:</strong> <span id="header-status">Loading&hellip;</span> &middot;
+        <strong>Priority:</strong> <span id="header-priority">Loading&hellip;</span>
+      </div>
+    </div>
+    <div class="task-bar__right">
+      <div class="task-bar__claimant"><strong>Assigned &ndash; <span id="header-assigned-to">Unassigned</span></strong></div>
+      <div class="task-bar__actions">
+        <button type="button" class="btn btn--warm" id="generate-invoice-btn">Generate Invoice</button>
+        <span class="detail-actions__divider" aria-hidden="true"></span>
+        <button type="button" class="btn btn--accent-cool" id="unclaim-case-btn" hidden>Unclaim Case</button>
+        <button type="button" class="btn btn--secondary" id="reopen-case-btn" hidden>Reopen Case</button>
+        <button type="button" class="btn btn--primary" id="claim-case-btn" hidden>Claim Case</button>
+        <button type="button" class="btn btn--primary" id="close-case-btn" hidden>Close Case</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page content -->
+  <main class="page-body" style="background: #fafafa;">
+
+    <!-- Summary islands -->
+    <div class="islands">
+
+      <div class="island">
+        <div class="island__eyebrow-row">
+          <span class="island__eyebrow">Case</span>
+        </div>
+        <div class="island__headline" id="island-case-number">Loading&hellip;</div>
+        <div class="island__kv">
+          <div class="island__kv-row"><span class="island__kv-key">Type:</span> <span class="island__kv-value" id="island-case-type">&mdash;</span></div>
+          <div class="island__kv-row"><span class="island__kv-key">Status:</span> <span class="island__kv-value" id="island-status">&mdash;</span></div>
+          <div class="island__kv-row"><span class="island__kv-key">Date Received:</span> <span class="island__kv-value" id="island-date-received">&mdash;</span></div>
+          <div class="island__kv-row"><span class="island__kv-key">Priority:</span> <span class="island__kv-value" id="island-priority">&mdash;</span></div>
+        </div>
+      </div>
+
+      <div class="island">
+        <div class="island__eyebrow-row">
+          <span class="island__eyebrow">Case Subject</span>
+        </div>
+        <div class="island__headline island__headline--wrap" id="island-subject-name">Loading&hellip;</div>
+        <div class="island__kv">
+          <div class="island__kv-row"><span class="island__kv-key">License:</span> <span class="island__kv-value" id="island-license-number">&mdash;</span></div>
+          <div class="island__kv-row"><span class="island__kv-key">License Type:</span> <span class="island__kv-value" id="island-license-type">&mdash;</span></div>
+          <div class="island__kv-row"><span class="island__kv-key">Email:</span> <span class="island__kv-value" id="island-subject-email">&mdash;</span></div>
+        </div>
+        <a href="individual-profile.html" class="island__footer-link">View Profile</a>
+      </div>
+
+      <div class="island">
+        <div class="island__eyebrow-row">
+          <span class="island__eyebrow">Complainant</span>
+        </div>
+        <div class="island__headline island__headline--wrap" id="island-complainant">Loading&hellip;</div>
+        <div class="island__kv">
+          <div class="island__kv-row"><span class="island__kv-key">Filed Via:</span> <span class="island__kv-value" id="island-filing-method">&mdash;</span></div>
+          <div class="island__kv-row"><span class="island__kv-key">Incident Date:</span> <span class="island__kv-value" id="island-incident-date">&mdash;</span></div>
+          <div class="island__kv-row"><span class="island__kv-key">Phone:</span> <span class="island__kv-value" id="island-phone">&mdash;</span></div>
+        </div>
+      </div>
+
+      <div class="island">
+        <div class="island__eyebrow-row">
+          <span class="island__eyebrow">Assignment</span>
+        </div>
+        <div class="island__headline" id="island-assigned-to">Unassigned</div>
+        <div class="island__kv">
+          <div class="island__kv-row"><span class="island__kv-key">Legacy Case:</span> <span class="island__kv-value" id="island-legacy-number">&mdash;</span></div>
+          <div class="island__kv-row"><span class="island__kv-key">Subjects:</span> <span class="island__kv-value" id="island-subject-count">&mdash;</span></div>
+          <div class="island__kv-row" id="island-outcomes-row" hidden><span class="island__kv-key">Outcomes:</span> <span class="island__kv-value" id="island-outcomes">&mdash;</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Work card + rail -->
+    <div class="work-grid">
+      <div class="work-column">
+
+      <div class="work-split">
+        <div class="work-card">
+          <div class="work-card__header">
+            <div class="work-card__title">Case Information</div>
+            <div class="work-card__subtitle">The complaint as filed. The Legacy Case Number is the only field the
+              agency can edit here; everything else comes from the original submission.</div>
+          </div>
+          <div class="work-card__body">
+
+            <div class="info-notice" id="closed-notice" hidden>
+              <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+              <span><strong>Closed</strong> &mdash; reopen the case to make further changes.</span>
+            </div>
+
+            <div class="info-grid info-grid--2">
+              <div class="info-grid__item">
+                <span class="info-grid__label">Complainant Name</span>
+                <span class="info-grid__value" id="content-complainant">&mdash;</span>
+              </div>
+              <div class="info-grid__item">
+                <span class="info-grid__label">How Complainant Filed</span>
+                <span class="info-grid__value" id="content-filing-method">&mdash;</span>
+              </div>
+              <div class="info-grid__item">
+                <span class="info-grid__label">Incident Date</span>
+                <span class="info-grid__value" id="content-incident-date">&mdash;</span>
+              </div>
+              <div class="info-grid__item">
+                <span class="info-grid__label">Date Received</span>
+                <span class="info-grid__value" id="content-date-received">&mdash;</span>
+              </div>
+            </div>
+
+            <div class="field" style="margin-top: 24px">
+              <label for="input-legacy-case-number">Legacy Case Number</label>
+              <input type="text" id="input-legacy-case-number" autocomplete="off">
+            </div>
+
+            <div class="field" style="margin-top: 24px">
+              <label for="content-description">Description of Complaint</label>
+              <textarea id="content-description" rows="6" readonly></textarea>
+            </div>
+
+          </div>
+          <div class="work-card__footer">
+            <button type="button" class="btn btn--primary" id="save-case-btn">Save</button>
+          </div>
+        </div>
+
+        <aside class="work-split__side">
+          <div class="accordion">
+            <button type="button" class="accordion__button island__eyebrow" aria-expanded="true" aria-controls="subjects-content">
+              <span class="accordion__button-label">Case Subjects <span class="toolbar-badge" id="subjects-count">0</span></span>
+              <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+            </button>
+            <div class="accordion__content accordion__content--flush" id="subjects-content">
+              <p class="inspection-note" style="border-top: 0">
+                <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+                A case may involve more than one subject.
+              </p>
+              <div id="subjects-list"></div>
+            </div>
+          </div>
+        </aside>
+      </div><!-- /work-split -->
+
+      <!-- Related records -->
+      <div class="rail-card">
+        <div class="detail-tabs detail-tabs--compact" role="tablist">
+          <button type="button" class="detail-tabs__btn is-active" data-tab="inspections" role="tab" aria-selected="true">Inspections <span class="toolbar-badge" id="inspections-count">0</span></button>
+          <button type="button" class="detail-tabs__btn" data-tab="investigations" role="tab" aria-selected="false">Investigations <span class="toolbar-badge" id="investigations-count">0</span></button>
+          <button type="button" class="detail-tabs__btn" data-tab="hearings" role="tab" aria-selected="false" id="hearings-tab" hidden>Hearings <span class="toolbar-badge" id="hearings-count">0</span></button>
+          <button type="button" class="detail-tabs__btn" data-tab="documents" role="tab" aria-selected="false">Documents <span class="toolbar-badge" id="documents-count">0</span></button>
+          <button type="button" class="detail-tabs__btn" data-tab="notes" role="tab" aria-selected="false">Notes <span class="toolbar-badge" id="notes-count">0</span></button>
+        </div>
+
+        <!-- Inspections -->
+        <div class="tab-panel" id="inspections-panel">
+          <a href="#" class="btn btn--warm">Create Inspection</a>
+
+          <p class="empty-state" id="inspections-empty" hidden>No inspections on record for this case.</p>
+
+          <table class="data-table" id="inspections-table" style="margin-top: 20px">
+            <thead>
+              <tr>
+                <th>Inspection ID <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Inspection Type <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Inspection Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Inspector <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Status <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Findings</th>
+              </tr>
+            </thead>
+            <tbody id="inspections-rows"></tbody>
+          </table>
+        </div>
+
+        <!-- Investigations -->
+        <div class="tab-panel" id="investigations-panel" hidden>
+          <a href="#" class="btn btn--warm" id="create-investigation-btn">Create Investigation</a>
+
+          <div class="table-controls" style="margin-top: 20px">
+            <div class="table-controls__count">
+              <span id="investigations-entries">Showing 0 - 0 of 0 Entries</span>
+              <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--investigations">
+                What do the control icons mean?
+                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="icon-legend" id="icon-legend--investigations" hidden>
+            <div class="icon-legend__item"><img src="assets/edit-icon.png" alt=""> Edit Investigation</div>
+          </div>
+
+          <p class="empty-state" id="investigations-empty">No investigations on record for this case.</p>
+
+          <table class="data-table" id="investigations-table" hidden>
+            <thead>
+              <tr>
+                <th>Investigation ID</th>
+                <th>Investigation Title</th>
+                <th>Status</th>
+                <th>Assigned Investigator</th>
+                <th>Start Date</th>
+                <th>Completion Date</th>
+                <th>Controls</th>
+              </tr>
+            </thead>
+            <tbody id="investigations-rows"></tbody>
+          </table>
+        </div>
+
+        <!-- Hearings (appeals only) -->
+        <div class="tab-panel" id="hearings-panel" hidden>
+          <button type="button" class="btn btn--warm" id="create-hearing-btn">Create Hearing</button>
+
+          <div class="table-controls" style="margin-top: 20px">
+            <div class="table-controls__count">
+              <span id="hearings-entries">Showing 0 - 0 of 0 Entries</span>
+              <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--hearings">
+                What do the control icons mean?
+                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="icon-legend" id="icon-legend--hearings" hidden>
+            <div class="icon-legend__item"><img src="assets/eye-icon.png" alt=""> View Hearing</div>
+            <div class="icon-legend__item"><img src="assets/icon-delete.png" alt=""> Delete Hearing</div>
+          </div>
+
+          <p class="empty-state" id="hearings-empty">No hearings on record for this case.</p>
+
+          <table class="data-table" id="hearings-table" hidden>
+            <thead>
+              <tr>
+                <th>Hearing Date</th>
+                <th>Hearing Time</th>
+                <th>Hearing Location</th>
+                <th>Hearing Officer</th>
+                <th>Controls</th>
+              </tr>
+            </thead>
+            <tbody id="hearings-rows"></tbody>
+          </table>
+        </div>
+
+        <!-- Documents -->
+        <div class="tab-panel" id="documents-panel" hidden>
+          <button type="button" class="btn btn--warm" id="upload-document-btn">Upload Document</button>
+
+          <div class="table-controls" style="margin-top: 20px">
+            <div class="table-controls__count">
+              <span id="documents-entries">Showing 0 - 0 of 0 Entries</span>
+              <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--documents">
+                What do the control icons mean?
+                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="icon-legend" id="icon-legend--documents" hidden>
+            <div class="icon-legend__item"><img src="assets/eye-icon.png" alt=""> View Document</div>
+            <div class="icon-legend__item"><img src="assets/icon-delete.png" alt=""> Delete Document</div>
+          </div>
+
+          <p class="empty-state" id="documents-empty">No documents uploaded for this case.</p>
+
+          <table class="data-table" id="documents-table" hidden>
+            <thead>
+              <tr>
+                <th>Document Name <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Category <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Description</th>
+                <th>Uploaded Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>File Name</th>
+                <th>Controls</th>
+              </tr>
+            </thead>
+            <tbody id="documents-rows"></tbody>
+          </table>
+        </div>
+
+        <!-- Notes -->
+        <div class="tab-panel" id="notes-panel" hidden>
+          <button type="button" class="btn btn--warm" id="add-note-btn">Create Note</button>
+
+          <div class="table-controls" style="margin-top: 20px">
+            <div class="table-controls__count">
+              <span id="notes-entries">Showing 0 - 0 of 0 Entries</span>
+              <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--notes">
+                What do the control icons mean?
+                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="icon-legend" id="icon-legend--notes" hidden>
+            <div class="icon-legend__item"><img src="assets/icon-delete.png" alt=""> Delete Note</div>
+          </div>
+
+          <p class="empty-state" id="notes-empty">No notes added for this case.</p>
+
+          <table class="data-table" id="notes-table" hidden>
+            <thead>
+              <tr>
+                <th>Note</th>
+                <th>Date Added <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Added By <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+                <th>Controls</th>
+              </tr>
+            </thead>
+            <tbody id="notes-rows"></tbody>
+          </table>
+        </div>
+      </div>
+
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Close Case modal -->
+<div class="modal-overlay" id="close-case-modal" hidden role="dialog" aria-modal="true" aria-labelledby="close-case-title">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title" id="close-case-title">Close Case</h2>
+      <button type="button" class="modal-close" id="close-case-modal-close" aria-label="Close modal">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>Select one or more outcomes that apply to this case.</p>
+
+      <div class="field" style="margin-top: 20px">
+        <label id="outcomes-label">Case Outcome <span class="field-required">Required</span></label>
+        <div class="checkbox-list" role="group" aria-labelledby="outcomes-label">
+          <label class="checkbox-option__label"><input type="checkbox" class="outcome-checkbox" value="Cease &amp; Desist Letter"> Cease &amp; Desist Letter</label>
+          <label class="checkbox-option__label"><input type="checkbox" class="outcome-checkbox" value="Civil Issue"> Civil Issue</label>
+          <label class="checkbox-option__label"><input type="checkbox" class="outcome-checkbox" value="Consent Decree / Fine"> Consent Decree / Fine</label>
+          <label class="checkbox-option__label"><input type="checkbox" class="outcome-checkbox" value="Criminal Charge"> Criminal Charge</label>
+          <label class="checkbox-option__label"><input type="checkbox" class="outcome-checkbox" value="Dismissed"> Dismissed</label>
+          <label class="checkbox-option__label"><input type="checkbox" class="outcome-checkbox" value="Revocation"> Revocation</label>
+          <label class="checkbox-option__label"><input type="checkbox" class="outcome-checkbox" value="Suspension"> Suspension</label>
+          <label class="checkbox-option__label"><input type="checkbox" class="outcome-checkbox" value="Unfounded"> Unfounded</label>
+          <label class="checkbox-option__label"><input type="checkbox" class="outcome-checkbox" value="Warning Letter"> Warning Letter</label>
+        </div>
+      </div>
+
+      <p class="help-text" style="margin-top: 16px"><strong>Selected Outcomes:</strong>
+        <span id="selected-outcomes">None selected</span></p>
+
+      <div class="info-notice info-notice--warning">
+        <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+        <span>This action cannot be undone from the list. Make sure all relevant documents and notes have been added
+          before closing the case.</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn--primary" id="close-case-confirm-btn" disabled>Close Case</button>
+      <button type="button" class="btn btn--cancel" id="close-case-cancel-btn">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Note modal -->
+<div class="modal-overlay" id="note-modal" hidden role="dialog" aria-modal="true" aria-labelledby="note-modal-title">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title" id="note-modal-title">Add Note</h2>
+      <button type="button" class="modal-close" id="note-modal-close" aria-label="Close modal">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+    <form id="note-form" onsubmit="return false;">
+      <div class="modal-body">
+        <div class="field" id="note-text-field">
+          <label for="note-text">Note <span class="field-required">Required</span></label>
+          <span class="field-error" id="note-text-error" hidden>Enter a note.</span>
+          <textarea id="note-text" rows="4" maxlength="300"></textarea>
+          <div class="char-counter"><span id="note-remaining">300</span> of 300 remaining</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn--primary">Save Note</button>
+        <button type="button" class="btn btn--cancel" id="note-cancel-btn">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Upload Document modal -->
+<div class="modal-overlay" id="document-modal" hidden role="dialog" aria-modal="true" aria-labelledby="document-modal-title">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title" id="document-modal-title">Upload Document</h2>
+      <button type="button" class="modal-close" id="document-modal-close" aria-label="Close modal">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+    <form id="document-form" onsubmit="return false;">
+      <div class="modal-body">
+        <div class="field" id="doc-name-field">
+          <label for="doc-name">Document Name <span class="field-required">Required</span></label>
+          <span class="field-error" id="doc-name-error" hidden>Enter a document name.</span>
+          <input type="text" id="doc-name" autocomplete="off">
+        </div>
+
+        <div class="field" id="doc-category-field" style="margin-top: 20px">
+          <label for="doc-category">Category <span class="field-required">Required</span></label>
+          <span class="field-error" id="doc-category-error" hidden>Select a category.</span>
+          <select id="doc-category">
+            <option value="">Please Select</option>
+            <option value="Identification">Identification</option>
+            <option value="Licenses and Permits">Licenses and Permits</option>
+            <option value="Insurance">Insurance</option>
+            <option value="Reports">Reports</option>
+            <option value="Evidence">Evidence</option>
+            <option value="Correspondence">Correspondence</option>
+            <option value="Compliance">Compliance</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="field" style="margin-top: 20px">
+          <label for="doc-description">Description</label>
+          <textarea id="doc-description" rows="3"></textarea>
+        </div>
+
+        <div class="field" id="doc-file-field" style="margin-top: 20px">
+          <label for="doc-file">File <span class="field-required">Required</span></label>
+          <span class="field-error" id="doc-file-error" hidden>Choose a file to upload.</span>
+          <input type="file" id="doc-file">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn--primary">Upload Document</button>
+        <button type="button" class="btn btn--cancel" id="document-cancel-btn">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Create Hearing modal -->
+<div class="modal-overlay" id="hearing-modal" hidden role="dialog" aria-modal="true" aria-labelledby="hearing-modal-title">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title" id="hearing-modal-title">Create Hearing</h2>
+      <button type="button" class="modal-close" id="hearing-modal-close" aria-label="Close modal">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+    <form id="hearing-form" onsubmit="return false;">
+      <div class="modal-body">
+        <div class="field-grid field-grid--2">
+          <div class="field" id="hearing-date-field">
+            <label for="hearing-date">Hearing Date <span class="field-required">Required</span></label>
+            <span class="field-error" id="hearing-date-error" hidden>Choose a hearing date.</span>
+            <input type="date" id="hearing-date">
+          </div>
+          <div class="field" id="hearing-time-field">
+            <label for="hearing-time">Hearing Time <span class="field-required">Required</span></label>
+            <span class="field-error" id="hearing-time-error" hidden>Choose a hearing time.</span>
+            <input type="text" id="hearing-time" placeholder="hh:mm" autocomplete="off">
+          </div>
+        </div>
+
+        <div class="field" id="hearing-location-field" style="margin-top: 20px">
+          <label for="hearing-location">Hearing Location <span class="field-required">Required</span></label>
+          <span class="field-error" id="hearing-location-error" hidden>Enter a hearing location.</span>
+          <input type="text" id="hearing-location" autocomplete="off">
+        </div>
+
+        <div class="field" id="hearing-officer-field" style="margin-top: 20px">
+          <label for="hearing-officer">Hearing Officer <span class="field-required">Required</span></label>
+          <span class="field-error" id="hearing-officer-error" hidden>Enter a hearing officer.</span>
+          <input type="text" id="hearing-officer" autocomplete="off">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn--primary">Save</button>
+        <button type="button" class="btn btn--cancel" id="hearing-cancel-btn">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Generate Invoice modal -->
+<div class="modal-overlay" id="invoice-modal" hidden role="dialog" aria-modal="true" aria-labelledby="invoice-modal-title">
+  <div class="modal-content modal-content--wide">
+    <div class="modal-header">
+      <h2 class="modal-title" id="invoice-modal-title">Generate Invoice</h2>
+      <button type="button" class="modal-close" id="invoice-modal-close" aria-label="Close modal">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>Select a case subject to generate an invoice. An invoice is created for the selected subject only.</p>
+      <table class="data-table" style="margin-top: 20px">
+        <thead>
+          <tr>
+            <th class="select-column">Select</th>
+            <th>Name</th>
+            <th>License Number</th>
+            <th>License Type</th>
+          </tr>
+        </thead>
+        <tbody id="invoice-rows"></tbody>
+      </table>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn--primary" id="invoice-confirm-btn" disabled>Generate Invoice</button>
+      <button type="button" class="btn btn--cancel" id="invoice-cancel-btn">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+  <span id="toast-text"></span>
+</div>
+
+<script src="js/toolbar.js"></script>
+<script src="js/icon-legend.js"></script>
+<script src="js/cases.js"></script>
+<script>
+  initToolbar('#toolbar', { activeKey: 'casemgmt' });
+  initIconLegends();
+
+  /* ------------------------------ Toast ------------------------------- */
+  var showToast = (function () {
+    var toast = document.getElementById('toast');
+    var toastText = document.getElementById('toast-text');
+    var timer;
+    return function (message) {
+      toastText.textContent = message;
+      toast.classList.add('is-visible');
+      clearTimeout(timer);
+      timer = setTimeout(function () { toast.classList.remove('is-visible'); }, 3000);
+    };
+  })();
+
+  var CURRENT_USER = 'Sgt. Peacock';
+  var params = new URLSearchParams(window.location.search);
+  var caseNumber = params.get('case') || CASE_SEED[0].caseNumber;
+  var currentCase = getCase(caseNumber);
+
+  /* Per-case collections. Inspections are seeded; the rest start from storage. */
+  var inspections = caseCollection(caseNumber, 'inspections') || [
+    {
+      id: 'INS-2026-00147', type: 'Compliance', date: '05/05/2026', inspector: 'Sgt. Williams',
+      status: 'Pending', findings: 'Initial contact made, documentation requested'
+    }
+  ];
+  var investigations = caseCollection(caseNumber, 'investigations') || [];
+  var hearings = caseCollection(caseNumber, 'hearings') || [];
+  var documents = caseCollection(caseNumber, 'documents') || [
+    {
+      name: 'ASP Complaint Form', category: 'Reports',
+      description: 'Initial complaint documentation submitted by complainant',
+      uploaded: '05/01/2026', fileName: 'complaint_form_20260501.pdf'
+    }
+  ];
+  var notes = caseCollection(caseNumber, 'notes') || [
+    {
+      text: 'Contacted complainant to confirm details. They indicated the incident occurred around 9:30 PM during the event.',
+      date: '05/02/2026', by: 'Sgt. Peacock'
+    }
+  ];
+
+  function statusClass(status) {
+    return 'status-text--' + status.toLowerCase();
+  }
+
+  /* Investigation statuses don't all match a status-text class one-for-one */
+  var INVESTIGATION_STATUS_CLASS = {
+    'Open': 'status-text--open',
+    'In Progress': 'status-text--in-progress',
+    'On Hold': 'status-text--on-hold',
+    'Completed': 'status-text--completed',
+    'Closed (No Violations)': 'status-text--closed'
+  };
+
+  /* --------------------------------------------------------------------- */
+  /* Header, islands and the case information card                         */
+  /* --------------------------------------------------------------------- */
+  function renderCase() {
+    var c = currentCase;
+    var subjects = caseSubjects(c);
+    var primary = subjects[0] || {};
+
+    document.title = 'Case ' + c.caseNumber + ' — RLP Agency Console';
+
+    document.getElementById('breadcrumb-case-number').textContent = c.caseNumber;
+    document.getElementById('header-case-subject').textContent = c.caseSubject;
+    document.getElementById('header-case-number').textContent = c.caseNumber;
+    document.getElementById('header-priority').textContent = c.priority;
+    document.getElementById('header-assigned-to').textContent = c.assignedTo;
+    document.getElementById('case-type-tag').textContent = c.caseType;
+
+    var headerStatus = document.getElementById('header-status');
+    headerStatus.textContent = c.status;
+    headerStatus.className = statusClass(c.status);
+
+    document.getElementById('island-case-number').textContent = c.caseNumber;
+    document.getElementById('island-case-type').textContent = c.caseType;
+    document.getElementById('island-date-received').textContent = c.dateReceived;
+    document.getElementById('island-priority').textContent = c.priority;
+
+    var islandStatus = document.getElementById('island-status');
+    islandStatus.textContent = c.status;
+    islandStatus.className = 'island__kv-value ' + statusClass(c.status);
+
+    document.getElementById('island-subject-name').textContent = primary.name || '—';
+    document.getElementById('island-license-number').textContent = primary.licenseNumber || '—';
+    document.getElementById('island-license-type').textContent = primary.licenseType || '—';
+    document.getElementById('island-subject-email').textContent = primary.email || '—';
+
+    document.getElementById('island-complainant').textContent = c.complainantName;
+    document.getElementById('island-filing-method').textContent = c.filingMethod;
+    document.getElementById('island-incident-date').textContent = c.incidentDate;
+    document.getElementById('island-phone').textContent = c.phoneNumber || '—';
+
+    document.getElementById('island-assigned-to').textContent = c.assignedTo;
+    document.getElementById('island-legacy-number').textContent = c.legacyCaseNumber || '—';
+    document.getElementById('island-subject-count').textContent = subjects.length;
+
+    var outcomesRow = document.getElementById('island-outcomes-row');
+    if (c.outcomes && c.outcomes.length) {
+      outcomesRow.hidden = false;
+      document.getElementById('island-outcomes').textContent = c.outcomes.join(', ');
+    } else {
+      outcomesRow.hidden = true;
+    }
+
+    document.getElementById('content-complainant').textContent = c.complainantName;
+    document.getElementById('content-filing-method').textContent = c.filingMethod;
+    document.getElementById('content-incident-date').textContent = c.incidentDate;
+    document.getElementById('content-date-received').textContent = c.dateReceived;
+    document.getElementById('content-description').value = c.description || '';
+    document.getElementById('input-legacy-case-number').value = c.legacyCaseNumber || '';
+
+    /* Hearings are an appeals-only concept */
+    document.getElementById('hearings-tab').hidden = c.caseType !== 'Appeal';
+
+    renderSubjects(subjects);
+    renderActions();
+  }
+
+  /* Case subjects read as stacked label/value blocks in the narrow rail */
+  function renderSubjects(subjects) {
+    document.getElementById('subjects-count').textContent = subjects.length;
+    document.getElementById('subjects-list').innerHTML = subjects.map(function (s) {
+      return '<div class="inspection-item">' +
+        '<div class="inspection-item__body" style="padding-top: 16px">' +
+          '<div class="inspection-item__type">' + escapeHtml(s.name) + '</div>' +
+          '<div class="info-grid" style="grid-template-columns: 1fr; margin-top: 12px">' +
+            '<div class="info-grid__item"><span class="info-grid__label">License Number</span><span class="info-grid__value">' + escapeHtml(s.licenseNumber) + '</span></div>' +
+            '<div class="info-grid__item"><span class="info-grid__label">License Type</span><span class="info-grid__value">' + escapeHtml(s.licenseType) + '</span></div>' +
+            '<div class="info-grid__item"><span class="info-grid__label">Physical Address</span><span class="info-grid__value">' + escapeHtml(s.physicalAddress) + '</span></div>' +
+            '<div class="info-grid__item"><span class="info-grid__label">Email</span><span class="info-grid__value">' + escapeHtml(s.email) + '</span></div>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  /* Which case actions apply depends entirely on the status */
+  function renderActions() {
+    var status = currentCase.status;
+    document.getElementById('claim-case-btn').hidden = status !== 'Open';
+    document.getElementById('close-case-btn').hidden = status !== 'Pending';
+    document.getElementById('unclaim-case-btn').hidden = status !== 'Pending';
+    document.getElementById('reopen-case-btn').hidden = status !== 'Closed';
+    document.getElementById('closed-notice').hidden = status !== 'Closed';
+    document.getElementById('save-case-btn').disabled = status === 'Closed';
+    document.getElementById('input-legacy-case-number').disabled = status === 'Closed';
+  }
+
+  /* --------------------------------------------------------------------- */
+  /* Related-record tables                                                 */
+  /* --------------------------------------------------------------------- */
+  function entriesText(n) {
+    return n === 0 ? 'Showing 0 - 0 of 0 Entries' : 'Showing 1 - ' + n + ' of ' + n + ' Entries';
+  }
+
+  function renderCollections() {
+    /* Inspections — read-only in the case view */
+    document.getElementById('inspections-rows').innerHTML = inspections.map(function (i) {
+      return '<tr>' +
+        '<td>' + escapeHtml(i.id) + '</td>' +
+        '<td>' + escapeHtml(i.type) + '</td>' +
+        '<td>' + escapeHtml(i.date) + '</td>' +
+        '<td>' + escapeHtml(i.inspector) + '</td>' +
+        '<td class="' + statusClass(i.status) + '">' + escapeHtml(i.status) + '</td>' +
+        '<td>' + escapeHtml(i.findings) + '</td>' +
+      '</tr>';
+    }).join('');
+    document.getElementById('inspections-count').textContent = inspections.length;
+    document.getElementById('inspections-empty').hidden = inspections.length > 0;
+    document.getElementById('inspections-table').hidden = inspections.length === 0;
+
+    /* Investigations */
+    document.getElementById('investigations-rows').innerHTML = investigations.map(function (inv, idx) {
+      return '<tr>' +
+        '<td>' + escapeHtml(inv.id) + '</td>' +
+        '<td>' + escapeHtml(inv.title) + '</td>' +
+        '<td class="' + (INVESTIGATION_STATUS_CLASS[inv.status] || '') + '">' + escapeHtml(inv.status) + '</td>' +
+        '<td>' + escapeHtml(inv.assignedTo) + '</td>' +
+        '<td>' + escapeHtml(inv.startDate) + '</td>' +
+        '<td>' + escapeHtml(inv.completionDate) + '</td>' +
+        '<td class="controls-cell">' +
+          '<a href="#" class="icon-btn" aria-label="Edit ' + escapeHtml(inv.id) + '" data-edit-investigation="' + idx + '"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+    document.getElementById('investigations-count').textContent = investigations.length;
+    document.getElementById('investigations-entries').textContent = entriesText(investigations.length);
+    document.getElementById('investigations-empty').hidden = investigations.length > 0;
+    document.getElementById('investigations-table').hidden = investigations.length === 0;
+
+    /* Hearings */
+    document.getElementById('hearings-rows').innerHTML = hearings.map(function (h, idx) {
+      return '<tr>' +
+        '<td>' + escapeHtml(h.date) + '</td>' +
+        '<td>' + escapeHtml(h.time) + '</td>' +
+        '<td>' + escapeHtml(h.location) + '</td>' +
+        '<td>' + escapeHtml(h.officer) + '</td>' +
+        '<td class="controls-cell">' +
+          '<a href="#" class="icon-btn" aria-label="View hearing on ' + escapeHtml(h.date) + '"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>' +
+          '<a href="#" class="icon-btn" aria-label="Delete hearing on ' + escapeHtml(h.date) + '" data-remove-hearing="' + idx + '"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+    document.getElementById('hearings-count').textContent = hearings.length;
+    document.getElementById('hearings-entries').textContent = entriesText(hearings.length);
+    document.getElementById('hearings-empty').hidden = hearings.length > 0;
+    document.getElementById('hearings-table').hidden = hearings.length === 0;
+
+    /* Documents */
+    document.getElementById('documents-rows').innerHTML = documents.map(function (d, idx) {
+      return '<tr>' +
+        '<td>' + escapeHtml(d.name) + '</td>' +
+        '<td>' + escapeHtml(d.category) + '</td>' +
+        '<td>' + escapeHtml(d.description) + '</td>' +
+        '<td>' + escapeHtml(d.uploaded) + '</td>' +
+        '<td class="filename-cell">' + escapeHtml(d.fileName) + '</td>' +
+        '<td class="controls-cell">' +
+          '<a href="#" class="icon-btn" aria-label="View ' + escapeHtml(d.name) + '"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>' +
+          '<a href="#" class="icon-btn" aria-label="Delete ' + escapeHtml(d.name) + '" data-remove-document="' + idx + '"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+    document.getElementById('documents-count').textContent = documents.length;
+    document.getElementById('documents-entries').textContent = entriesText(documents.length);
+    document.getElementById('documents-empty').hidden = documents.length > 0;
+    document.getElementById('documents-table').hidden = documents.length === 0;
+
+    /* Notes */
+    document.getElementById('notes-rows').innerHTML = notes.map(function (n, idx) {
+      return '<tr>' +
+        '<td>' + escapeHtml(n.text) + '</td>' +
+        '<td>' + escapeHtml(n.date) + '</td>' +
+        '<td>' + escapeHtml(n.by) + '</td>' +
+        '<td class="controls-cell">' +
+          '<a href="#" class="icon-btn" aria-label="Delete note" data-remove-note="' + idx + '"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+    document.getElementById('notes-count').textContent = notes.length;
+    document.getElementById('notes-entries').textContent = entriesText(notes.length);
+    document.getElementById('notes-empty').hidden = notes.length > 0;
+    document.getElementById('notes-table').hidden = notes.length === 0;
+  }
+
+  /* --------------------------------------------------------------------- */
+  /* Tabs                                                                  */
+  /* --------------------------------------------------------------------- */
+  (function () {
+    var tabs = document.querySelectorAll('.detail-tabs__btn');
+
+    function activate(name) {
+      tabs.forEach(function (tab) {
+        var isActive = tab.getAttribute('data-tab') === name;
+        tab.classList.toggle('is-active', isActive);
+        tab.setAttribute('aria-selected', String(isActive));
+      });
+      ['inspections', 'investigations', 'hearings', 'documents', 'notes'].forEach(function (panel) {
+        document.getElementById(panel + '-panel').hidden = panel !== name;
+      });
+    }
+
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        activate(tab.getAttribute('data-tab'));
+      });
+    });
+
+    var requested = params.get('tab');
+    if (requested && document.getElementById(requested + '-panel')) activate(requested);
+  })();
+
+  /* Case Subjects accordion */
+  (function () {
+    var button = document.querySelector('[aria-controls="subjects-content"]');
+    var content = document.getElementById('subjects-content');
+    button.addEventListener('click', function () {
+      var expanded = button.getAttribute('aria-expanded') === 'true';
+      button.setAttribute('aria-expanded', String(!expanded));
+      content.hidden = expanded;
+    });
+  })();
+
+  /* --------------------------------------------------------------------- */
+  /* Case actions                                                          */
+  /* --------------------------------------------------------------------- */
+  function patchCase(patch, message) {
+    updateCase(caseNumber, patch);
+    currentCase = getCase(caseNumber);
+    renderCase();
+    showToast(message);
+  }
+
+  document.getElementById('claim-case-btn').addEventListener('click', function () {
+    patchCase({ status: 'Pending', assignedTo: CURRENT_USER },
+      'Case ' + caseNumber + ' successfully claimed');
+  });
+
+  document.getElementById('unclaim-case-btn').addEventListener('click', function () {
+    patchCase({ status: 'Open', assignedTo: 'Unassigned' },
+      'Case ' + caseNumber + ' successfully unclaimed');
+  });
+
+  document.getElementById('reopen-case-btn').addEventListener('click', function () {
+    patchCase({ status: 'Pending', assignedTo: CURRENT_USER, outcomes: [] },
+      'Case ' + caseNumber + ' reopened');
+  });
+
+  document.getElementById('save-case-btn').addEventListener('click', function () {
+    patchCase({ legacyCaseNumber: document.getElementById('input-legacy-case-number').value.trim() },
+      'Case saved successfully');
+  });
+
+  document.getElementById('create-investigation-btn').addEventListener('click', function (e) {
+    e.preventDefault();
+    window.location.href = 'create-investigation.html?case=' + encodeURIComponent(caseNumber);
+  });
+
+  /* --------------------------------------------------------------------- */
+  /* Close Case modal                                                      */
+  /* --------------------------------------------------------------------- */
+  (function () {
+    var modal = document.getElementById('close-case-modal');
+    var confirmBtn = document.getElementById('close-case-confirm-btn');
+    var summary = document.getElementById('selected-outcomes');
+
+    function selected() {
+      return Array.prototype.slice.call(modal.querySelectorAll('.outcome-checkbox:checked'))
+        .map(function (cb) { return cb.value; });
+    }
+
+    function refresh() {
+      var chosen = selected();
+      summary.textContent = chosen.length ? chosen.join(', ') : 'None selected';
+      confirmBtn.disabled = chosen.length === 0;
+    }
+
+    function close() {
+      modal.hidden = true;
+      modal.querySelectorAll('.outcome-checkbox').forEach(function (cb) { cb.checked = false; });
+      refresh();
+    }
+
+    document.getElementById('close-case-btn').addEventListener('click', function () {
+      modal.hidden = false;
+    });
+
+    modal.querySelectorAll('.outcome-checkbox').forEach(function (cb) {
+      cb.addEventListener('change', refresh);
+    });
+
+    document.getElementById('close-case-modal-close').addEventListener('click', close);
+    document.getElementById('close-case-cancel-btn').addEventListener('click', close);
+    modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !modal.hidden) close();
+    });
+
+    confirmBtn.addEventListener('click', function () {
+      var chosen = selected();
+      close();
+      patchCase({ status: 'Closed', outcomes: chosen }, 'Case ' + caseNumber + ' closed successfully');
+    });
+  })();
+
+  /* --------------------------------------------------------------------- */
+  /* Add Note modal                                                        */
+  /* --------------------------------------------------------------------- */
+  (function () {
+    var modal = document.getElementById('note-modal');
+    var form = document.getElementById('note-form');
+    var textarea = document.getElementById('note-text');
+    var remaining = document.getElementById('note-remaining');
+
+    textarea.addEventListener('input', function () {
+      remaining.textContent = 300 - textarea.value.length;
+      if (textarea.value.trim()) {
+        document.getElementById('note-text-error').hidden = true;
+        document.getElementById('note-text-field').classList.remove('field--error');
+      }
+    });
+
+    function close() {
+      modal.hidden = true;
+      textarea.value = '';
+      remaining.textContent = '300';
+      document.getElementById('note-text-error').hidden = true;
+      document.getElementById('note-text-field').classList.remove('field--error');
+    }
+
+    document.getElementById('add-note-btn').addEventListener('click', function () {
+      modal.hidden = false;
+      textarea.focus();
+    });
+
+    document.getElementById('note-modal-close').addEventListener('click', close);
+    document.getElementById('note-cancel-btn').addEventListener('click', close);
+    modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !modal.hidden) close();
+    });
+
+    form.addEventListener('submit', function () {
+      var text = textarea.value.trim();
+      if (!text) {
+        document.getElementById('note-text-error').hidden = false;
+        document.getElementById('note-text-field').classList.add('field--error');
+        textarea.focus();
+        return;
+      }
+
+      notes.push({ text: text, date: todayDisplay(), by: CURRENT_USER });
+      saveCaseCollection(caseNumber, 'notes', notes);
+      close();
+      renderCollections();
+      showToast('Note added successfully');
+    });
+  })();
+
+  /* --------------------------------------------------------------------- */
+  /* Upload Document modal                                                 */
+  /* --------------------------------------------------------------------- */
+  (function () {
+    var modal = document.getElementById('document-modal');
+    var form = document.getElementById('document-form');
+    var FIELDS = ['doc-name', 'doc-category', 'doc-file'];
+
+    function clearErrors() {
+      FIELDS.forEach(function (name) {
+        document.getElementById(name + '-error').hidden = true;
+        document.getElementById(name + '-field').classList.remove('field--error');
+      });
+    }
+
+    function close() {
+      modal.hidden = true;
+      form.reset();
+      clearErrors();
+    }
+
+    document.getElementById('upload-document-btn').addEventListener('click', function () {
+      clearErrors();
+      modal.hidden = false;
+      document.getElementById('doc-name').focus();
+    });
+
+    document.getElementById('document-modal-close').addEventListener('click', close);
+    document.getElementById('document-cancel-btn').addEventListener('click', close);
+    modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !modal.hidden) close();
+    });
+
+    form.addEventListener('submit', function () {
+      clearErrors();
+
+      var name = document.getElementById('doc-name').value.trim();
+      var category = document.getElementById('doc-category').value;
+      var fileInput = document.getElementById('doc-file');
+
+      var invalid = [];
+      if (!name) invalid.push('doc-name');
+      if (!category) invalid.push('doc-category');
+      if (!fileInput.files.length) invalid.push('doc-file');
+
+      invalid.forEach(function (field) {
+        document.getElementById(field + '-error').hidden = false;
+        document.getElementById(field + '-field').classList.add('field--error');
+      });
+
+      if (invalid.length) {
+        document.getElementById(invalid[0]).focus();
+        return;
+      }
+
+      documents.push({
+        name: name,
+        category: category,
+        description: document.getElementById('doc-description').value.trim(),
+        uploaded: todayDisplay(),
+        fileName: fileInput.files[0].name
+      });
+      saveCaseCollection(caseNumber, 'documents', documents);
+
+      close();
+      renderCollections();
+      showToast('Document uploaded successfully');
+    });
+  })();
+
+  /* --------------------------------------------------------------------- */
+  /* Create Hearing modal                                                  */
+  /* --------------------------------------------------------------------- */
+  (function () {
+    var modal = document.getElementById('hearing-modal');
+    var form = document.getElementById('hearing-form');
+    var FIELDS = ['hearing-date', 'hearing-time', 'hearing-location', 'hearing-officer'];
+
+    function clearErrors() {
+      FIELDS.forEach(function (name) {
+        document.getElementById(name + '-error').hidden = true;
+        document.getElementById(name + '-field').classList.remove('field--error');
+      });
+    }
+
+    function close() {
+      modal.hidden = true;
+      form.reset();
+      clearErrors();
+    }
+
+    document.getElementById('create-hearing-btn').addEventListener('click', function () {
+      clearErrors();
+      modal.hidden = false;
+      document.getElementById('hearing-date').focus();
+    });
+
+    document.getElementById('hearing-modal-close').addEventListener('click', close);
+    document.getElementById('hearing-cancel-btn').addEventListener('click', close);
+    modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !modal.hidden) close();
+    });
+
+    form.addEventListener('submit', function () {
+      clearErrors();
+
+      var invalid = FIELDS.filter(function (name) {
+        return !document.getElementById(name).value.trim();
+      });
+
+      invalid.forEach(function (name) {
+        document.getElementById(name + '-error').hidden = false;
+        document.getElementById(name + '-field').classList.add('field--error');
+      });
+
+      if (invalid.length) {
+        document.getElementById(invalid[0]).focus();
+        return;
+      }
+
+      hearings.push({
+        date: formatIsoDate(document.getElementById('hearing-date').value),
+        time: formatIsoTime(document.getElementById('hearing-time').value),
+        location: document.getElementById('hearing-location').value.trim(),
+        officer: document.getElementById('hearing-officer').value.trim()
+      });
+      saveCaseCollection(caseNumber, 'hearings', hearings);
+
+      close();
+      renderCollections();
+      showToast('Hearing created successfully');
+    });
+  })();
+
+  /* --------------------------------------------------------------------- */
+  /* Generate Invoice modal                                                */
+  /* --------------------------------------------------------------------- */
+  (function () {
+    var modal = document.getElementById('invoice-modal');
+    var rows = document.getElementById('invoice-rows');
+    var confirmBtn = document.getElementById('invoice-confirm-btn');
+
+    function close() {
+      modal.hidden = true;
+      rows.innerHTML = '';
+      confirmBtn.disabled = true;
+    }
+
+    document.getElementById('generate-invoice-btn').addEventListener('click', function () {
+      rows.innerHTML = caseSubjects(currentCase).map(function (s) {
+        return '<tr>' +
+          '<td class="select-cell"><input type="radio" name="invoice-subject" value="' + escapeHtml(s.name) + '" aria-label="Select ' + escapeHtml(s.name) + '"></td>' +
+          '<td>' + escapeHtml(s.name) + '</td>' +
+          '<td>' + escapeHtml(s.licenseNumber) + '</td>' +
+          '<td>' + escapeHtml(s.licenseType) + '</td>' +
+        '</tr>';
+      }).join('');
+      confirmBtn.disabled = true;
+      modal.hidden = false;
+    });
+
+    rows.addEventListener('change', function () {
+      confirmBtn.disabled = !rows.querySelector('input[name="invoice-subject"]:checked');
+    });
+
+    document.getElementById('invoice-modal-close').addEventListener('click', close);
+    document.getElementById('invoice-cancel-btn').addEventListener('click', close);
+    modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !modal.hidden) close();
+    });
+
+    confirmBtn.addEventListener('click', function () {
+      var chosen = rows.querySelector('input[name="invoice-subject"]:checked');
+      if (!chosen) return;
+      var name = chosen.value;
+      close();
+      showToast('Invoice generated for ' + name);
+    });
+  })();
+
+  /* --------------------------------------------------------------------- */
+  /* Row controls — delegated, so re-rendered rows stay wired              */
+  /* --------------------------------------------------------------------- */
+  document.querySelector('.rail-card').addEventListener('click', function (e) {
+    var editInv = e.target.closest('[data-edit-investigation]');
+    if (editInv) {
+      e.preventDefault();
+      showToast('Editing investigations is not wired up in this prototype');
+      return;
+    }
+
+    var removeHearing = e.target.closest('[data-remove-hearing]');
+    if (removeHearing) {
+      e.preventDefault();
+      hearings.splice(parseInt(removeHearing.getAttribute('data-remove-hearing'), 10), 1);
+      saveCaseCollection(caseNumber, 'hearings', hearings);
+      renderCollections();
+      showToast('Hearing deleted');
+      return;
+    }
+
+    var removeDoc = e.target.closest('[data-remove-document]');
+    if (removeDoc) {
+      e.preventDefault();
+      var doc = documents.splice(parseInt(removeDoc.getAttribute('data-remove-document'), 10), 1)[0];
+      saveCaseCollection(caseNumber, 'documents', documents);
+      renderCollections();
+      showToast('Deleted ' + doc.name);
+      return;
+    }
+
+    var removeNote = e.target.closest('[data-remove-note]');
+    if (removeNote) {
+      e.preventDefault();
+      notes.splice(parseInt(removeNote.getAttribute('data-remove-note'), 10), 1);
+      saveCaseCollection(caseNumber, 'notes', notes);
+      renderCollections();
+      showToast('Note deleted');
+    }
+  });
+
+  /* --------------------------------------------------------------------- */
+  /* Boot                                                                  */
+  /* --------------------------------------------------------------------- */
+  if (currentCase) {
+    renderCase();
+    renderCollections();
+  } else {
+    document.querySelector('.page-body').innerHTML =
+      '<p class="empty-state">Case ' + escapeHtml(caseNumber) + ' was not found. ' +
+      '<a href="view-cases.html">Back to View Cases</a></p>';
+  }
+
+  /* A toast handed over from create-investigation.html */
+  (function () {
+    var pending = sessionStorage.getItem('rlp.caseToast');
+    if (!pending) return;
+    sessionStorage.removeItem('rlp.caseToast');
+    showToast(pending);
+  })();
+</script>
+
+</body>
+</html>

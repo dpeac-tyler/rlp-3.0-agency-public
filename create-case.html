@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create New Case &mdash; RLP Agency Console</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Header (shared chrome) -->
+  <header class="app-header">
+    <a class="app-header__brand" href="index.html">
+      <img class="app-header__logo" src="assets/tyler-t.png" alt="Tenant logo">
+      <span class="app-header__brand-name">Name of Agency</span>
+    </a>
+    <nav class="app-header__links" aria-label="Account">
+      <a href="settings.html">Settings</a>
+      <span class="app-header__divider" aria-hidden="true"></span>
+      <a href="search.html">Search</a>
+      <span class="app-header__divider" aria-hidden="true"></span>
+      <a href="#">Help</a>
+      <span class="app-header__divider" aria-hidden="true"></span>
+      <a href="#">Logout</a>
+    </nav>
+  </header>
+
+  <!-- Customizable toolbar (shared chrome, rendered by js/toolbar.js) -->
+  <div id="toolbar"></div>
+
+  <!-- Page content -->
+  <main class="page-body">
+
+    <ol class="breadcrumb" aria-label="Breadcrumb">
+      <li class="breadcrumb__item"><a href="index.html">Home</a></li>
+      <li class="breadcrumb__item"><a href="view-cases.html">View Cases</a></li>
+      <li class="breadcrumb__item"><span class="breadcrumb__current">Create New Case</span></li>
+    </ol>
+
+    <h1 class="page-title">Create New Case</h1>
+
+    <!-- Validation summary — scrolled into view when Create finds errors -->
+    <div class="info-notice info-notice--error" id="error-notice" hidden>
+      <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
+      <div><strong>Please correct the following errors before creating the case.</strong></div>
+    </div>
+
+    <p class="help-text" style="margin-top: 16px">Enter case information to create a new case. Fields marked
+      <span class="field-required">Required</span> must be completed.</p>
+
+    <form style="margin-top: 24px" onsubmit="return false;">
+
+      <!-- ── Case Information ──────────────────────────────────────────── -->
+      <h2 class="section-heading">Case Information</h2>
+
+      <div class="info-grid">
+        <div class="info-grid__item">
+          <span class="info-grid__label">Case Number</span>
+          <span class="info-grid__value" id="case-number-display">&mdash;</span>
+        </div>
+        <div class="info-grid__item">
+          <span class="info-grid__label">Date Received</span>
+          <span class="info-grid__value" id="date-received-display">&mdash;</span>
+        </div>
+        <div class="info-grid__item">
+          <span class="info-grid__label">Status</span>
+          <span class="info-grid__value status-text--open">Open</span>
+        </div>
+      </div>
+
+      <fieldset class="fieldset" id="case-type-field" style="margin-top: 24px">
+        <legend>Case Type <span class="field-required">Required</span></legend>
+        <span class="field-error" id="case-type-error" hidden>Select a case type.</span>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="case-type" value="Complaint"> Complaint</label>
+          <label class="radio-option"><input type="radio" name="case-type" value="Appeal"> Appeal</label>
+        </div>
+      </fieldset>
+
+      <div class="field-grid" style="margin-top: 24px">
+        <div class="field">
+          <label for="priority">Priority <span class="field-required">Required</span></label>
+          <select id="priority">
+            <option value="High">High</option>
+            <option value="Medium" selected>Medium</option>
+            <option value="Low">Low</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="filing-method">Filing Method</label>
+          <select id="filing-method">
+            <option value="Board Order">Board Order</option>
+            <option value="Email">Email</option>
+            <option value="Fax">Fax</option>
+            <option value="Judicial Decision">Judicial Decision</option>
+            <option value="Mail">Mail</option>
+            <option value="Online">Online</option>
+            <option value="Personal Visit">Personal Visit</option>
+            <option value="Staff Discovery">Staff Discovery</option>
+            <option value="Staff Entry" selected>Staff Entry</option>
+            <option value="Telephone">Telephone</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="legacy-case-number">Legacy Case Number</label>
+          <input type="text" id="legacy-case-number" autocomplete="off">
+        </div>
+      </div>
+
+      <!-- ── Case Subject Information ──────────────────────────────────── -->
+      <h2 class="section-heading">Case Subject Information</h2>
+      <p class="help-text">A case may involve more than one subject. Search the licensee records to add them.</p>
+
+      <div style="margin-top: 20px">
+        <button type="button" class="btn btn--warm" id="add-subject-btn">Create Case Subject</button>
+      </div>
+
+      <div class="table-controls" style="margin-top: 20px">
+        <div class="table-controls__count">
+          <span id="subjects-count">Showing 0 - 0 of 0 Entries</span>
+          <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--subjects">
+            What do the control icons mean?
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="icon-legend" id="icon-legend--subjects" hidden>
+        <div class="icon-legend__item"><img src="assets/icon-delete.png" alt=""> Remove Case Subject</div>
+      </div>
+
+      <p class="empty-state" id="subjects-empty-state">No case subjects added yet.</p>
+
+      <table class="data-table" id="subjects-table" hidden>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>License Number</th>
+            <th>License Type</th>
+            <th>Practice Address</th>
+            <th>Email</th>
+            <th>Controls</th>
+          </tr>
+        </thead>
+        <tbody id="subjects-rows"></tbody>
+      </table>
+
+      <!-- ── Complainant Information ───────────────────────────────────── -->
+      <h2 class="section-heading">Complainant Information</h2>
+
+      <div class="field" id="complainant-name-field">
+        <label for="complainant-name">Complainant Name <span class="field-required">Required</span></label>
+        <span class="field-error" id="complainant-name-error" hidden>Enter a complainant name.</span>
+        <input type="text" id="complainant-name" autocomplete="off">
+      </div>
+
+      <div class="field-grid" style="margin-top: 20px">
+        <div class="field">
+          <label for="incident-date">Incident Date</label>
+          <input type="date" id="incident-date">
+        </div>
+        <div class="field">
+          <label for="phone-number">Phone Number</label>
+          <input type="text" id="phone-number" inputmode="tel" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="email-address">Email Address</label>
+          <input type="text" id="email-address" autocomplete="off">
+        </div>
+      </div>
+
+      <!-- ── Complaint Details ────────────────────────────────────────── -->
+      <h2 class="section-heading">Complaint Details</h2>
+
+      <div class="field">
+        <label for="complaint-description">Complaint Description</label>
+        <textarea id="complaint-description" rows="6" maxlength="2000"></textarea>
+        <div class="char-counter"><span id="description-remaining">2000</span> of 2000 remaining</div>
+      </div>
+
+      <!-- ── Documents ────────────────────────────────────────────────── -->
+      <h2 class="section-heading">Documents</h2>
+      <p class="help-text">Upload supporting documents for this case.</p>
+
+      <div style="margin-top: 20px">
+        <button type="button" class="btn btn--warm" id="upload-document-btn">Upload Document</button>
+      </div>
+
+      <div class="table-controls" style="margin-top: 20px">
+        <div class="table-controls__count">
+          <span id="documents-count">Showing 0 - 0 of 0 Entries</span>
+          <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--documents">
+            What do the control icons mean?
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="icon-legend" id="icon-legend--documents" hidden>
+        <div class="icon-legend__item"><img src="assets/eye-icon.png" alt=""> View Document</div>
+        <div class="icon-legend__item"><img src="assets/icon-delete.png" alt=""> Delete Document</div>
+      </div>
+
+      <p class="empty-state" id="documents-empty-state">No documents uploaded yet.</p>
+
+      <table class="data-table" id="documents-table" hidden>
+        <thead>
+          <tr>
+            <th>Document Name</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Uploaded Date</th>
+            <th>File Name</th>
+            <th>Controls</th>
+          </tr>
+        </thead>
+        <tbody id="documents-rows"></tbody>
+      </table>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn--primary" id="create-case-btn">Create New Case</button>
+        <a href="view-cases.html" class="btn btn--cancel">Cancel</a>
+      </div>
+
+    </form>
+
+  </main>
+</div>
+
+<!-- Add Case Subject modal — search the licensee records, tick the matches -->
+<div class="modal-overlay" id="subject-modal" hidden role="dialog" aria-modal="true" aria-labelledby="subject-modal-title">
+  <div class="modal-content modal-content--wide">
+    <div class="modal-header">
+      <h2 class="modal-title" id="subject-modal-title">Add Case Subject</h2>
+      <button type="button" class="modal-close" id="subject-modal-close" aria-label="Close modal">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="field-grid">
+        <div class="field">
+          <label for="subject-search-name">Name</label>
+          <input type="text" id="subject-search-name" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="subject-search-license">License Number</label>
+          <input type="text" id="subject-search-license" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="subject-search-address">Physical Address</label>
+          <input type="text" id="subject-search-address" autocomplete="off">
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn--primary" id="subject-search-btn">Search</button>
+        <button type="button" class="btn btn--secondary" id="subject-clear-btn">Clear Search</button>
+      </div>
+
+      <div id="subject-results" style="margin-top: 24px" hidden>
+        <div class="table-controls">
+          <div class="table-controls__count"><span id="subject-results-count">Showing 0 - 0 of 0 Entries</span></div>
+        </div>
+        <p class="empty-state" id="subject-results-empty" hidden>No licensees match that search.</p>
+        <table class="data-table" id="subject-results-table">
+          <thead>
+            <tr>
+              <th class="select-column">Select</th>
+              <th>Name</th>
+              <th>License Number</th>
+              <th>License Type</th>
+              <th>Practice Address</th>
+            </tr>
+          </thead>
+          <tbody id="subject-results-rows"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn--primary" id="add-selected-btn" disabled>Add Selected (0)</button>
+      <button type="button" class="btn btn--cancel" id="subject-cancel-btn">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Upload Document modal -->
+<div class="modal-overlay" id="document-modal" hidden role="dialog" aria-modal="true" aria-labelledby="document-modal-title">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title" id="document-modal-title">Upload Document</h2>
+      <button type="button" class="modal-close" id="document-modal-close" aria-label="Close modal">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+    <form id="document-form" onsubmit="return false;">
+      <div class="modal-body">
+        <div class="field" id="doc-name-field">
+          <label for="doc-name">Document Name <span class="field-required">Required</span></label>
+          <span class="field-error" id="doc-name-error" hidden>Enter a document name.</span>
+          <input type="text" id="doc-name" autocomplete="off">
+        </div>
+
+        <div class="field" id="doc-category-field" style="margin-top: 20px">
+          <label for="doc-category">Category <span class="field-required">Required</span></label>
+          <span class="field-error" id="doc-category-error" hidden>Select a category.</span>
+          <select id="doc-category">
+            <option value="">Please Select</option>
+            <option value="Identification">Identification</option>
+            <option value="Licenses and Permits">Licenses and Permits</option>
+            <option value="Insurance">Insurance</option>
+            <option value="Reports">Reports</option>
+            <option value="Evidence">Evidence</option>
+            <option value="Correspondence">Correspondence</option>
+            <option value="Compliance">Compliance</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="field" style="margin-top: 20px">
+          <label for="doc-description">Description</label>
+          <textarea id="doc-description" rows="3"></textarea>
+        </div>
+
+        <div class="field" id="doc-file-field" style="margin-top: 20px">
+          <label for="doc-file">File <span class="field-required">Required</span></label>
+          <span class="field-error" id="doc-file-error" hidden>Choose a file to upload.</span>
+          <input type="file" id="doc-file">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn--primary">Upload Document</button>
+        <button type="button" class="btn btn--cancel" id="document-cancel-btn">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+  <span id="toast-text"></span>
+</div>
+
+<script src="js/toolbar.js"></script>
+<script src="js/icon-legend.js"></script>
+<script src="js/cases.js"></script>
+<script>
+  initToolbar('#toolbar', { activeKey: 'casemgmt' });
+  initIconLegends();
+
+  /* ------------------------------ Toast ------------------------------- */
+  var showToast = (function () {
+    var toast = document.getElementById('toast');
+    var toastText = document.getElementById('toast-text');
+    var timer;
+    return function (message) {
+      toastText.textContent = message;
+      toast.classList.add('is-visible');
+      clearTimeout(timer);
+      timer = setTimeout(function () { toast.classList.remove('is-visible'); }, 3000);
+    };
+  })();
+
+  var CURRENT_USER = 'Sgt. Peacock';
+
+  /* The case number and received date are assigned up front, read-only */
+  var newCaseNumber = nextCaseNumber();
+  document.getElementById('case-number-display').textContent = newCaseNumber;
+  document.getElementById('date-received-display').textContent = todayDisplay();
+
+  /* Description character counter */
+  (function () {
+    var textarea = document.getElementById('complaint-description');
+    var remaining = document.getElementById('description-remaining');
+    textarea.addEventListener('input', function () {
+      remaining.textContent = 2000 - textarea.value.length;
+    });
+  })();
+
+  /* --------------------------------------------------------------------- */
+  /* Licensee records the Case Subject search runs against                 */
+  /* --------------------------------------------------------------------- */
+  var LICENSEES = [
+    { name: 'Anderson, Derek',         licenseNumber: 'PI-2023-00145', physicalAddress: '123 Main St, Little Rock, AR 72201',        email: 'd.anderson@email.com' },
+    { name: 'Apex Security Solutions', licenseNumber: 'SB-2022-00891', physicalAddress: '4500 Cantrell Rd, Little Rock, AR 72207',   email: 'info@apexsecurity.com' },
+    { name: 'Brooks, Terrence',        licenseNumber: 'PI-2024-00312', physicalAddress: '789 Oak Ave, Fayetteville, AR 72701',       email: 't.brooks@email.com' },
+    { name: 'Capitol Shield LLC',      licenseNumber: 'SB-2021-01203', physicalAddress: '300 W Capitol Ave, Little Rock, AR 72201',  email: 'contact@capitolshield.com' },
+    { name: 'Evans, Michelle',         licenseNumber: 'AG-2023-00567', physicalAddress: '2200 Kavanaugh Blvd, Little Rock, AR 72205', email: 'm.evans@email.com' },
+    { name: 'Frontier Defense Group',  licenseNumber: 'SB-2020-00445', physicalAddress: '1100 Rogers Ave, Fort Smith, AR 72901',     email: 'info@frontierdefense.com' },
+    { name: 'Harris, Calvin',          licenseNumber: 'PI-2025-00089', physicalAddress: '501 Union St, Jonesboro, AR 72401',         email: 'c.harris@email.com' },
+    { name: 'Iron Guard Services',     licenseNumber: 'SB-2023-00734', physicalAddress: '888 S College Ave, Fayetteville, AR 72701', email: 'ops@ironguard.com' },
+    { name: 'Jackson, Renee',          licenseNumber: 'AG-2024-00201', physicalAddress: '640 Garland Ave, Fayetteville, AR 72701',   email: 'r.jackson@email.com' },
+    { name: 'Summit Protection Inc',   licenseNumber: 'SB-2022-01089', physicalAddress: '2050 N College Ave, Fayetteville, AR 72703', email: 'info@summitprotection.com' }
+  ];
+
+  /* --------------------------------------------------------------------- */
+  /* Case subjects added to this case                                      */
+  /* --------------------------------------------------------------------- */
+  var subjects = [];
+
+  function renderSubjects() {
+    document.getElementById('subjects-rows').innerHTML = subjects.map(function (s, idx) {
+      return '<tr>' +
+        '<td>' + escapeHtml(s.name) + '</td>' +
+        '<td>' + escapeHtml(s.licenseNumber) + '</td>' +
+        '<td>' + escapeHtml(licenseTypeFromNumber(s.licenseNumber)) + '</td>' +
+        '<td>' + escapeHtml(s.physicalAddress) + '</td>' +
+        '<td>' + escapeHtml(s.email) + '</td>' +
+        '<td class="controls-cell">' +
+          '<a href="#" class="icon-btn" aria-label="Remove ' + escapeHtml(s.name) + '" data-remove-subject="' + idx + '"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+
+    var n = subjects.length;
+    document.getElementById('subjects-count').textContent =
+      n === 0 ? 'Showing 0 - 0 of 0 Entries' : 'Showing 1 - ' + n + ' of ' + n + ' Entries';
+    document.getElementById('subjects-empty-state').hidden = n > 0;
+    document.getElementById('subjects-table').hidden = n === 0;
+  }
+
+  document.getElementById('subjects-rows').addEventListener('click', function (e) {
+    var link = e.target.closest('[data-remove-subject]');
+    if (!link) return;
+    e.preventDefault();
+    var removed = subjects.splice(parseInt(link.getAttribute('data-remove-subject'), 10), 1)[0];
+    renderSubjects();
+    showToast('Removed ' + removed.name);
+  });
+
+  /* --------------------------------------------------------------------- */
+  /* Add Case Subject modal                                                */
+  /* --------------------------------------------------------------------- */
+  (function () {
+    var modal = document.getElementById('subject-modal');
+    var results = document.getElementById('subject-results');
+    var rows = document.getElementById('subject-results-rows');
+    var addBtn = document.getElementById('add-selected-btn');
+    var matched = [];
+
+    var searchInputs = ['subject-search-name', 'subject-search-license', 'subject-search-address'];
+
+    function updateAddBtn() {
+      var count = rows.querySelectorAll('input[type="checkbox"]:checked').length;
+      addBtn.textContent = 'Add Selected (' + count + ')';
+      addBtn.disabled = count === 0;
+    }
+
+    function reset() {
+      searchInputs.forEach(function (id) { document.getElementById(id).value = ''; });
+      results.hidden = true;
+      rows.innerHTML = '';
+      matched = [];
+      updateAddBtn();
+    }
+
+    function close() {
+      modal.hidden = true;
+      reset();
+    }
+
+    function runSearch() {
+      var name = document.getElementById('subject-search-name').value.trim().toLowerCase();
+      var license = document.getElementById('subject-search-license').value.trim().toLowerCase();
+      var address = document.getElementById('subject-search-address').value.trim().toLowerCase();
+
+      matched = LICENSEES.filter(function (l) {
+        return (!name || l.name.toLowerCase().indexOf(name) !== -1) &&
+               (!license || l.licenseNumber.toLowerCase().indexOf(license) !== -1) &&
+               (!address || l.physicalAddress.toLowerCase().indexOf(address) !== -1);
+      });
+
+      rows.innerHTML = matched.map(function (l, idx) {
+        return '<tr>' +
+          '<td class="select-cell"><input type="checkbox" data-licensee="' + idx + '" aria-label="Select ' + escapeHtml(l.name) + '"></td>' +
+          '<td>' + escapeHtml(l.name) + '</td>' +
+          '<td>' + escapeHtml(l.licenseNumber) + '</td>' +
+          '<td>' + escapeHtml(licenseTypeFromNumber(l.licenseNumber)) + '</td>' +
+          '<td>' + escapeHtml(l.physicalAddress) + '</td>' +
+        '</tr>';
+      }).join('');
+
+      var n = matched.length;
+      document.getElementById('subject-results-count').textContent =
+        n === 0 ? 'Showing 0 - 0 of 0 Entries' : 'Showing 1 - ' + n + ' of ' + n + ' Entries';
+      document.getElementById('subject-results-empty').hidden = n > 0;
+      document.getElementById('subject-results-table').hidden = n === 0;
+      results.hidden = false;
+      updateAddBtn();
+    }
+
+    document.getElementById('add-subject-btn').addEventListener('click', function () {
+      modal.hidden = false;
+      document.getElementById('subject-search-name').focus();
+    });
+
+    document.getElementById('subject-modal-close').addEventListener('click', close);
+    document.getElementById('subject-cancel-btn').addEventListener('click', close);
+    modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !modal.hidden) close();
+    });
+
+    document.getElementById('subject-search-btn').addEventListener('click', runSearch);
+    document.getElementById('subject-clear-btn').addEventListener('click', reset);
+    rows.addEventListener('change', updateAddBtn);
+
+    addBtn.addEventListener('click', function () {
+      var added = 0;
+      rows.querySelectorAll('input[type="checkbox"]:checked').forEach(function (cb) {
+        var licensee = matched[parseInt(cb.getAttribute('data-licensee'), 10)];
+        var alreadyAdded = subjects.some(function (s) { return s.licenseNumber === licensee.licenseNumber; });
+        if (!alreadyAdded) {
+          subjects.push(licensee);
+          added++;
+        }
+      });
+      close();
+      renderSubjects();
+      showToast(added === 1 ? 'Case subject added' : added + ' case subjects added');
+    });
+  })();
+
+  /* --------------------------------------------------------------------- */
+  /* Documents                                                             */
+  /* --------------------------------------------------------------------- */
+  var documents = [];
+
+  function renderDocuments() {
+    document.getElementById('documents-rows').innerHTML = documents.map(function (d, idx) {
+      return '<tr>' +
+        '<td>' + escapeHtml(d.name) + '</td>' +
+        '<td>' + escapeHtml(d.category) + '</td>' +
+        '<td>' + escapeHtml(d.description) + '</td>' +
+        '<td>' + d.uploaded + '</td>' +
+        '<td class="filename-cell">' + escapeHtml(d.fileName) + '</td>' +
+        '<td class="controls-cell">' +
+          '<a href="#" class="icon-btn" aria-label="View ' + escapeHtml(d.name) + '"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>' +
+          '<a href="#" class="icon-btn" aria-label="Delete ' + escapeHtml(d.name) + '" data-remove-document="' + idx + '"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+
+    var n = documents.length;
+    document.getElementById('documents-count').textContent =
+      n === 0 ? 'Showing 0 - 0 of 0 Entries' : 'Showing 1 - ' + n + ' of ' + n + ' Entries';
+    document.getElementById('documents-empty-state').hidden = n > 0;
+    document.getElementById('documents-table').hidden = n === 0;
+  }
+
+  document.getElementById('documents-rows').addEventListener('click', function (e) {
+    var link = e.target.closest('[data-remove-document]');
+    if (!link) return;
+    e.preventDefault();
+    var removed = documents.splice(parseInt(link.getAttribute('data-remove-document'), 10), 1)[0];
+    renderDocuments();
+    showToast('Deleted ' + removed.name);
+  });
+
+  /* Upload Document modal */
+  (function () {
+    var modal = document.getElementById('document-modal');
+    var form = document.getElementById('document-form');
+    var FIELDS = ['doc-name', 'doc-category', 'doc-file'];
+
+    function clearErrors() {
+      FIELDS.forEach(function (name) {
+        document.getElementById(name + '-error').hidden = true;
+        document.getElementById(name + '-field').classList.remove('field--error');
+      });
+    }
+
+    function close() {
+      modal.hidden = true;
+      form.reset();
+      clearErrors();
+    }
+
+    document.getElementById('upload-document-btn').addEventListener('click', function () {
+      clearErrors();
+      modal.hidden = false;
+      document.getElementById('doc-name').focus();
+    });
+
+    document.getElementById('document-modal-close').addEventListener('click', close);
+    document.getElementById('document-cancel-btn').addEventListener('click', close);
+    modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !modal.hidden) close();
+    });
+
+    form.addEventListener('submit', function () {
+      clearErrors();
+
+      var name = document.getElementById('doc-name').value.trim();
+      var category = document.getElementById('doc-category').value;
+      var fileInput = document.getElementById('doc-file');
+
+      var invalid = [];
+      if (!name) invalid.push('doc-name');
+      if (!category) invalid.push('doc-category');
+      if (!fileInput.files.length) invalid.push('doc-file');
+
+      invalid.forEach(function (field) {
+        document.getElementById(field + '-error').hidden = false;
+        document.getElementById(field + '-field').classList.add('field--error');
+      });
+
+      if (invalid.length) {
+        document.getElementById(invalid[0]).focus();
+        return;
+      }
+
+      documents.push({
+        name: name,
+        category: category,
+        description: document.getElementById('doc-description').value.trim(),
+        uploaded: todayDisplay(),
+        fileName: fileInput.files[0].name
+      });
+
+      close();
+      renderDocuments();
+      showToast('Document uploaded successfully');
+    });
+  })();
+
+  /* --------------------------------------------------------------------- */
+  /* Create the case                                                       */
+  /* --------------------------------------------------------------------- */
+  document.getElementById('complainant-name').addEventListener('input', function () {
+    if (this.value.trim()) {
+      document.getElementById('complainant-name-error').hidden = true;
+      document.getElementById('complainant-name-field').classList.remove('field--error');
+    }
+  });
+
+  document.querySelectorAll('input[name="case-type"]').forEach(function (radio) {
+    radio.addEventListener('change', function () {
+      document.getElementById('case-type-error').hidden = true;
+    });
+  });
+
+  document.getElementById('create-case-btn').addEventListener('click', function () {
+    document.getElementById('error-notice').hidden = true;
+    document.getElementById('case-type-error').hidden = true;
+    document.getElementById('complainant-name-error').hidden = true;
+    document.getElementById('complainant-name-field').classList.remove('field--error');
+
+    var caseType = document.querySelector('input[name="case-type"]:checked');
+    var complainant = document.getElementById('complainant-name').value.trim();
+
+    var valid = true;
+    if (!caseType) {
+      document.getElementById('case-type-error').hidden = false;
+      valid = false;
+    }
+    if (!complainant) {
+      document.getElementById('complainant-name-error').hidden = false;
+      document.getElementById('complainant-name-field').classList.add('field--error');
+      valid = false;
+    }
+
+    if (!valid) {
+      document.getElementById('error-notice').hidden = false;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    /* The first subject is stored on the case; the rest hang off extraSubjects */
+    var primary = subjects[0] || { name: '—', licenseNumber: '', physicalAddress: '—', email: '—' };
+
+    addCase({
+      caseNumber: newCaseNumber,
+      dateReceived: document.getElementById('date-received-display').textContent,
+      caseSubject: primary.name,
+      status: 'Pending',
+      assignedTo: CURRENT_USER,
+      caseType: caseType.value,
+      priority: document.getElementById('priority').value,
+      complainantName: complainant,
+      licenseNumber: primary.licenseNumber,
+      physicalAddress: primary.physicalAddress,
+      emailAddress: document.getElementById('email-address').value.trim() || primary.email,
+      filingMethod: document.getElementById('filing-method').value,
+      incidentDate: formatIsoDate(document.getElementById('incident-date').value),
+      legacyCaseNumber: document.getElementById('legacy-case-number').value.trim(),
+      phoneNumber: document.getElementById('phone-number').value.trim(),
+      description: document.getElementById('complaint-description').value.trim(),
+      extraSubjects: subjects.slice(1)
+    });
+
+    if (documents.length) saveCaseCollection(newCaseNumber, 'documents', documents);
+
+    sessionStorage.setItem('newCaseCreated', newCaseNumber);
+    window.location.href = 'view-cases.html';
+  });
+
+  renderSubjects();
+  renderDocuments();
+</script>
+
+</body>
+</html>

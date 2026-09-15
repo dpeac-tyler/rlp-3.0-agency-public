@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Investigation &mdash; RLP Agency Console</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Header (shared chrome) -->
+  <header class="app-header">
+    <a class="app-header__brand" href="index.html">
+      <img class="app-header__logo" src="assets/tyler-t.png" alt="Tenant logo">
+      <span class="app-header__brand-name">Name of Agency</span>
+    </a>
+    <nav class="app-header__links" aria-label="Account">
+      <a href="settings.html">Settings</a>
+      <span class="app-header__divider" aria-hidden="true"></span>
+      <a href="search.html">Search</a>
+      <span class="app-header__divider" aria-hidden="true"></span>
+      <a href="#">Help</a>
+      <span class="app-header__divider" aria-hidden="true"></span>
+      <a href="#">Logout</a>
+    </nav>
+  </header>
+
+  <!-- Customizable toolbar (shared chrome, rendered by js/toolbar.js) -->
+  <div id="toolbar"></div>
+
+  <!-- Page content -->
+  <main class="page-body">
+
+    <ol class="breadcrumb" aria-label="Breadcrumb">
+      <li class="breadcrumb__item"><a href="view-cases.html">View Cases</a></li>
+      <li class="breadcrumb__item"><a href="#" id="breadcrumb-case-link">Case</a></li>
+      <li class="breadcrumb__item"><span class="breadcrumb__current">Create Investigation</span></li>
+    </ol>
+
+    <h1 class="page-title">Create Investigation</h1>
+
+    <!-- Validation summary — scrolled into view when Create finds errors -->
+    <div class="info-notice info-notice--error" id="error-notice" hidden>
+      <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
+      <div><strong>Please correct the following errors before creating the investigation.</strong></div>
+    </div>
+
+    <p class="help-text" style="margin-top: 16px">Create a new investigation for case
+      <strong id="page-case-number">&mdash;</strong>.</p>
+
+    <form style="margin-top: 24px" onsubmit="return false;">
+
+      <div class="info-grid">
+        <div class="info-grid__item">
+          <span class="info-grid__label">Investigation ID</span>
+          <span class="info-grid__value" id="investigation-id-display">&mdash;</span>
+        </div>
+      </div>
+
+      <div class="field" id="investigation-title-field" style="margin-top: 24px">
+        <label for="investigation-title">Investigation Title <span class="field-required">Required</span></label>
+        <span class="field-error" id="investigation-title-error" hidden>Enter an investigation title.</span>
+        <input type="text" id="investigation-title" autocomplete="off">
+      </div>
+
+      <div class="field-grid field-grid--2" style="margin-top: 20px">
+        <div class="field">
+          <label for="investigation-status">Investigation Status</label>
+          <select id="investigation-status">
+            <option value="Open" selected>Open</option>
+            <option value="In Progress">In Progress</option>
+            <option value="On Hold">On Hold</option>
+            <option value="Completed">Completed</option>
+            <option value="Closed (No Violations)">Closed (No Violations)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="investigation-type">Investigation Type</label>
+          <select id="investigation-type">
+            <option value="Complaint Investigation" selected>Complaint Investigation</option>
+            <option value="Follow-up Investigation">Follow-up Investigation</option>
+            <option value="Proactive Investigation">Proactive Investigation</option>
+            <option value="Referral Investigation">Referral Investigation</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field-grid field-grid--2" style="margin-top: 20px">
+        <div class="field">
+          <label for="investigation-priority">Priority</label>
+          <select id="investigation-priority">
+            <option value="High">High</option>
+            <option value="Medium" selected>Medium</option>
+            <option value="Low">Low</option>
+          </select>
+        </div>
+        <div class="field" id="assigned-investigator-field">
+          <label for="assigned-investigator">Assigned Investigator <span class="field-required">Required</span></label>
+          <span class="field-error" id="assigned-investigator-error" hidden>Select an investigator.</span>
+          <select id="assigned-investigator">
+            <option value="">Please Select</option>
+            <option value="Harris, Calvin">Harris, Calvin</option>
+            <option value="Martinez, Elena">Martinez, Elena</option>
+            <option value="Nguyen, Kevin">Nguyen, Kevin</option>
+            <option value="Thompson, Robert">Thompson, Robert</option>
+            <option value="Williams, Dana">Williams, Dana</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field-grid" style="margin-top: 20px">
+        <div class="field">
+          <label for="start-date">Start Date</label>
+          <input type="date" id="start-date">
+        </div>
+        <div class="field" id="target-completion-date-field">
+          <label for="target-completion-date">Target Completion Date <span class="field-required">Required</span></label>
+          <span class="field-error" id="target-completion-date-error" hidden>Choose a target completion date.</span>
+          <input type="date" id="target-completion-date">
+        </div>
+        <div class="field">
+          <label for="completion-date">Completion Date</label>
+          <input type="date" id="completion-date">
+        </div>
+      </div>
+
+      <div class="field" style="margin-top: 20px">
+        <label for="investigation-notes">Investigation Notes</label>
+        <textarea id="investigation-notes" rows="5" maxlength="1000"></textarea>
+        <div class="char-counter"><span id="notes-remaining">1000</span> of 1000 remaining</div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn--primary" id="create-investigation-btn">Create Investigation</button>
+        <a href="#" class="btn btn--cancel" id="cancel-link">Cancel</a>
+      </div>
+
+    </form>
+
+  </main>
+</div>
+
+<script src="js/toolbar.js"></script>
+<script src="js/cases.js"></script>
+<script>
+  initToolbar('#toolbar', { activeKey: 'casemgmt' });
+
+  var caseNumber = new URLSearchParams(window.location.search).get('case') || '';
+  var caseUrl = 'view-case-detail.html?case=' + encodeURIComponent(caseNumber);
+
+  document.getElementById('page-case-number').textContent = caseNumber || '—';
+  document.getElementById('breadcrumb-case-link').textContent = caseNumber || 'Case';
+  document.getElementById('breadcrumb-case-link').href = caseUrl;
+  document.getElementById('cancel-link').href = caseUrl;
+
+  /* Investigation IDs continue per session, the way case numbers do */
+  var investigationId = (function () {
+    var counter = parseInt(sessionStorage.getItem('rlp.investigationCounter') || '147', 10) + 1;
+    sessionStorage.setItem('rlp.investigationCounter', String(counter));
+    return 'INV-' + new Date().getFullYear() + '-' + String(counter).padStart(5, '0');
+  })();
+  document.getElementById('investigation-id-display').textContent = investigationId;
+
+  /* Notes character counter */
+  (function () {
+    var textarea = document.getElementById('investigation-notes');
+    var remaining = document.getElementById('notes-remaining');
+    textarea.addEventListener('input', function () {
+      remaining.textContent = 1000 - textarea.value.length;
+    });
+  })();
+
+  var FIELDS = ['investigation-title', 'assigned-investigator', 'target-completion-date'];
+
+  function clearErrors() {
+    FIELDS.forEach(function (name) {
+      document.getElementById(name + '-error').hidden = true;
+      document.getElementById(name + '-field').classList.remove('field--error');
+    });
+    document.getElementById('error-notice').hidden = true;
+  }
+
+  FIELDS.forEach(function (name) {
+    document.getElementById(name).addEventListener('input', function () {
+      if (this.value) {
+        document.getElementById(name + '-error').hidden = true;
+        document.getElementById(name + '-field').classList.remove('field--error');
+      }
+    });
+  });
+
+  document.getElementById('create-investigation-btn').addEventListener('click', function () {
+    clearErrors();
+
+    var invalid = FIELDS.filter(function (name) {
+      return !document.getElementById(name).value.trim();
+    });
+
+    invalid.forEach(function (name) {
+      document.getElementById(name + '-error').hidden = false;
+      document.getElementById(name + '-field').classList.add('field--error');
+    });
+
+    if (invalid.length) {
+      document.getElementById('error-notice').hidden = false;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      document.getElementById(invalid[0]).focus();
+      return;
+    }
+
+    var investigations = caseCollection(caseNumber, 'investigations') || [];
+    investigations.push({
+      id: investigationId,
+      title: document.getElementById('investigation-title').value.trim(),
+      status: document.getElementById('investigation-status').value,
+      type: document.getElementById('investigation-type').value,
+      priority: document.getElementById('investigation-priority').value,
+      assignedTo: document.getElementById('assigned-investigator').value,
+      startDate: formatIsoDate(document.getElementById('start-date').value),
+      targetDate: formatIsoDate(document.getElementById('target-completion-date').value),
+      completionDate: formatIsoDate(document.getElementById('completion-date').value),
+      notes: document.getElementById('investigation-notes').value.trim()
+    });
+    saveCaseCollection(caseNumber, 'investigations', investigations);
+
+    sessionStorage.setItem('rlp.caseToast', 'Investigation ' + investigationId + ' created successfully');
+    window.location.href = caseUrl + '&tab=investigations';
+  });
+</script>
+
+</body>
+</html>

@@ -41,6 +41,7 @@
     licenses: 'license-types.html',
     applications: 'applications.html',
     packets: 'packets.html',
+    casemgmt: 'view-cases.html',
   };
 
   function loadPersisted() {
