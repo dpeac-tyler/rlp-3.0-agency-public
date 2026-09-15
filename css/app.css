@@ -3316,33 +3316,33 @@ a.stat:focus-visible {
   text-decoration: underline;
 }
 
-/* Transient success message (flag added / removed) */
+/* Transient success message — flies in from the top left, then back out.
+   Parked off-canvas at left: -100%, so dropping .is-visible animates the
+   exit on its own. The overshoot easing gives it the slight bounce. */
 
 .toast {
   position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%) translateY(12px);
+  top: 120px;
+  left: -100%;
   z-index: 300;
   display: flex;
   align-items: center;
-  gap: 10px;
-  max-width: 520px;
-  padding: 14px 20px;
+  gap: 12px;
+  min-width: 300px;
+  max-width: 500px;
+  padding: 16px 24px;
   background: #ecf3ec;
-  border-left: 6px solid var(--c-status-green);
-  border-radius: var(--r-pill);
-  box-shadow: var(--shadow-menu);
+  border-left: 8px solid var(--c-status-green);
+  border-radius: 0 4px 4px 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, .15);
   font-size: 16px;
   color: var(--c-text-primary);
-  opacity: 0;
   pointer-events: none;
-  transition: opacity .2s ease, transform .2s ease;
+  transition: left .4s cubic-bezier(.34, 1.56, .64, 1);
 }
 
 .toast.is-visible {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
+  left: 0;
 }
 
 .toast i {
