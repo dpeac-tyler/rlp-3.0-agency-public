@@ -42,6 +42,7 @@
     applications: 'applications.html',
     packets: 'packets.html',
     casemgmt: 'view-cases.html',
+    flags: 'flags.html',
   };
 
   function loadPersisted() {

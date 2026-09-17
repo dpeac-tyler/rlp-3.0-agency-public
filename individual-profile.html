@@ -302,8 +302,8 @@
             <div class="island__eyebrow-row"><span class="island__eyebrow">Active Flags</span></div>
             <div class="island__headline">2</div>
             <div class="island__kv">
-              <div class="island__kv-row"><span class="island__kv-key">Eligibility:</span> <span class="island__kv-value" data-flag-stat="eligibility">1</span></div>
-              <div class="island__kv-row"><span class="island__kv-key">Agency review:</span> <span class="island__kv-value" data-flag-stat="review">1</span></div>
+              <div class="island__kv-row"><span class="island__kv-key">Automatic:</span> <span class="island__kv-value" data-flag-stat="automatic">1</span></div>
+              <div class="island__kv-row"><span class="island__kv-key">Manual:</span> <span class="island__kv-value" data-flag-stat="manual">1</span></div>
             </div>
             <a href="#flags" class="island__footer-link" data-panel="panel-flags">View flags</a>
           </div>
@@ -1335,7 +1335,7 @@
       <section class="profile-panel" id="panel-flags" aria-label="Flags" hidden>
         <div class="profile-panel__head">
           <h1 class="profile-panel__title">Flags</h1>
-          <p class="profile-panel__desc">Conditions applied to this individual. Eligibility flags are set automatically by rule; agency review flags are applied by staff.</p>
+          <p class="profile-panel__desc">Conditions applied to this individual. A flag&rsquo;s category is how it was raised &mdash; Timer, Expiration and Event flags are set automatically by rule, while Manual flags are applied by staff.</p>
         </div>
 
         <div class="info-notice" id="flags-notice">
@@ -1380,7 +1380,6 @@
               <tr>
                 <th>Flag <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
                 <th>Category <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
-                <th>Source <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
                 <th>Blocks Submission <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
                 <th>Applied By <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
                 <th>Applied Date <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
@@ -1880,7 +1879,7 @@
           <select id="flag-name-select" aria-describedby="flag-name-error">
             <option value="">Please Select</option>
           </select>
-          <p class="field-hint">Only flags currently active in Settings are available.</p>
+          <p class="field-hint">Only Manual flag definitions currently active in Settings &gt; Flags are available. Timer, Expiration and Event flags are raised automatically.</p>
         </div>
       </div>
       <div class="modal-footer">
@@ -2040,6 +2039,7 @@
 <script src="js/toolbar.js"></script>
 <script src="js/icon-legend.js"></script>
 <script src="js/column-select.js"></script>
+<script src="js/flags.js"></script>
 <script>
   initToolbar('#toolbar', { activeKey: 'constituents' });
   initIconLegends();
@@ -2152,21 +2152,18 @@
   /* panel table all render from the same store.                         */
   /* ------------------------------------------------------------------ */
   (function () {
-    var STORAGE_KEY = 'rlp.profile.flags.v1';
+    /* v2 — categories now match the Settings > Flags catalog (Timer /
+       Expiration / Event / Manual), so v1 records are intentionally dropped. */
+    var STORAGE_KEY = 'rlp.profile.flags.v2';
 
-    /* Flag definitions would come from Settings > Flags. Active only. */
-    var FLAG_DEFINITIONS = [
-      { name: 'Continuing Education Overdue', category: 'Eligibility',   blocks: 'Yes', status: 'Active' },
-      { name: 'Open Complaint Investigation', category: 'Agency Review', blocks: 'No',  status: 'Active' },
-      { name: 'Delinquent Payment',           category: 'Eligibility',   blocks: 'Yes', status: 'Active' },
-      { name: 'Background Check Failed',      category: 'Eligibility',   blocks: 'Yes', status: 'Active' },
-      { name: 'License Expired',              category: 'Eligibility',   blocks: 'Yes', status: 'Active' },
-      { name: 'Fraudulent Documentation',     category: 'Agency Review', blocks: 'Yes', status: 'Active' }
-    ];
+    /* The picker offers Manual definitions from Settings > Flags (js/flags.js).
+       Timer, Expiration and Event flags are raised by rule, not by staff.
+       Re-read on each open so a catalog edit in Settings shows up here. */
+    var FLAG_DEFINITIONS = manualFlagDefinitions();
 
     var SEED = [
-      { name: 'Open Complaint Investigation', category: 'Agency Review', source: 'Manual',    blocks: 'No',  appliedBy: 'Admin Account', appliedDate: '09/02/2026' },
-      { name: 'Continuing Education Overdue', category: 'Eligibility',   source: 'Automatic', blocks: 'Yes', appliedBy: 'System',        appliedDate: '07/01/2026' }
+      { name: 'Open Complaint Investigation', category: 'Manual',     blocks: 'No',  appliedBy: 'Admin Account', appliedDate: '09/02/2026' },
+      { name: 'Continuing Education Overdue', category: 'Expiration', blocks: 'Yes', appliedBy: 'System',        appliedDate: '07/01/2026' }
     ];
 
     var flags;
@@ -2236,7 +2233,7 @@
         name.textContent = flag.name;
         var meta = document.createElement('span');
         meta.className = 'flag-popover__item-meta';
-        meta.textContent = flag.category + ' \u00b7 ' + flag.source + ' \u00b7 ' + flag.appliedDate;
+        meta.textContent = flag.category + ' \u00b7 ' + flag.appliedDate;
         body.appendChild(name);
         body.appendChild(meta);
 
@@ -2244,7 +2241,7 @@
         li.appendChild(body);
 
         /* Automatic flags clear themselves when the underlying rule passes */
-        if (flag.source === 'Manual') {
+        if (flag.category === 'Manual') {
           var remove = document.createElement('button');
           remove.type = 'button';
           remove.className = 'flag-popover__item-remove';
@@ -2275,7 +2272,7 @@
       tbody.innerHTML = '';
       flags.forEach(function (flag, index) {
         var tr = document.createElement('tr');
-        var cells = [flag.name, flag.category, flag.source, flag.blocks, flag.appliedBy, flag.appliedDate];
+        var cells = [flag.name, flag.category, flag.blocks, flag.appliedBy, flag.appliedDate];
         cells.forEach(function (value) {
           var td = document.createElement('td');
           td.textContent = value;
@@ -2287,7 +2284,7 @@
         controls.innerHTML =
           '<a href="#" class="icon-btn" aria-label="View Flag Detail"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>' +
           '<a href="#" class="icon-btn" aria-label="View History"><img src="assets/view-history.png" alt="" width="30" height="30"></a>';
-        if (flag.source === 'Manual') {
+        if (flag.category === 'Manual') {
           var removeLink = document.createElement('a');
           removeLink.href = '#';
           removeLink.className = 'icon-btn';
@@ -2331,10 +2328,10 @@
       var island = document.getElementById('flags-island');
       if (island) {
         island.querySelector('.island__headline').textContent = flags.length;
-        island.querySelector('[data-flag-stat="eligibility"]').textContent =
-          flags.filter(function (f) { return f.category === 'Eligibility'; }).length;
-        island.querySelector('[data-flag-stat="review"]').textContent =
-          flags.filter(function (f) { return f.category === 'Agency Review'; }).length;
+        island.querySelector('[data-flag-stat="manual"]').textContent =
+          flags.filter(function (f) { return f.category === 'Manual'; }).length;
+        island.querySelector('[data-flag-stat="automatic"]').textContent =
+          flags.filter(function (f) { return f.category !== 'Manual'; }).length;
       }
     }
 
@@ -2360,14 +2357,15 @@
     }
 
     function populateSelect() {
+      FLAG_DEFINITIONS = manualFlagDefinitions();
       var applied = flags.map(function (f) { return f.name; });
       select.innerHTML = '<option value="">Please Select</option>';
       FLAG_DEFINITIONS
-        .filter(function (d) { return d.status === 'Active' && applied.indexOf(d.name) === -1; })
+        .filter(function (d) { return applied.indexOf(d.label) === -1; })
         .forEach(function (d) {
           var opt = document.createElement('option');
-          opt.value = d.name;
-          opt.textContent = d.name;
+          opt.value = d.label;
+          opt.textContent = d.label;
           select.appendChild(opt);
         });
     }
@@ -2419,11 +2417,10 @@
         select.focus();
         return;
       }
-      var def = FLAG_DEFINITIONS.filter(function (d) { return d.name === name; })[0];
+      var def = FLAG_DEFINITIONS.filter(function (d) { return d.label === name; })[0];
       flags.unshift({
         name: name,
-        category: def ? def.category : 'Agency Review',
-        source: 'Manual',
+        category: 'Manual',
         blocks: def ? def.blocks : 'No',
         appliedBy: 'ASP Admin Two',
         appliedDate: today()

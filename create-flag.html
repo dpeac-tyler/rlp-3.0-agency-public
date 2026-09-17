@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create New Flag Definition &mdash; RLP Agency Console</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Header (shared chrome) -->
+  <header class="app-header">
+    <a class="app-header__brand" href="index.html">
+      <img class="app-header__logo" src="assets/tyler-t.png" alt="Tenant logo">
+      <span class="app-header__brand-name">Name of Agency</span>
+    </a>
+    <nav class="app-header__links" aria-label="Account">
+      <a href="settings.html">Settings</a>
+      <span class="app-header__divider" aria-hidden="true"></span>
+      <a href="search.html">Search</a>
+      <span class="app-header__divider" aria-hidden="true"></span>
+      <a href="#">Help</a>
+      <span class="app-header__divider" aria-hidden="true"></span>
+      <a href="#">Logout</a>
+    </nav>
+  </header>
+
+  <!-- Customizable toolbar (shared chrome, rendered by js/toolbar.js) -->
+  <div id="toolbar"></div>
+
+  <!-- Page content -->
+  <main class="page-body" style="background: #fafafa;">
+
+    <ol class="breadcrumb" aria-label="Breadcrumb">
+      <li class="breadcrumb__item"><a href="settings.html">Settings</a></li>
+      <li class="breadcrumb__item"><a href="flags.html">Flags</a></li>
+      <li class="breadcrumb__item"><span class="breadcrumb__current" id="breadcrumb-current">Create New Flag Definition</span></li>
+    </ol>
+
+    <h1 class="page-title" id="page-title">Create New Flag Definition</h1>
+
+    <!-- Validation summary — scrolled into view when Save finds errors -->
+    <div class="info-notice info-notice--error" id="error-notice" hidden>
+      <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
+      <div><strong>Please correct the following errors before saving.</strong></div>
+    </div>
+
+    <p class="help-text" style="margin-top: 16px">A flag definition is the agency-wide template for a condition that
+      can be raised on a record. Fields marked <span class="field-required">Required</span> must be completed. The name
+      and category cannot be changed once the definition is created.</p>
+
+    <form style="margin-top: 24px" onsubmit="return false;">
+
+      <!-- ── Definition ────────────────────────────────────────────────── -->
+      <section class="island island--section">
+        <h2 class="section-heading">Definition</h2>
+
+        <div class="field-grid field-grid--2">
+          <div class="field" id="flag-key-field">
+            <label for="flag-key">Name <span class="field-required">Required</span></label>
+            <span class="field-error" id="flag-key-error" hidden>Enter a name using only uppercase letters, numbers, and underscores.</span>
+            <input type="text" id="flag-key" autocomplete="off">
+            <span class="field-hint">Uppercase letters and underscores, for example INSURANCE_EXPIRATION. Must be unique within your agency.</span>
+          </div>
+
+          <div class="field" id="flag-category-field">
+            <label for="flag-category">Category <span class="field-required">Required</span></label>
+            <span class="field-error" id="flag-category-error" hidden>Select a category.</span>
+            <select id="flag-category">
+              <option value="">Please Select</option>
+              <option value="Timer">Timer</option>
+              <option value="Expiration">Expiration</option>
+              <option value="Event">Event</option>
+              <option value="Manual">Manual</option>
+            </select>
+            <span class="field-hint" id="flag-category-hint">Timer, Expiration and Event flags are raised automatically by rule. Manual flags are applied by staff from a constituent profile.</span>
+          </div>
+        </div>
+
+        <div class="field" id="flag-label-field" style="margin-top: 24px">
+          <label for="flag-label">Label <span class="field-required">Required</span></label>
+          <span class="field-error" id="flag-label-error" hidden>Enter a label.</span>
+          <input type="text" id="flag-label" autocomplete="off">
+          <span class="field-hint">What staff and constituents see wherever the flag appears.</span>
+        </div>
+
+        <div class="field" style="margin-top: 24px">
+          <label for="flag-description">Description</label>
+          <textarea id="flag-description" rows="4" maxlength="1024"></textarea>
+          <div class="char-counter"><span id="flag-description-remaining">1024</span> of 1024 remaining</div>
+        </div>
+      </section>
+
+      <!-- ── Behavior ──────────────────────────────────────────────────── -->
+      <section class="island island--section">
+        <h2 class="section-heading">Behavior</h2>
+
+        <fieldset class="fieldset">
+          <legend>Status <span class="field-required">Required</span></legend>
+          <div class="radio-group">
+            <label class="radio-option"><input type="radio" name="flag-status" value="Active" checked> Active</label>
+            <label class="radio-option"><input type="radio" name="flag-status" value="Inactive"> Inactive</label>
+          </div>
+        </fieldset>
+        <p class="help-text" style="margin-top: 10px">An inactive definition stays on record but is no longer raised
+          automatically or offered in the constituent profile flag picker.</p>
+
+        <fieldset class="fieldset" style="margin-top: 24px">
+          <legend>Blocks Submission <span class="field-required">Required</span></legend>
+          <div class="radio-group">
+            <label class="radio-option"><input type="radio" name="flag-blocks" value="Yes"> Yes</label>
+            <label class="radio-option"><input type="radio" name="flag-blocks" value="No" checked> No</label>
+          </div>
+        </fieldset>
+        <p class="help-text" style="margin-top: 10px">When set to Yes, a constituent carrying this flag cannot submit
+          until it is cleared.</p>
+      </section>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn--primary" id="save-flag-btn">Save</button>
+        <a href="flags.html" class="btn btn--cancel">Cancel</a>
+      </div>
+
+    </form>
+
+  </main>
+</div>
+
+<script src="js/toolbar.js"></script>
+<script src="js/flags.js"></script>
+<script>
+  initToolbar('#toolbar', { activeKey: 'flags' });
+
+  var FLAGS = loadFlagDefinitions();
+
+  /* --------------------------------------------------------------------- */
+  /* One page serves Create and Edit. ?flag=<index> switches to Edit, which */
+  /* locks the name and category — they identify the definition and can't  */
+  /* change once records reference it.                                     */
+  /* --------------------------------------------------------------------- */
+  var params = new URLSearchParams(window.location.search);
+  var editIndex = params.has('flag') ? parseInt(params.get('flag'), 10) : -1;
+  var editing = editIndex >= 0 && editIndex < FLAGS.length;
+
+  var keyInput = document.getElementById('flag-key');
+  var categorySelect = document.getElementById('flag-category');
+  var labelInput = document.getElementById('flag-label');
+  var descriptionInput = document.getElementById('flag-description');
+  var remaining = document.getElementById('flag-description-remaining');
+  var errorNotice = document.getElementById('error-notice');
+
+  if (editing) {
+    var flag = FLAGS[editIndex];
+    document.title = 'Edit Flag Definition — RLP Agency Console';
+    document.getElementById('page-title').textContent = 'Edit Flag Definition';
+    document.getElementById('breadcrumb-current').textContent = 'Edit Flag Definition';
+
+    keyInput.value = flag.key;
+    keyInput.disabled = true;
+    categorySelect.value = flag.category;
+    categorySelect.disabled = true;
+    document.getElementById('flag-category-hint').textContent =
+      'The category cannot be changed after the flag definition is created.';
+    labelInput.value = flag.label;
+    descriptionInput.value = flag.description || '';
+
+    var statusRadio = document.querySelector('input[name="flag-status"][value="' + flag.status + '"]');
+    if (statusRadio) statusRadio.checked = true;
+    var blocksRadio = document.querySelector('input[name="flag-blocks"][value="' + (flag.blocks || 'No') + '"]');
+    if (blocksRadio) blocksRadio.checked = true;
+  }
+
+  /* ---------------------------- Char counter --------------------------- */
+  function updateCounter() {
+    remaining.textContent = 1024 - descriptionInput.value.length;
+  }
+  descriptionInput.addEventListener('input', updateCounter);
+  updateCounter();
+
+  /* ----------------------------- Validation ---------------------------- */
+  function setError(fieldId, errorId, show) {
+    document.getElementById(fieldId).classList.toggle('field--error', show);
+    document.getElementById(errorId).hidden = !show;
+  }
+
+  function clearErrors() {
+    setError('flag-key-field', 'flag-key-error', false);
+    setError('flag-category-field', 'flag-category-error', false);
+    setError('flag-label-field', 'flag-label-error', false);
+    errorNotice.hidden = true;
+  }
+
+  /* Clear a field's error as soon as it reads valid again */
+  keyInput.addEventListener('input', function () {
+    if (/^[A-Z0-9_]+$/.test(keyInput.value.trim())) setError('flag-key-field', 'flag-key-error', false);
+  });
+  categorySelect.addEventListener('change', function () {
+    if (categorySelect.value) setError('flag-category-field', 'flag-category-error', false);
+  });
+  labelInput.addEventListener('input', function () {
+    if (labelInput.value.trim()) setError('flag-label-field', 'flag-label-error', false);
+  });
+
+  function validate() {
+    clearErrors();
+    var valid = true;
+
+    if (!editing) {
+      var key = keyInput.value.trim();
+      var duplicate = FLAGS.some(function (f) { return f.key === key; });
+      if (!/^[A-Z0-9_]+$/.test(key) || duplicate) {
+        document.getElementById('flag-key-error').textContent = duplicate
+          ? 'A flag definition named ' + key + ' already exists.'
+          : 'Enter a name using only uppercase letters, numbers, and underscores.';
+        setError('flag-key-field', 'flag-key-error', true);
+        valid = false;
+      }
+
+      if (!categorySelect.value) {
+        setError('flag-category-field', 'flag-category-error', true);
+        valid = false;
+      }
+    }
+
+    if (!labelInput.value.trim()) {
+      setError('flag-label-field', 'flag-label-error', true);
+      valid = false;
+    }
+
+    if (!valid) {
+      errorNotice.hidden = false;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    return valid;
+  }
+
+  /* ------------------------------- Save -------------------------------- */
+  document.getElementById('save-flag-btn').addEventListener('click', function () {
+    if (!validate()) return;
+
+    var record = {
+      key: editing ? FLAGS[editIndex].key : keyInput.value.trim(),
+      label: labelInput.value.trim(),
+      category: editing ? FLAGS[editIndex].category : categorySelect.value,
+      description: descriptionInput.value.trim(),
+      settings: editing ? (FLAGS[editIndex].settings || '') : '',
+      blocks: document.querySelector('input[name="flag-blocks"]:checked').value,
+      status: document.querySelector('input[name="flag-status"]:checked').value
+    };
+
+    if (editing) {
+      FLAGS[editIndex] = record;
+    } else {
+      FLAGS.push(record);
+      /* Settings lists definitions grouped by category, then by label */
+      var order = ['Timer', 'Expiration', 'Event', 'Manual'];
+      FLAGS.sort(function (a, b) {
+        var byCategory = order.indexOf(a.category) - order.indexOf(b.category);
+        return byCategory !== 0 ? byCategory : a.label.localeCompare(b.label);
+      });
+    }
+
+    saveFlagDefinitions(FLAGS);
+    sessionStorage.setItem('rlp.flags.savedMessage',
+      'Flag definition "' + record.label + '" ' + (editing ? 'updated' : 'created') + ' successfully');
+    window.location.href = 'flags.html';
+  });
+</script>
+
+</body>
+</html>

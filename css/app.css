@@ -1191,6 +1191,16 @@ a.stat:focus-visible {
   box-shadow: 0 0 0 1px var(--c-blue);
 }
 
+/* Locked field — a value that identifies the record and can't be changed after
+   creation (flag Name and Category on edit). Matches the combobox treatment. */
+.field select:disabled,
+.field input:disabled,
+.field textarea:disabled {
+  background: var(--c-hairline);
+  color: var(--c-text-secondary);
+  cursor: not-allowed;
+}
+
 .field-error {
   display: block;
   font-size: 16px;

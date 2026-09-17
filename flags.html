@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flags &mdash; RLP Agency Console</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Header (shared chrome) -->
+  <header class="app-header">
+    <a class="app-header__brand" href="index.html">
+      <img class="app-header__logo" src="assets/tyler-t.png" alt="Tenant logo">
+      <span class="app-header__brand-name">Name of Agency</span>
+    </a>
+    <nav class="app-header__links" aria-label="Account">
+      <a href="settings.html">Settings</a>
+      <span class="app-header__divider" aria-hidden="true"></span>
+      <a href="search.html">Search</a>
+      <span class="app-header__divider" aria-hidden="true"></span>
+      <a href="#">Help</a>
+      <span class="app-header__divider" aria-hidden="true"></span>
+      <a href="#">Logout</a>
+    </nav>
+  </header>
+
+  <!-- Customizable toolbar (shared chrome, rendered by js/toolbar.js) -->
+  <div id="toolbar"></div>
+
+  <!-- Page content -->
+  <main class="page-body">
+
+    <ol class="breadcrumb" aria-label="Breadcrumb">
+      <li class="breadcrumb__item"><a href="settings.html">Settings</a></li>
+      <li class="breadcrumb__item"><span class="breadcrumb__current">Flags</span></li>
+    </ol>
+
+    <h1 class="page-title">Flags</h1>
+
+    <p class="help-text" style="margin-top: 16px">Flag definitions are specific to your agency. A flag's category
+      determines how it is raised: <strong>Timer</strong>, <strong>Expiration</strong> and <strong>Event</strong> flags
+      are raised automatically by rule, while <strong>Manual</strong> flags are the only ones staff can apply by hand
+      from a constituent profile. Inactive definitions stay on record but are no longer raised or offered.</p>
+
+    <div style="margin-top: 24px">
+      <a href="create-flag.html" class="btn btn--primary">Create New Flag Definition</a>
+    </div>
+
+    <div class="filter-tabs" role="group" aria-label="Flag category filter">
+      <button type="button" class="filter-tabs__btn is-active" data-category="all">All</button>
+      <button type="button" class="filter-tabs__btn" data-category="Timer">Timer</button>
+      <button type="button" class="filter-tabs__btn" data-category="Expiration">Expiration</button>
+      <button type="button" class="filter-tabs__btn" data-category="Event">Event</button>
+      <button type="button" class="filter-tabs__btn" data-category="Manual">Manual</button>
+    </div>
+
+    <div style="margin-top: 24px">
+      <div class="table-controls">
+        <div class="table-controls__count">
+          <span id="flags-count">Showing 0 - 0 of 0 Entries</span>
+          <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--flags">
+            What do the control icons mean?
+            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="table-controls__right">
+          <label for="entries-per-page-flags">Show</label>
+          <select id="entries-per-page-flags">
+            <option value="100" selected>100</option>
+            <option value="50">50</option>
+            <option value="25">25</option>
+            <option value="10">10</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="icon-legend" id="icon-legend--flags" hidden>
+        <div class="icon-legend__item"><img src="assets/eye-icon.png" alt=""> View Flag Definition</div>
+        <div class="icon-legend__item"><img src="assets/edit-icon.png" alt=""> Edit Flag Definition</div>
+        <div class="icon-legend__item"><img src="assets/icon-delete.png" alt=""> Delete Flag Definition</div>
+      </div>
+
+      <p class="empty-state" id="flags-empty-state" hidden>No flag definitions found.</p>
+
+      <table class="data-table" id="flags-table">
+        <thead>
+          <tr>
+            <th>Flag Name <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Category <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Description &amp; Settings</th>
+            <th>Status <i class="fa-solid fa-sort" aria-hidden="true"></i></th>
+            <th>Controls</th>
+          </tr>
+        </thead>
+        <tbody id="flags-rows"></tbody>
+      </table>
+
+      <nav aria-label="Pagination">
+        <ul class="pagination">
+          <li><a href="#" class="pagination__arrow" aria-label="Previous page">&lsaquo; Previous</a></li>
+          <li><a href="#" class="is-current" aria-label="Page 1" aria-current="page">1</a></li>
+          <li><a href="#" class="pagination__arrow" aria-label="Next page">Next &rsaquo;</a></li>
+        </ul>
+      </nav>
+    </div>
+
+  </main>
+</div>
+
+<!-- View Flag Definition modal — populated from FLAGS by JS -->
+<div class="modal-overlay" id="view-flag-modal" hidden role="dialog" aria-modal="true" aria-labelledby="view-flag-title">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title" id="view-flag-title">View Flag Definition</h2>
+      <button type="button" class="modal-close" id="view-flag-close" aria-label="Close modal">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="info-grid info-grid--2">
+        <div class="info-grid__item">
+          <span class="info-grid__label">Name</span>
+          <span class="info-grid__value" id="view-flag-key"></span>
+        </div>
+        <div class="info-grid__item">
+          <span class="info-grid__label">Category</span>
+          <span class="info-grid__value" id="view-flag-category"></span>
+        </div>
+        <div class="info-grid__item">
+          <span class="info-grid__label">Label</span>
+          <span class="info-grid__value" id="view-flag-label"></span>
+        </div>
+        <div class="info-grid__item">
+          <span class="info-grid__label">Status</span>
+          <span class="info-grid__value" id="view-flag-status"></span>
+        </div>
+        <div class="info-grid__item">
+          <span class="info-grid__label">Description</span>
+          <span class="info-grid__value" id="view-flag-description"></span>
+        </div>
+        <div class="info-grid__item">
+          <span class="info-grid__label">Blocks Submission</span>
+          <span class="info-grid__value" id="view-flag-blocks"></span>
+        </div>
+        <div class="info-grid__item" id="view-flag-settings-item">
+          <span class="info-grid__label">Settings</span>
+          <span class="info-grid__value" id="view-flag-settings"></span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn--primary" id="view-flag-close-btn">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete confirmation modal -->
+<div class="modal-overlay" id="delete-flag-modal" hidden role="dialog" aria-modal="true" aria-labelledby="delete-flag-title">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title" id="delete-flag-title">Delete Flag Definition</h2>
+      <button type="button" class="modal-close" id="delete-flag-close" aria-label="Close modal">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="info-notice info-notice--warning">
+        <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+        <div>Deleting a definition removes it from the constituent profile flag picker. Flags already applied to a
+          record are not removed.</div>
+      </div>
+      <p id="delete-flag-text"></p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn--cancel" id="delete-flag-confirm">Delete Flag Definition</button>
+      <button type="button" class="btn btn--secondary" id="delete-flag-cancel">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+  <span id="toast-text"></span>
+</div>
+
+<script src="js/toolbar.js"></script>
+<script src="js/icon-legend.js"></script>
+<script src="js/flags.js"></script>
+<script>
+  initToolbar('#toolbar', { activeKey: 'flags' });
+  initIconLegends();
+
+  /* ------------------------------ Toast ------------------------------- */
+  var showToast = (function () {
+    var toast = document.getElementById('toast');
+    var toastText = document.getElementById('toast-text');
+    var timer;
+    return function (message) {
+      toastText.textContent = message;
+      toast.classList.add('is-visible');
+      clearTimeout(timer);
+      timer = setTimeout(function () { toast.classList.remove('is-visible'); }, 3000);
+    };
+  })();
+
+  /* --------------------------------------------------------------------- */
+  /* Definitions live in js/flags.js so the constituent profile reads the   */
+  /* same catalog. Edits made here persist to localStorage.                */
+  /* --------------------------------------------------------------------- */
+  var FLAGS = loadFlagDefinitions();
+  var activeCategory = 'all';
+
+  function escapeHtml(text) {
+    var div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  function countText(n) {
+    return n === 0 ? 'Showing 0 - 0 of 0 Entries' : 'Showing 1 - ' + n + ' of ' + n + ' Entries';
+  }
+
+  /* Each tab carries its own count, so the label has to be rebuilt on render */
+  function renderTabCounts() {
+    document.querySelectorAll('.filter-tabs__btn').forEach(function (tab) {
+      var category = tab.getAttribute('data-category');
+      var n = category === 'all'
+        ? FLAGS.length
+        : FLAGS.filter(function (f) { return f.category === category; }).length;
+      tab.textContent = (category === 'all' ? 'All' : category) + ' (' + n + ')';
+    });
+  }
+
+  function render() {
+    var visible = FLAGS.filter(function (f) {
+      return activeCategory === 'all' || f.category === activeCategory;
+    });
+
+    document.getElementById('flags-rows').innerHTML = visible.map(function (flag) {
+      var idx = FLAGS.indexOf(flag);
+      /* The settings line carries the rule detail, plus the blocking note when
+         the definition stops a constituent from submitting. */
+      var parts = [];
+      if (flag.settings) parts.push(flag.settings);
+      if (flag.blocks === 'Yes') parts.push('blocks submission while active');
+      var settings = parts.length
+        ? '<div class="help-text" style="margin-top: 4px">' + escapeHtml(parts.join(' \u00b7 ')) + '</div>'
+        : '';
+      return '<tr>' +
+        '<td>' + escapeHtml(flag.label) + '</td>' +
+        '<td>' + escapeHtml(flag.category) + '</td>' +
+        '<td>' + escapeHtml(flag.description) + settings + '</td>' +
+        '<td><span class="status-text--' + flag.status.toLowerCase() + '">' + escapeHtml(flag.status) + '</span></td>' +
+        '<td class="controls-cell">' +
+          '<a href="#" class="icon-btn" aria-label="View Flag Definition" data-view-idx="' + idx + '"><img src="assets/eye-icon.png" alt="" width="30" height="30"></a>' +
+          '<a href="create-flag.html?flag=' + idx + '" class="icon-btn" aria-label="Edit Flag Definition"><img src="assets/edit-icon.png" alt="" width="30" height="30"></a>' +
+          '<a href="#" class="icon-btn" aria-label="Delete Flag Definition" data-delete-idx="' + idx + '"><img src="assets/icon-delete.png" alt="" width="30" height="30"></a>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+
+    document.getElementById('flags-count').textContent = countText(visible.length);
+    document.getElementById('flags-empty-state').hidden = visible.length > 0;
+    document.getElementById('flags-table').hidden = visible.length === 0;
+    renderTabCounts();
+  }
+
+  /* --------------------------------------------------------------------- */
+  /* Category filter tabs                                                  */
+  /* --------------------------------------------------------------------- */
+  (function () {
+    var tabs = document.querySelectorAll('.filter-tabs__btn');
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        tabs.forEach(function (t) { t.classList.remove('is-active'); });
+        tab.classList.add('is-active');
+        activeCategory = tab.getAttribute('data-category');
+        render();
+      });
+    });
+  })();
+
+  /* --------------------------------------------------------------------- */
+  /* View modal                                                            */
+  /* --------------------------------------------------------------------- */
+  var openViewModal = (function () {
+    var modal = document.getElementById('view-flag-modal');
+
+    function close() {
+      modal.hidden = true;
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('view-flag-close').addEventListener('click', close);
+    document.getElementById('view-flag-close-btn').addEventListener('click', close);
+    modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !modal.hidden) close();
+    });
+
+    return function (idx) {
+      var flag = FLAGS[idx];
+      document.getElementById('view-flag-key').textContent = flag.key;
+      document.getElementById('view-flag-category').textContent = flag.category;
+      document.getElementById('view-flag-label').textContent = flag.label;
+      document.getElementById('view-flag-status').textContent = flag.status;
+      document.getElementById('view-flag-description').textContent = flag.description || '—';
+      document.getElementById('view-flag-blocks').textContent = flag.blocks || 'No';
+      document.getElementById('view-flag-settings').textContent = flag.settings || '';
+      document.getElementById('view-flag-settings-item').hidden = !flag.settings;
+      modal.hidden = false;
+      document.body.style.overflow = 'hidden';
+    };
+  })();
+
+  /* --------------------------------------------------------------------- */
+  /* Delete modal                                                          */
+  /* --------------------------------------------------------------------- */
+  var openDeleteModal = (function () {
+    var modal = document.getElementById('delete-flag-modal');
+    var text = document.getElementById('delete-flag-text');
+    var pending = null;
+
+    function close() {
+      modal.hidden = true;
+      document.body.style.overflow = '';
+      pending = null;
+    }
+
+    document.getElementById('delete-flag-close').addEventListener('click', close);
+    document.getElementById('delete-flag-cancel').addEventListener('click', close);
+    modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !modal.hidden) close();
+    });
+
+    document.getElementById('delete-flag-confirm').addEventListener('click', function () {
+      if (pending) pending();
+      close();
+    });
+
+    return function (idx) {
+      text.textContent = 'Delete the "' + FLAGS[idx].label + '" flag definition? This cannot be undone.';
+      pending = function () {
+        var label = FLAGS[idx].label;
+        FLAGS.splice(idx, 1);
+        saveFlagDefinitions(FLAGS);
+        render();
+        showToast('Flag definition "' + label + '" deleted');
+      };
+      modal.hidden = false;
+      document.body.style.overflow = 'hidden';
+    };
+  })();
+
+  /* --------------------------------------------------------------------- */
+  /* Row controls — delegated, so re-rendered rows stay wired              */
+  /* --------------------------------------------------------------------- */
+  document.addEventListener('click', function (e) {
+    var viewLink = e.target.closest('[data-view-idx]');
+    if (viewLink) {
+      e.preventDefault();
+      openViewModal(parseInt(viewLink.getAttribute('data-view-idx'), 10));
+      return;
+    }
+
+    var deleteLink = e.target.closest('[data-delete-idx]');
+    if (deleteLink) {
+      e.preventDefault();
+      openDeleteModal(parseInt(deleteLink.getAttribute('data-delete-idx'), 10));
+    }
+  });
+
+  /* A definition saved by create-flag.html announces itself on arrival */
+  (function () {
+    var saved = sessionStorage.getItem('rlp.flags.savedMessage');
+    if (!saved) return;
+    sessionStorage.removeItem('rlp.flags.savedMessage');
+    showToast(saved);
+  })();
+
+  render();
+  saveFlagDefinitions(FLAGS);
+</script>
+
+</body>
+</html>
