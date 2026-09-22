@@ -4105,7 +4105,9 @@ a.stat:focus-visible {
   min-width: 112px;
   height: 44px;
   padding: 0 18px;
-  border: 1px solid #c9ccd0;
+  /* #8d9296 clears the 3:1 non-text floor against white; the old #c9ccd0
+     border sat at 1.6:1, too faint to read as the edge of a control */
+  border: 1px solid #8d9296;
   border-radius: var(--r-pill);
   background: #fff;
   font-size: 16px;
@@ -4115,7 +4117,7 @@ a.stat:focus-visible {
 }
 
 .choice:hover {
-  border-color: #9ea3a8;
+  border-color: var(--c-text-secondary);
 }
 
 .choice input[type="radio"] {
@@ -4194,4 +4196,244 @@ a.stat:focus-visible {
 
 .builder-actions .btn--secondary i {
   margin: 0 10px 0 0;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Tooltip (USWDS tooltip pattern)                                        */
+/* A question-mark trigger sits after a label; the body is dark, appears   */
+/* on hover and on keyboard focus, and points back at the trigger. The     */
+/* optional bold title line is how the longer help texts read in v2.0.     */
+/* ---------------------------------------------------------------------- */
+
+.tooltip {
+  position: relative;
+  display: inline-flex;
+  vertical-align: middle;
+  margin-left: 6px;
+}
+
+.tooltip__trigger {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: none;
+  color: var(--c-text-secondary);
+  font-size: 17px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.tooltip__trigger:hover,
+.tooltip__trigger:focus {
+  border-color: var(--c-blue);
+  color: var(--c-blue);
+}
+
+/* Default placement is to the right of the trigger, vertically centred —
+   the canvas runs full width, so there is always room beside a question */
+.tooltip__body {
+  position: absolute;
+  z-index: 60;
+  top: 50%;
+  left: calc(100% + 11px);
+  transform: translateY(-50%);
+  width: 272px;
+  padding: 12px 14px;
+  border-radius: var(--r-chip-sm);
+  background: #1b1b1b;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.45;
+  letter-spacing: 0;
+  text-transform: none;
+  box-shadow: var(--shadow-menu);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .1s ease-in;
+}
+
+.tooltip__body::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  margin-top: -6px;
+  border: 6px solid transparent;
+  border-right-color: #1b1b1b;
+}
+
+/* Above the trigger, for a control sitting near the right edge */
+.tooltip__body--top {
+  top: auto;
+  bottom: calc(100% + 11px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.tooltip__body--top::after {
+  top: 100%;
+  right: auto;
+  left: 50%;
+  margin: 0 0 0 -6px;
+  border-right-color: transparent;
+  border-top-color: #1b1b1b;
+}
+
+.tooltip__title {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+/* Hover shows it; :focus-visible keeps it reachable from the keyboard */
+.tooltip:hover .tooltip__body,
+.tooltip__trigger:focus + .tooltip__body,
+.tooltip.is-open .tooltip__body {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Locked answers                                                         */
+/* An option the earlier license / application type rules out. It stays    */
+/* visible, greyed and unclickable, with a note saying what locked it.     */
+/* ---------------------------------------------------------------------- */
+
+.choice.is-disabled,
+.choice.is-disabled:hover {
+  background: var(--c-hairline);
+  border-color: var(--c-border);
+  color: var(--c-text-secondary);
+  cursor: not-allowed;
+}
+
+.choice.is-disabled input[type="radio"] {
+  cursor: not-allowed;
+  accent-color: #9ea3a8;
+}
+
+.choice-lock-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 10px 0 0;
+  font-size: 15px;
+  color: var(--c-text-secondary);
+}
+
+.choice-lock-note i {
+  margin-top: 3px;
+  color: var(--c-text-secondary);
+}
+
+/* Follow-up numbering: 1a, 3a, 4a — ties the branch to its parent question */
+.question-followup__num {
+  margin-right: 6px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  /* One step darker than --c-gold-icon, which lands at 3.9:1 on the panel */
+  color: #8f6200;
+}
+
+/* Disabled advance button: grey, not a faded blue, so it never reads live */
+.btn--primary:disabled,
+.btn--primary:disabled:hover {
+  background: #c9c9c9;
+  color: #454545;
+  opacity: 1;
+}
+
+.builder-actions__note {
+  font-size: 15px;
+  color: var(--c-text-secondary);
+}
+
+.builder-actions__note[hidden] {
+  display: none;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Question overview (Application Type)                                   */
+/* The whole question set written out above the cards. A tinted panel with */
+/* numbered chips that match the cards, in two columns so it reads at a    */
+/* glance instead of running down the page as a plain numbered list.       */
+/* ---------------------------------------------------------------------- */
+
+.question-overview {
+  margin-top: 18px;
+  background: var(--c-tile-bg);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-panel);
+  padding: 18px 22px 20px;
+}
+
+.question-overview__title {
+  margin: 0 0 14px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--c-text-secondary);
+}
+
+/* Columns rather than a grid: the items flow top to bottom and never have
+   to line up row by row, so an item with two follow-ups stays intact */
+.question-overview__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  column-count: 2;
+  column-gap: 44px;
+}
+
+.question-overview__list > li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 14px;
+  break-inside: avoid;
+  font-size: 18px;
+  line-height: 1.45;
+  color: var(--c-text-primary);
+}
+
+.question-overview__list > li:last-child {
+  margin-bottom: 0;
+}
+
+.question-overview__num {
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  margin-top: 1px;
+  border-radius: var(--r-chip-sm);
+  background: var(--c-hairline);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--c-text-secondary);
+}
+
+/* Follow-ups sit under their parent, muted, so the six stay countable */
+.question-overview__sub {
+  display: block;
+  margin-top: 4px;
+  font-size: 16px;
+  color: var(--c-text-secondary);
+}
+
+@media (max-width: 1100px) {
+  .question-overview__list {
+    column-count: 1;
+  }
 }

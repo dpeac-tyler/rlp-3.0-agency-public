@@ -62,7 +62,8 @@
 
     <!-- ══ Builder shell ═══════════════════════════════════════════════════
          Step 2 of the Set up phase. The rail keeps the whole path visible;
-         this canvas holds only the six answers that shape the application.
+         this canvas holds the six answers that shape the application, plus the
+         follow-up each one can open.
          ═══════════════════════════════════════════════════════════════════ -->
     <main class="builder-shell">
 
@@ -140,38 +141,105 @@
 
           <p class="builder-eyebrow">Set up &middot; Application Type</p>
           <h1 class="builder-title">How should this application behave?</h1>
-          <p class="builder-lede">Six answers set the shape of the application: accounts, uploads, fees, licensing and
-            signature. They decide which of the later steps appear.</p>
+          <p class="builder-lede">To get started, please answer the following questions. The first set of questions
+            will help you create the correct type of application.</p>
+
+          <!-- The questions, written out before the cards, so the whole set
+               reads at once before any of it is answered. Two columns keep it
+               to a glance rather than a scroll, and the numbered chips match
+               the cards below. -->
+          <div class="question-overview">
+            <p class="question-overview__title">What you&rsquo;ll answer</p>
+            <ol class="question-overview__list">
+              <li>
+                <span class="question-overview__num">1</span>
+                <div>Does this application type need the individual/business to create an account?
+                  <span class="question-overview__sub">1a. If yes, will this application need an internal workflow
+                    review?</span>
+                </div>
+              </li>
+              <li>
+                <span class="question-overview__num">2</span>
+                <div>Does this application need documents to be included as part of the submission?</div>
+              </li>
+              <li>
+                <span class="question-overview__num">3</span>
+                <div>Is this application for an individual or a business?
+                  <span class="question-overview__sub">3a. Individual: do you need to collect identification
+                    information for an individual?</span>
+                  <span class="question-overview__sub">3a. Business: do you need to collect identification
+                    information for business branches?</span>
+                </div>
+              </li>
+              <li>
+                <span class="question-overview__num">4</span>
+                <div>Is there a fee for submitting this application?
+                  <span class="question-overview__sub">4a. If yes, does this application allow payment after
+                    approval?</span>
+                </div>
+              </li>
+              <li>
+                <span class="question-overview__num">5</span>
+                <div>Does this application allow a license/permit?
+                  <span class="question-overview__sub">5a. If yes, does this application issue a certificate?</span>
+                </div>
+              </li>
+              <li>
+                <span class="question-overview__num">6</span>
+                <div>Does the application require an electronic signature from the individual/business?</div>
+              </li>
+            </ol>
+          </div>
+
+          <p class="help-text" style="margin-top: 16px"><strong>Note:</strong> For an Asset License, Individual,
+            Business, and ID Collection options have been removed as they&rsquo;re not asset related.</p>
+
+          <p class="help-text" style="margin-top: 12px">Please answer all questions.</p>
 
           <div class="info-notice info-notice--warning">
             <i class="fa-solid fa-lock" aria-hidden="true"></i>
-            <div>Answers become read-only once Title Information is complete. Entity licenses hide the Individual,
-              Business and ID-collection options.</div>
+            <div><strong>IMPORTANT:</strong> Responses to these questions are final. Once the Application Type and
+              Title Information are completed, you will not be able to edit these responses.</div>
           </div>
 
           <div class="answer-summary">
-            <span class="answer-summary__label">6 required answers</span>
-            <span class="answer-summary__count" id="answer-count"><strong>1 answered</strong> &middot; 5 remaining</span>
+            <span class="answer-summary__label">Application type questions</span>
+            <span class="answer-summary__count" id="answer-count"><strong>0 answered</strong> &middot; 6 remaining</span>
           </div>
 
           <ol class="question-cards" id="question-cards">
 
-            <!-- 1. Account, with the internal review branch it unlocks -->
-            <li class="question-card is-answered" data-question="account">
+            <!-- 1. Account. Authenticated license types settle this, so No is
+                 locked; the internal-review branch hangs off the Yes answer. -->
+            <li class="question-card" data-question="account">
               <span class="question-card__num">1</span>
               <div class="question-card__body">
                 <h2 class="question-card__title">Does the user of this application need an account?
                   <span class="field-required">Required</span></h2>
-                <p class="question-card__text">An account lets the applicant save progress, return later, and track
-                  status.</p>
                 <div class="choice-group">
                   <label class="choice is-selected"><input type="radio" name="account" value="yes" checked> Yes</label>
-                  <label class="choice"><input type="radio" name="account" value="no"> No</label>
+                  <label class="choice is-disabled"><input type="radio" name="account" value="no" disabled> No</label>
                 </div>
+                <p class="choice-lock-note">
+                  <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                  Commercial Fishing License is an authenticated license type, so an account is required.
+                </p>
 
                 <div class="question-followup" id="account-followup">
-                  <div class="question-followup__eyebrow">Follow-up</div>
-                  <h3 class="question-followup__title">Does this application require internal review?</h3>
+                  <h3 class="question-followup__title"><span class="question-followup__num">1a</span>Does this
+                    application require internal review? <span class="field-required">Required</span>
+                    <span class="tooltip">
+                      <button type="button" class="tooltip__trigger" aria-describedby="tip-internal-review"
+                              aria-label="About internal workflow review">
+                        <i class="fa-regular fa-circle-question" aria-hidden="true"></i>
+                      </button>
+                      <span class="tooltip__body" id="tip-internal-review" role="tooltip">
+                        <span class="tooltip__title">Internal Workflow Review</span>
+                        Sends each submitted application to a staff queue for a reviewer to work before a decision is
+                        recorded. Answer No and the application is decided automatically on submission.
+                      </span>
+                    </span>
+                  </h3>
                   <div class="choice-group">
                     <label class="choice"><input type="radio" name="internal-review" value="yes"> Yes</label>
                     <label class="choice"><input type="radio" name="internal-review" value="no"> No</label>
@@ -180,12 +248,24 @@
               </div>
             </li>
 
-            <!-- 2. Document upload -->
+            <!-- 2. Documents in the submission -->
             <li class="question-card" data-question="upload">
               <span class="question-card__num">2</span>
               <div class="question-card__body">
                 <h2 class="question-card__title">Does the application need document upload?
-                  <span class="field-required">Required</span></h2>
+                  <span class="field-required">Required</span>
+                  <span class="tooltip">
+                    <button type="button" class="tooltip__trigger" aria-describedby="tip-upload"
+                            aria-label="About document upload">
+                      <i class="fa-regular fa-circle-question" aria-hidden="true"></i>
+                    </button>
+                    <span class="tooltip__body" id="tip-upload" role="tooltip">
+                      <span class="tooltip__title">Document Upload</span>
+                      Adds a documents step to the application, where you name each document the applicant must
+                      attach and mark it required or optional.
+                    </span>
+                  </span>
+                </h2>
                 <div class="choice-group">
                   <label class="choice"><input type="radio" name="upload" value="yes"> Yes</label>
                   <label class="choice"><input type="radio" name="upload" value="no"> No</label>
@@ -193,42 +273,123 @@
               </div>
             </li>
 
-            <!-- 3. Individual or business -->
+            <!-- 3. Individual or business. Each answer opens its own 3a: the
+                 individual branch asks about person ID, the business branch
+                 about branch ID. Only one is ever on screen. -->
             <li class="question-card" data-question="subject">
               <span class="question-card__num">3</span>
               <div class="question-card__body">
-                <h2 class="question-card__title">Is the application for an individual or a business?
+                <h2 class="question-card__title">Is the application for an Individual or a Business?
                   <span class="field-required">Required</span></h2>
-                <p class="question-card__text">Choosing one reveals the matching ID-collection question.</p>
                 <div class="choice-group">
                   <label class="choice"><input type="radio" name="subject" value="individual"> Individual</label>
                   <label class="choice"><input type="radio" name="subject" value="business"> Business</label>
                 </div>
+
+                <div class="question-followup" id="subject-followup-individual" hidden>
+                  <h3 class="question-followup__title"><span class="question-followup__num">3a</span>Does this
+                    application collect ID information?
+                    <span class="field-required">Required</span>
+                    <span class="tooltip">
+                      <button type="button" class="tooltip__trigger" aria-describedby="tip-id-fields-individual"
+                              aria-label="About individual ID fields">
+                        <i class="fa-regular fa-circle-question" aria-hidden="true"></i>
+                      </button>
+                      <span class="tooltip__body" id="tip-id-fields-individual" role="tooltip">
+                        <span class="tooltip__title">ID Fields</span>
+                        Fields include: US Citizen, Date of Birth, Social Security Number, Driver License, State ID,
+                        Military ID, Passport and International ID&rsquo;s.
+                      </span>
+                    </span>
+                  </h3>
+                  <div class="choice-group">
+                    <label class="choice"><input type="radio" name="id-information-individual" value="yes"> Yes</label>
+                    <label class="choice"><input type="radio" name="id-information-individual" value="no"> No</label>
+                  </div>
+                </div>
+
+                <div class="question-followup" id="subject-followup-business" hidden>
+                  <h3 class="question-followup__title"><span class="question-followup__num">3a</span>Does this
+                    application collect ID information for business branches?
+                    <span class="field-required">Required</span>
+                    <span class="tooltip">
+                      <button type="button" class="tooltip__trigger" aria-describedby="tip-id-fields-business"
+                              aria-label="About business branch ID fields">
+                        <i class="fa-regular fa-circle-question" aria-hidden="true"></i>
+                      </button>
+                      <span class="tooltip__body" id="tip-id-fields-business" role="tooltip">
+                        <span class="tooltip__title">Branch ID Fields</span>
+                        Collected for every branch on the application. Fields include: FEIN, State Tax ID, DBA name,
+                        branch address and the branch manager&rsquo;s contact.
+                      </span>
+                    </span>
+                  </h3>
+                  <div class="choice-group">
+                    <label class="choice"><input type="radio" name="id-information-business" value="yes"> Yes</label>
+                    <label class="choice"><input type="radio" name="id-information-business" value="no"> No</label>
+                  </div>
+                </div>
               </div>
             </li>
 
-            <!-- 4. Fee -->
+            <!-- 4. Fee, with the payment-timing branch a fee unlocks -->
             <li class="question-card" data-question="fee">
               <span class="question-card__num">4</span>
               <div class="question-card__body">
-                <h2 class="question-card__title">Is there a fee for submitting this application?
+                <h2 class="question-card__title">Is there a fee for this application?
                   <span class="field-required">Required</span></h2>
                 <div class="choice-group">
                   <label class="choice"><input type="radio" name="fee" value="yes"> Yes</label>
                   <label class="choice"><input type="radio" name="fee" value="no"> No</label>
                 </div>
+
+                <div class="question-followup" id="fee-followup" hidden>
+                  <h3 class="question-followup__title"><span class="question-followup__num">4a</span>Does this
+                    application allow payment after approval? <span class="field-required">Required</span>
+                    <span class="tooltip">
+                      <button type="button" class="tooltip__trigger" aria-describedby="tip-payment-after"
+                              aria-label="About payment after approval">
+                        <i class="fa-regular fa-circle-question" aria-hidden="true"></i>
+                      </button>
+                      <span class="tooltip__body" id="tip-payment-after" role="tooltip">
+                        <span class="tooltip__title">Payment After Approval</span>
+                        The applicant submits without paying and is invoiced once the application is approved.
+                        Answer No and the fee is collected at submission, before the application reaches a reviewer.
+                      </span>
+                    </span>
+                  </h3>
+                  <div class="choice-group">
+                    <label class="choice"><input type="radio" name="payment-after-approval" value="yes"> Yes</label>
+                    <label class="choice"><input type="radio" name="payment-after-approval" value="no"> No</label>
+                  </div>
+                </div>
               </div>
             </li>
 
-            <!-- 5. License or permit -->
+            <!-- 5. License or permit. This license type always issues one, so
+                 No is locked; the certificate branch hangs off the Yes answer. -->
             <li class="question-card" data-question="license">
               <span class="question-card__num">5</span>
               <div class="question-card__body">
-                <h2 class="question-card__title">Does this application allow a license or permit?
+                <h2 class="question-card__title">Does this application allow a license/permit?
                   <span class="field-required">Required</span></h2>
                 <div class="choice-group">
-                  <label class="choice"><input type="radio" name="license" value="yes"> Yes</label>
-                  <label class="choice"><input type="radio" name="license" value="no"> No</label>
+                  <label class="choice is-selected"><input type="radio" name="license" value="yes" checked> Yes</label>
+                  <label class="choice is-disabled"><input type="radio" name="license" value="no" disabled> No</label>
+                </div>
+                <p class="choice-lock-note">
+                  <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                  An Original (One) application always issues the license it is built against.
+                </p>
+
+                <div class="question-followup" id="license-followup">
+                  <h3 class="question-followup__title"><span class="question-followup__num">5a</span>Does this
+                    application issue a certificate? <span class="field-required">Required</span>
+                  </h3>
+                  <div class="choice-group">
+                    <label class="choice"><input type="radio" name="certificate" value="yes"> Yes</label>
+                    <label class="choice"><input type="radio" name="certificate" value="no"> No</label>
+                  </div>
                 </div>
               </div>
             </li>
@@ -238,7 +399,19 @@
               <span class="question-card__num">6</span>
               <div class="question-card__body">
                 <h2 class="question-card__title">Will this application require an electronic signature?
-                  <span class="field-required">Required</span></h2>
+                  <span class="field-required">Required</span>
+                  <span class="tooltip">
+                    <button type="button" class="tooltip__trigger" aria-describedby="tip-signature"
+                            aria-label="About electronic signature">
+                      <i class="fa-regular fa-circle-question" aria-hidden="true"></i>
+                    </button>
+                    <span class="tooltip__body" id="tip-signature" role="tooltip">
+                      <span class="tooltip__title">Electronic Signature</span>
+                      Adds a signature block to the end of the application. The applicant types their name to attest
+                      to the answers, and the signature is stored with the submission.
+                    </span>
+                  </span>
+                </h2>
                 <div class="choice-group">
                   <label class="choice"><input type="radio" name="signature" value="yes"> Yes</label>
                   <label class="choice"><input type="radio" name="signature" value="no"> No</label>
@@ -248,16 +421,18 @@
 
           </ol>
 
-          <!-- Wizard action bar: back on the left, advance on the right -->
+          <!-- Wizard action bar: back on the left, advance on the right.
+               Next stays disabled until every visible required answer is in. -->
           <div class="builder-actions">
             <a href="builder-getting-started.html" class="btn btn--secondary">
               <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Getting Started
             </a>
             <div class="builder-actions__right">
+              <span class="builder-actions__note" id="next-note">Answer every required question to continue</span>
               <a href="applications.html">Save &amp; exit</a>
-              <a href="#" class="btn btn--primary">
+              <button type="button" class="btn btn--primary" id="next-btn" disabled>
                 Title Information <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-              </a>
+              </button>
             </div>
           </div>
 
@@ -271,50 +446,104 @@
   <script>
     initToolbar('#toolbar', { activeKey: 'applications' });
 
-    var TOTAL_QUESTIONS = 6;
     var cards = document.getElementById('question-cards');
     var countEl = document.getElementById('answer-count');
-    var followup = document.getElementById('account-followup');
+    var nextBtn = document.getElementById('next-btn');
+    var nextNote = document.getElementById('next-note');
+
+    /* Each branch is a follow-up that only applies for certain parent answers.
+       Hiding one also drops it from the required count and clears its answer. */
+    var BRANCHES = [
+      { name: 'account', followup: 'account-followup', showFor: ['yes'] },
+      { name: 'subject', followup: 'subject-followup-individual', showFor: ['individual'] },
+      { name: 'subject', followup: 'subject-followup-business', showFor: ['business'] },
+      { name: 'fee', followup: 'fee-followup', showFor: ['yes'] },
+      { name: 'license', followup: 'license-followup', showFor: ['yes'] }
+    ];
 
     /* The pill carries the selected state; the radio inside stays the control */
     function paintGroup(group) {
       group.querySelectorAll('.choice').forEach(function (choice) {
-        choice.classList.toggle('is-selected', choice.querySelector('input').checked);
+        var input = choice.querySelector('input');
+        choice.classList.toggle('is-selected', input.checked && !input.disabled);
       });
     }
 
+    /* Every group still on screen, follow-ups included */
+    function visibleGroups(root) {
+      return Array.prototype.filter.call(
+        (root || cards).querySelectorAll('.choice-group'),
+        function (group) {
+          var branch = group.closest('.question-followup');
+          return !branch || !branch.hidden;
+        });
+    }
+
     function updateCount() {
-      var answered = 0;
+      var groups = visibleGroups();
+      var answered = groups.filter(function (group) {
+        return !!group.querySelector('input:checked');
+      }).length;
+
+      /* A card is complete only when its own branch is answered too */
       cards.querySelectorAll('.question-card').forEach(function (card) {
-        /* The follow-up is not one of the six, so only the first group counts */
-        var group = card.querySelector('.choice-group');
-        var isAnswered = !!group.querySelector('input:checked');
-        card.classList.toggle('is-answered', isAnswered);
-        if (isAnswered) answered++;
+        var cardGroups = visibleGroups(card);
+        var done = cardGroups.every(function (group) {
+          return !!group.querySelector('input:checked');
+        });
+        card.classList.toggle('is-answered', done);
       });
 
-      var remaining = TOTAL_QUESTIONS - answered;
+      var remaining = groups.length - answered;
       countEl.innerHTML = '<strong>' + answered + ' answered</strong> &middot; ' + remaining + ' remaining';
+
+      nextBtn.disabled = remaining > 0;
+      nextNote.hidden = remaining === 0;
+    }
+
+    function syncBranches() {
+      BRANCHES.forEach(function (branch) {
+        var picked = cards.querySelector('input[name="' + branch.name + '"]:checked');
+        var show = !!picked && branch.showFor.indexOf(picked.value) !== -1;
+        var el = document.getElementById(branch.followup);
+
+        if (el.hidden !== !show) {
+          el.hidden = !show;
+          if (!show) {
+            el.querySelectorAll('input').forEach(function (input) { input.checked = false; });
+            el.querySelectorAll('.choice-group').forEach(paintGroup);
+          }
+        }
+      });
     }
 
     cards.addEventListener('change', function (e) {
       if (e.target.type !== 'radio') return;
-
       paintGroup(e.target.closest('.choice-group'));
-
-      /* Only an account holder can be routed to internal review */
-      if (e.target.name === 'account') {
-        var needsAccount = e.target.value === 'yes';
-        followup.hidden = !needsAccount;
-        if (!needsAccount) {
-          followup.querySelectorAll('input').forEach(function (input) { input.checked = false; });
-          paintGroup(followup.querySelector('.choice-group'));
-        }
-      }
-
+      syncBranches();
       updateCount();
     });
 
+    /* Tooltips: hover and keyboard focus are handled in CSS. Click toggles the
+       body as well, so a touch user can read it, and Esc / outside click close */
+    document.addEventListener('click', function (e) {
+      var trigger = e.target.closest('.tooltip__trigger');
+
+      document.querySelectorAll('.tooltip.is-open').forEach(function (tip) {
+        if (!trigger || tip !== trigger.parentNode) tip.classList.remove('is-open');
+      });
+
+      if (trigger) trigger.parentNode.classList.toggle('is-open');
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape') return;
+      document.querySelectorAll('.tooltip.is-open').forEach(function (tip) {
+        tip.classList.remove('is-open');
+      });
+    });
+
+    syncBranches();
     updateCount();
   </script>
 
