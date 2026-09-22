@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Title Information &mdash; RLP Agency Console</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+
+<body>
+
+  <div class="app app--builder">
+
+    <!-- Header (shared chrome) -->
+    <header class="app-header">
+      <a class="app-header__brand" href="index.html">
+        <img class="app-header__logo" src="assets/tyler-t.png" alt="Tenant logo">
+        <span class="app-header__brand-name">Name of Agency</span>
+      </a>
+      <nav class="app-header__links" aria-label="Account">
+        <a href="settings.html">Settings</a>
+        <span class="app-header__divider" aria-hidden="true"></span>
+        <a href="search.html">Search</a>
+        <span class="app-header__divider" aria-hidden="true"></span>
+        <a href="#">Help</a>
+        <span class="app-header__divider" aria-hidden="true"></span>
+        <a href="#">Logout</a>
+      </nav>
+    </header>
+
+    <!-- Customizable toolbar (shared chrome, rendered by js/toolbar.js) -->
+    <div id="toolbar"></div>
+
+    <!-- ══ Context bar ═══════════════════════════════════════════════════════
+         First step that can carry it: Application Type has been answered, so
+         the license, the application type and the behaviours those answers
+         settled are all known. The name fills in live as the title is typed.
+         ═════════════════════════════════════════════════════════════════════ -->
+    <div class="builder-context">
+      <div class="builder-context__block">
+        <div class="builder-context__eyebrow">Application / Permit Name</div>
+        <div class="builder-context__name" id="context-name">Untitled application</div>
+        <div class="builder-context__meta">
+          <span class="badge badge--gold">Draft</span>
+          <span>Form No. not set &middot; saved 2 min ago</span>
+        </div>
+      </div>
+      <div class="builder-context__block">
+        <div class="builder-context__eyebrow">License / Application Type</div>
+        <div class="builder-context__value">Commercial Fishing License : Original (One)</div>
+        <div class="builder-context__tags">
+          <span class="tag tag--muted">Authenticated</span>
+          <span class="tag tag--muted">Individual</span>
+          <span class="tag tag--muted">Signature</span>
+          <span class="tag tag--muted">Document Upload</span>
+        </div>
+      </div>
+      <a href="#">Preview</a>
+    </div>
+
+    <!-- ══ Builder shell ═══════════════════════════════════════════════════
+         Step 3 of the Set up phase. Six fields name the application and write
+         the copy the applicant reads: title, display title, subtitle, a more
+         info link, the description and the instructions.
+         ═══════════════════════════════════════════════════════════════════ -->
+    <main class="builder-shell">
+
+      <!-- Phase rail -->
+      <aside class="builder-rail">
+        <a class="builder-rail__back" href="applications.html">
+          <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> All applications
+        </a>
+
+        <div class="builder-rail__progress" style="margin-top: 14px">
+          <div class="builder-rail__progress-row">
+            <span class="builder-rail__eyebrow">Setup phases</span>
+            <span class="builder-rail__pct">25%</span>
+          </div>
+          <div class="builder-rail__track">
+            <div class="builder-rail__fill" style="width: 25%"></div>
+          </div>
+        </div>
+
+        <nav class="builder-phases" aria-label="Setup phases">
+
+          <div class="builder-phase is-current">
+            <a class="builder-phase__row" href="builder-title-information.html" aria-current="step">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Set up</span>
+                <span class="builder-phase__summary">Details &middot; Applicant info</span>
+              </span>
+            </a>
+            <ul class="builder-steps">
+              <li class="builder-steps__item is-done"><a href="builder-getting-started.html">Getting Started</a></li>
+              <li class="builder-steps__item is-done"><a href="builder-application-type.html">Application Type</a></li>
+              <li class="builder-steps__item is-current"><a href="builder-title-information.html">Title Information</a>
+              </li>
+              <li class="builder-steps__item"><a href="#">Form No., Deactivation &amp; Search Terms</a></li>
+              <li class="builder-steps__item"><a href="#">Applicant Information</a></li>
+            </ul>
+          </div>
+
+          <div class="builder-phase">
+            <a class="builder-phase__row" href="#">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Build</span>
+                <span class="builder-phase__summary">Questions &middot; Conditions</span>
+              </span>
+            </a>
+          </div>
+
+          <div class="builder-phase">
+            <a class="builder-phase__row" href="#">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Rules</span>
+                <span class="builder-phase__summary">Payment &middot; License</span>
+              </span>
+            </a>
+          </div>
+
+          <div class="builder-phase">
+            <a class="builder-phase__row" href="#">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Publish</span>
+                <span class="builder-phase__summary">Preview &middot; Notification</span>
+              </span>
+            </a>
+          </div>
+
+        </nav>
+      </aside>
+
+      <!-- Step canvas -->
+      <div class="builder-canvas">
+        <div class="builder-canvas__inner">
+
+          <p class="builder-eyebrow">Set up &middot; Title Information</p>
+          <h1 class="builder-title">Name and describe this application</h1>
+          <p class="builder-lede">Now let&rsquo;s give your application a title, display name, subtitle, description
+            and URL.</p>
+
+          <p class="help-text" style="margin-top: 14px">The application title matters because it is saved as the
+            unique name for this application. The display title appears at the top of every page of the application
+            and on the certificate the applicant receives, and it can be changed at any time without affecting the
+            saved application title. You can also give the application a subtitle.</p>
+
+          <p class="help-text" style="margin-top: 12px">The description should be a brief explanation of the
+            application, so applicants clearly understand what they are about to submit.</p>
+
+          <p class="help-text" style="margin-top: 12px"><strong>Note:</strong> The More Info URL is not the URL that
+            will be assigned to this application. It is a link to a website that may have more comprehensive
+            information, FAQs and the like, for applicants who need additional detail about the license or permit
+            they are submitting.</p>
+
+          <p class="help-text" style="margin-top: 12px"><em>Required</em> indicates a required field.</p>
+
+          <ol class="question-cards" id="question-cards">
+
+            <!-- 1. The saved, unique name. Locked the moment the step is left,
+                 which is why the card says so in the instruction itself. -->
+            <li class="question-card" data-card="title">
+              <span class="question-card__num">1</span>
+              <div class="question-card__body">
+                <h2 class="question-card__title">Type the Application Title in the field below. This cannot be changed
+                  once you continue to the next step.</h2>
+                <div class="field">
+                  <label for="app-title">Application Title <span class="field-required">Required</span></label>
+                  <input type="text" id="app-title" data-required placeholder="Commercial Fishing Permit: Original (One)">
+                </div>
+              </div>
+            </li>
+
+            <!-- 2. Display title: what the applicant sees, changeable for life -->
+            <li class="question-card" data-card="display-title">
+              <span class="question-card__num">2</span>
+              <div class="question-card__body">
+                <h2 class="question-card__title">Type the Application Display Title in the field below. This appears at
+                  the top of every page of the application, and on the certificate.</h2>
+                <div class="field">
+                  <label for="app-display-title">Application Display Title
+                    <span class="field-required">Required</span></label>
+                  <input type="text" id="app-display-title" data-required placeholder="Commercial Fishing Permit">
+                </div>
+              </div>
+            </li>
+
+            <!-- 3. Subtitle, optional -->
+            <li class="question-card" data-card="subtitle">
+              <span class="question-card__num">3</span>
+              <div class="question-card__body">
+                <h2 class="question-card__title">Type the Application Subtitle in the field below.</h2>
+                <div class="field">
+                  <label for="app-subtitle">Application Subtitle</label>
+                  <input type="text" id="app-subtitle" placeholder="2026 season, inland waters">
+                </div>
+              </div>
+            </li>
+
+            <!-- 4. More Info URL. RLP renders this as a rich text editor with a
+                 500 character counter; a URL field is the right control, so the
+                 prototype uses one and the divergence is deliberate. -->
+            <li class="question-card" data-card="more-info-url">
+              <span class="question-card__num">4</span>
+              <div class="question-card__body">
+                <h2 class="question-card__title">Type the More Info URL in the field below.</h2>
+                <div class="field">
+                  <label for="app-more-info-url">More Info URL</label>
+                  <input type="url" id="app-more-info-url" placeholder="https://dnr.example.gov/commercial-fishing">
+                </div>
+              </div>
+            </li>
+
+            <!-- 5. Description -->
+            <li class="question-card" data-card="description">
+              <span class="question-card__num">5</span>
+              <div class="question-card__body">
+                <h2 class="question-card__title">Type the Application Description in the field below. This will appear
+                  as a paragraph under the title.</h2>
+                <div class="field">
+                  <label id="app-description-label">Application Description
+                    <span class="field-required">Required</span></label>
+                  <div class="rte">
+                    <div class="rte__toolbar" role="toolbar" aria-label="Description formatting">
+                      <button type="button" class="rte__btn" data-cmd="undo" title="Undo" aria-label="Undo">
+                        <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn" data-cmd="redo" title="Redo" aria-label="Redo">
+                        <i class="fa-solid fa-rotate-right" aria-hidden="true"></i>
+                      </button>
+                      <span class="rte__divider" aria-hidden="true"></span>
+                      <select class="rte__select" data-cmd="formatBlock" aria-label="Text style">
+                        <option value="p">Normal</option>
+                        <option value="h2">Heading</option>
+                        <option value="h3">Subheading</option>
+                      </select>
+                      <span class="rte__divider" aria-hidden="true"></span>
+                      <button type="button" class="rte__btn" data-cmd="bold" title="Bold" aria-label="Bold">
+                        <i class="fa-solid fa-bold" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn" data-cmd="italic" title="Italic" aria-label="Italic">
+                        <i class="fa-solid fa-italic" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn" data-cmd="underline" title="Underline" aria-label="Underline">
+                        <i class="fa-solid fa-underline" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn" title="Text colour" aria-label="Text colour">
+                        <i class="fa-solid fa-palette" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn" title="Link" aria-label="Link">
+                        <i class="fa-solid fa-link" aria-hidden="true"></i>
+                      </button>
+                      <span class="rte__divider" aria-hidden="true"></span>
+                      <button type="button" class="rte__btn" data-cmd="insertOrderedList" title="Numbered list" aria-label="Numbered list">
+                        <i class="fa-solid fa-list-ol" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn" data-cmd="insertUnorderedList" title="Bulleted list" aria-label="Bulleted list">
+                        <i class="fa-solid fa-list-ul" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn" title="Horizontal rule" aria-label="Horizontal rule">
+                        <i class="fa-solid fa-minus" aria-hidden="true"></i>
+                      </button>
+                      <span class="rte__divider" aria-hidden="true"></span>
+                      <button type="button" class="rte__btn" data-cmd="outdent" title="Outdent" aria-label="Outdent">
+                        <i class="fa-solid fa-outdent" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn" data-cmd="indent" title="Indent" aria-label="Indent">
+                        <i class="fa-solid fa-indent" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn" title="Align" aria-label="Align">
+                        <i class="fa-solid fa-align-left" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn" title="Quote" aria-label="Quote">
+                        <i class="fa-solid fa-quote-right" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn" data-cmd="removeFormat" title="Clear formatting" aria-label="Clear formatting">
+                        <i class="fa-solid fa-text-slash" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn rte__btn--text" title="Special character"
+                              aria-label="Special character">&Sigma;</button>
+                    </div>
+                    <div class="rte__body" id="app-description" contenteditable="true" role="textbox" aria-multiline="true"
+                         aria-labelledby="app-description-label" data-required data-limit="500"
+                         data-placeholder="A brief explanation of what this application is for."></div>
+                  </div>
+                  <span class="char-counter" data-counter-for="app-description">500 characters left</span>
+                </div>
+              </div>
+            </li>
+
+            <!-- 6. Instructions -->
+            <li class="question-card" data-card="instructions">
+              <span class="question-card__num">6</span>
+              <div class="question-card__body">
+                <h2 class="question-card__title">Type the Application Instructions in the field below. This will appear
+                  as a paragraph under the description.</h2>
+                <div class="field">
+                  <label id="app-instructions-label">Application Instructions
+                    <span class="field-required">Required</span></label>
+                  <div class="rte">
+                    <div class="rte__toolbar" role="toolbar" aria-label="Instructions formatting">
+                      <button type="button" class="rte__btn" data-cmd="undo" title="Undo" aria-label="Undo">
+                        <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn" data-cmd="redo" title="Redo" aria-label="Redo">
+                        <i class="fa-solid fa-rotate-right" aria-hidden="true"></i>
+                      </button>
+                      <span class="rte__divider" aria-hidden="true"></span>
+                      <select class="rte__select" data-cmd="formatBlock" aria-label="Text style">
+                        <option value="p">Normal</option>
+                        <option value="h2">Heading</option>
+                        <option value="h3">Subheading</option>
+                      </select>
+                      <span class="rte__divider" aria-hidden="true"></span>
+                      <button type="button" class="rte__btn" data-cmd="bold" title="Bold" aria-label="Bold">
+                        <i class="fa-solid fa-bold" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn" data-cmd="italic" title="Italic" aria-label="Italic">
+                        <i class="fa-solid fa-italic" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn" data-cmd="underline" title="Underline" aria-label="Underline">
+                        <i class="fa-solid fa-underline" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn" title="Text colour" aria-label="Text colour">
+                        <i class="fa-solid fa-palette" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn" title="Link" aria-label="Link">
+                        <i class="fa-solid fa-link" aria-hidden="true"></i>
+                      </button>
+                      <span class="rte__divider" aria-hidden="true"></span>
+                      <button type="button" class="rte__btn" data-cmd="insertOrderedList" title="Numbered list" aria-label="Numbered list">
+                        <i class="fa-solid fa-list-ol" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn" data-cmd="insertUnorderedList" title="Bulleted list" aria-label="Bulleted list">
+                        <i class="fa-solid fa-list-ul" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn" title="Horizontal rule" aria-label="Horizontal rule">
+                        <i class="fa-solid fa-minus" aria-hidden="true"></i>
+                      </button>
+                      <span class="rte__divider" aria-hidden="true"></span>
+                      <button type="button" class="rte__btn" data-cmd="outdent" title="Outdent" aria-label="Outdent">
+                        <i class="fa-solid fa-outdent" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn" data-cmd="indent" title="Indent" aria-label="Indent">
+                        <i class="fa-solid fa-indent" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn" title="Align" aria-label="Align">
+                        <i class="fa-solid fa-align-left" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn" title="Quote" aria-label="Quote">
+                        <i class="fa-solid fa-quote-right" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn" data-cmd="removeFormat" title="Clear formatting" aria-label="Clear formatting">
+                        <i class="fa-solid fa-text-slash" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn rte__btn--text" title="Special character"
+                              aria-label="Special character">&Sigma;</button>
+                    </div>
+                    <div class="rte__body rte__body--tall" id="app-instructions" contenteditable="true" role="textbox" aria-multiline="true"
+                         aria-labelledby="app-instructions-label" data-required data-limit="10000"
+                         data-placeholder="What the applicant should have to hand before they start."></div>
+                  </div>
+                  <span class="char-counter" data-counter-for="app-instructions">10000 characters left</span>
+                </div>
+              </div>
+            </li>
+
+          </ol>
+
+          <!-- Wizard action bar: back on the left, advance on the right.
+               Next stays disabled until the four required fields are filled. -->
+          <div class="builder-actions">
+            <a href="builder-application-type.html" class="btn btn--secondary">
+              <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Application Type
+            </a>
+            <div class="builder-actions__right">
+              <span class="builder-actions__note" id="next-note">Complete the required fields to continue</span>
+              <a href="applications.html">Save &amp; exit</a>
+              <button type="button" class="btn btn--primary" id="next-btn" disabled>
+                Form No. &amp; Search Terms <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/toolbar.js"></script>
+  <script>
+    initToolbar('#toolbar', { activeKey: 'applications' });
+
+    var contextName = document.getElementById('context-name');
+    var titleInput = document.getElementById('app-title');
+    var nextBtn = document.getElementById('next-btn');
+    var nextNote = document.getElementById('next-note');
+    var required = Array.prototype.slice.call(document.querySelectorAll('[data-required]'));
+
+    /* The record band has no name of its own yet, so the title fills it in */
+    titleInput.addEventListener('input', function () {
+      contextName.textContent = titleInput.value.trim() || 'Untitled application';
+    });
+
+    function valueOf(el) {
+      return (el.isContentEditable ? el.textContent : el.value).trim();
+    }
+
+    /* Same reading as the Application Type step: the numbered chip fills in
+       once the card has a value, so progress is legible at a glance */
+    function paintCards() {
+      document.querySelectorAll('.question-card').forEach(function (card) {
+        var filled = Array.prototype.slice.call(card.querySelectorAll('input, [contenteditable]'))
+          .every(function (el) { return valueOf(el) !== ''; });
+        card.classList.toggle('is-answered', filled);
+      });
+    }
+
+    function updateNext() {
+      var done = required.every(function (el) { return valueOf(el) !== ''; });
+      nextBtn.disabled = !done;
+      nextNote.hidden = done;
+      paintCards();
+    }
+
+    nextBtn.addEventListener('click', function () {
+      window.location.href = '#';
+    });
+
+    /* Character counters: a countdown, the way RLP words them, turning red
+       once the field runs past its limit */
+    document.querySelectorAll('[data-limit]').forEach(function (body) {
+      var limit = parseInt(body.getAttribute('data-limit'), 10);
+      var counter = document.querySelector('[data-counter-for="' + body.id + '"]');
+
+      function paint() {
+        var left = limit - body.textContent.length;
+        counter.textContent = Math.abs(left) + ' character' + (Math.abs(left) === 1 ? '' : 's') +
+          (left < 0 ? ' over' : ' left');
+        counter.classList.toggle('char-counter--over', left < 0);
+      }
+
+      body.addEventListener('input', paint);
+      paint();
+    });
+
+    /* Toolbar: the formatting commands that carry the demo are wired with
+       execCommand; the rest are present for fidelity and sit inert */
+    document.querySelectorAll('.rte').forEach(function (rte) {
+      var body = rte.querySelector('.rte__body');
+
+      rte.querySelectorAll('.rte__btn').forEach(function (btn) {
+        /* mousedown, so the caret is not lost before the command runs */
+        btn.addEventListener('mousedown', function (e) {
+          e.preventDefault();
+          var cmd = btn.getAttribute('data-cmd');
+          if (!cmd) return;
+          body.focus();
+          document.execCommand(cmd);
+          paintToolbar();
+        });
+      });
+
+      rte.querySelector('.rte__select').addEventListener('change', function (e) {
+        body.focus();
+        document.execCommand('formatBlock', false, e.target.value);
+      });
+
+      /* Bold / italic / underline light up with the caret */
+      function paintToolbar() {
+        ['bold', 'italic', 'underline'].forEach(function (cmd) {
+          var btn = rte.querySelector('[data-cmd="' + cmd + '"]');
+          var on = false;
+          try { on = document.queryCommandState(cmd); } catch (err) { on = false; }
+          btn.classList.toggle('is-active', on);
+        });
+      }
+
+      body.addEventListener('keyup', paintToolbar);
+      body.addEventListener('mouseup', paintToolbar);
+    });
+
+    document.addEventListener('input', updateNext);
+    updateNext();
+  </script>
+
+</body>
+
+</html>
