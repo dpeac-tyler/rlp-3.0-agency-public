@@ -32,7 +32,7 @@
   <div id="toolbar"></div>
 
   <!-- Page content -->
-  <main class="page-body">
+  <main class="page-body" style="background: #fafafa;">
 
     <ol class="breadcrumb" aria-label="Breadcrumb">
       <li class="breadcrumb__item"><a href="packets.html">All Packets</a></li>
@@ -41,7 +41,7 @@
 
     <h1 class="page-title" id="page-title">Create New Packet</h1>
 
-    <!-- Validation summary — scrolled into view when Save finds errors -->
+    <!-- Validation summary, scrolled into view when Save finds errors -->
     <div class="info-notice info-notice--error" id="error-notice" hidden>
       <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
       <div><strong>Please correct the following errors before saving.</strong></div>
@@ -51,95 +51,107 @@
       application types. When a packet is created, the owner applicant completes the owner application, after which
       affiliated users are prompted to complete the associated participant applications. Each participant application
       can be marked as Required, meaning it must be completed before the packet can be submitted, or Optional, allowing
-      it to be skipped. At least one required participant application must be defined before a packet can be saved.</p>
+      it to be skipped. At least one required participant application must be defined before a packet can be saved.
+      Fields marked <span class="field-required">Required</span> must be completed.</p>
 
     <form style="margin-top: 24px" onsubmit="return false;">
 
-      <div class="field" id="packet-name-field">
-        <label for="packet-name">Packet Name <span class="field-required">Required</span></label>
-        <span class="field-error" id="packet-name-error" hidden>Enter a packet name.</span>
-        <input type="text" id="packet-name" name="packet-name" autocomplete="off">
-      </div>
+      <!-- ── Packet Information ────────────────────────────────────────── -->
+      <section class="island island--section">
+        <h2 class="section-heading">Packet Information</h2>
+
+        <div class="field" id="packet-name-field">
+          <label for="packet-name">Packet Name <span class="field-required">Required</span></label>
+          <span class="field-error" id="packet-name-error" hidden>Enter a packet name.</span>
+          <input type="text" id="packet-name" name="packet-name" autocomplete="off">
+        </div>
+      </section>
 
       <!-- ── Owner Application ─────────────────────────────────────────── -->
-      <h2 class="section-heading">Owner Application</h2>
-      <p class="help-text">Only application types configured with an AFQ review step are eligible.</p>
+      <section class="island island--section">
+        <h2 class="section-heading">Owner Application</h2>
+        <p class="help-text">Only application types configured with an AFQ review step are eligible.</p>
 
-      <div class="field-grid field-grid--2" style="margin-top: 20px">
-        <div class="field" id="owner-license-type-field">
-          <label for="owner-license-type">License Type <span class="field-required">Required</span></label>
-          <span class="field-error" id="owner-license-type-error" hidden>Select a license type.</span>
-          <select id="owner-license-type">
-            <option value="">Please Select</option>
-          </select>
-        </div>
-        <div class="field" id="owner-app-field">
-          <label for="owner-app-input">Owner Application <span class="field-required">Required</span></label>
-          <span class="field-error" id="owner-app-error" hidden>Select an owner application.</span>
-          <div class="combobox" id="owner-app">
-            <input type="text" class="combobox__input" id="owner-app-input" placeholder="Please Select"
-                   autocomplete="off" role="combobox" aria-expanded="false" aria-autocomplete="list"
-                   aria-controls="owner-app-list" disabled>
-            <input type="hidden" id="owner-app-value">
-            <button type="button" class="combobox__toggle" tabindex="-1" aria-hidden="true" disabled>
-              <i class="fa-solid fa-chevron-down"></i>
-            </button>
-            <ul class="combobox__list" id="owner-app-list" role="listbox" hidden></ul>
+        <div class="field-grid field-grid--2" style="margin-top: 20px">
+          <div class="field" id="owner-license-type-field">
+            <label for="owner-license-type">License Type <span class="field-required">Required</span></label>
+            <span class="field-error" id="owner-license-type-error" hidden>Select a license type.</span>
+            <select id="owner-license-type">
+              <option value="">Please Select</option>
+            </select>
+          </div>
+          <div class="field" id="owner-app-field">
+            <label for="owner-app-input">Owner Application <span class="field-required">Required</span></label>
+            <span class="field-error" id="owner-app-error" hidden>Select an owner application.</span>
+            <div class="combobox" id="owner-app">
+              <input type="text" class="combobox__input" id="owner-app-input" placeholder="Please Select"
+                     autocomplete="off" role="combobox" aria-expanded="false" aria-autocomplete="list"
+                     aria-controls="owner-app-list" disabled>
+              <input type="hidden" id="owner-app-value">
+              <button type="button" class="combobox__toggle" tabindex="-1" aria-hidden="true" disabled>
+                <i class="fa-solid fa-chevron-down"></i>
+              </button>
+              <ul class="combobox__list" id="owner-app-list" role="listbox" hidden></ul>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
 
       <!-- ── Participant Applications ──────────────────────────────────── -->
-      <h2 class="section-heading">Participant Application(s)</h2>
-      <p class="help-text">Define participant applications. At least one required participant application must be
-        defined before saving.</p>
-      <span class="field-error" id="participants-error" style="margin-top: 8px" hidden>Add at least one required
-        participant application.</span>
+      <section class="island island--section">
+        <h2 class="section-heading">Participant Application(s)</h2>
+        <p class="help-text">Define participant applications. At least one required participant application must be
+          defined before saving.</p>
+        <span class="field-error" id="participants-error" style="margin-top: 8px" hidden>Add at least one required
+          participant application.</span>
 
-      <div class="table-controls" style="margin-top: 20px">
-        <div class="table-controls__count">
-          <span id="participants-count">Showing 0 - 0 of 0 Entries</span>
-          <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--participants">
-            What do the control icons mean?
-            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
-          </button>
+        <div style="margin-top: 20px">
+          <button type="button" class="btn btn--warm" id="add-participant-btn">Add Participant Application</button>
         </div>
-      </div>
 
-      <div class="icon-legend" id="icon-legend--participants" hidden>
-        <div class="icon-legend__item"><img src="assets/edit-icon.png" alt=""> Edit Participant Application</div>
-        <div class="icon-legend__item"><img src="assets/icon-delete.png" alt=""> Remove Participant Application</div>
-      </div>
+        <div class="table-controls" style="margin-top: 20px">
+          <div class="table-controls__count">
+            <span id="participants-count">Showing 0 - 0 of 0 Entries</span>
+            <button type="button" class="icon-legend-toggle" aria-expanded="false" aria-controls="icon-legend--participants">
+              What do the control icons mean?
+              <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
 
-      <p class="empty-state" id="participants-empty-state">No participant applications added yet.</p>
+        <div class="icon-legend" id="icon-legend--participants" hidden>
+          <div class="icon-legend__item"><img src="assets/edit-icon.png" alt=""> Edit Participant Application</div>
+          <div class="icon-legend__item"><img src="assets/icon-delete.png" alt=""> Remove Participant Application</div>
+        </div>
 
-      <table class="data-table" id="participants-table" hidden>
-        <thead>
-          <tr>
-            <th>Role</th>
-            <th>Application</th>
-            <th>Required</th>
-            <th>Controls</th>
-          </tr>
-        </thead>
-        <tbody id="participants-rows"></tbody>
-      </table>
+        <p class="empty-state" id="participants-empty-state">No participant applications added yet.</p>
 
-      <div style="margin-top: 20px">
-        <button type="button" class="btn btn--warm" id="add-participant-btn">Add Participant Application</button>
-      </div>
+        <table class="data-table" id="participants-table" hidden>
+          <thead>
+            <tr>
+              <th>Role</th>
+              <th>Application</th>
+              <th>Required</th>
+              <th>Controls</th>
+            </tr>
+          </thead>
+          <tbody id="participants-rows"></tbody>
+        </table>
+      </section>
 
       <!-- ── Packet Settings ───────────────────────────────────────────── -->
-      <h2 class="section-heading">Packet Settings</h2>
-      <p class="help-text">When enabled, the packet automatically submits to the agency once all required participant
-        submissions are complete. When disabled, the owner applicant must review and sign off before submission.</p>
+      <section class="island island--section">
+        <h2 class="section-heading">Packet Settings</h2>
+        <p class="help-text">When enabled, the packet automatically submits to the agency once all required participant
+          submissions are complete. When disabled, the owner applicant must review and sign off before submission.</p>
 
-      <div class="checkbox-option" style="margin-top: 16px">
-        <label class="checkbox-option__label">
-          <input type="checkbox" id="auto-submit" name="auto-submit">
-          Auto-submit
-        </label>
-      </div>
+        <div class="checkbox-option" style="margin-top: 16px">
+          <label class="checkbox-option__label">
+            <input type="checkbox" id="auto-submit" name="auto-submit">
+            Auto-submit
+          </label>
+        </div>
+      </section>
 
       <div class="form-actions">
         <button type="button" class="btn btn--primary" id="save-packet-btn">Save</button>
@@ -151,7 +163,7 @@
   </main>
 </div>
 
-<!-- Add / Edit Participant Application modal — same form serves both -->
+<!-- Add / Edit Participant Application modal: the same form serves both -->
 <div class="modal-overlay" id="participant-modal" hidden role="dialog" aria-modal="true" aria-labelledby="participant-modal-title">
   <div class="modal-content">
     <div class="modal-header">

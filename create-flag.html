@@ -45,7 +45,7 @@
 
       <h1 class="page-title" id="page-title">Create New Flag Definition</h1>
 
-      <!-- Validation summary — scrolled into view when Save finds errors -->
+      <!-- Validation summary, scrolled into view when Save finds errors -->
       <div class="info-notice info-notice--error" id="error-notice" hidden>
         <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
         <div><strong>Please correct the following errors before saving.</strong></div>
@@ -62,9 +62,8 @@
             completed.
           </p>
           <p class="help-text" style="margin-bottom: 24px">
-            Give the definition a name in uppercase letters, numbers and underscores — for example INSURANCE_EXPIRATION
-            —
-            that is unique within your agency, then choose the category that matches how the flag is raised: Timer,
+            Give the definition a name in uppercase letters, numbers and underscores, for example
+            INSURANCE_EXPIRATION, that is unique within your agency, then choose the category that matches how the flag is raised: Timer,
             Expiration and Event flags are raised automatically by rule, while Manual flags are applied by staff from a
             constituent profile. The label is what staff and constituents see wherever the flag appears. The name and
             category cannot be changed once the definition is created.</p>
@@ -146,7 +145,7 @@
 
     /* --------------------------------------------------------------------- */
     /* One page serves Create and Edit. ?flag=<index> switches to Edit, which */
-    /* locks the name and category — they identify the definition and can't  */
+    /* locks the name and category: they identify the definition and can't   */
     /* change once records reference it.                                     */
     /* --------------------------------------------------------------------- */
     var params = new URLSearchParams(window.location.search);

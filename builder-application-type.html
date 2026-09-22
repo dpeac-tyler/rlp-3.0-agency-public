@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Application Type &mdash; RLP Agency Console</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+
+<body>
+
+  <div class="app app--builder">
+
+    <!-- Header (shared chrome) -->
+    <header class="app-header">
+      <a class="app-header__brand" href="index.html">
+        <img class="app-header__logo" src="assets/tyler-t.png" alt="Tenant logo">
+        <span class="app-header__brand-name">Name of Agency</span>
+      </a>
+      <nav class="app-header__links" aria-label="Account">
+        <a href="settings.html">Settings</a>
+        <span class="app-header__divider" aria-hidden="true"></span>
+        <a href="search.html">Search</a>
+        <span class="app-header__divider" aria-hidden="true"></span>
+        <a href="#">Help</a>
+        <span class="app-header__divider" aria-hidden="true"></span>
+        <a href="#">Logout</a>
+      </nav>
+    </header>
+
+    <!-- Customizable toolbar (shared chrome, rendered by js/toolbar.js) -->
+    <div id="toolbar"></div>
+
+    <!-- Context bar: withheld until the Form No. step. The name, form number
+         and the Authenticated / Task Management / Business tags are all set by
+         answers the user has not given yet, so there is nothing to carry here.
+         Restore this block as-is from step 4 onward.
+
+    <div class="builder-context">
+      <div class="builder-context__block">
+        <div class="builder-context__eyebrow">Application / Permit Name</div>
+        <div class="builder-context__name">Commercial Fishing Permit</div>
+        <div class="builder-context__meta">
+          <span class="badge badge--gold">Draft</span>
+          <span>Form No. DNR-4412 &middot; saved 2 min ago</span>
+        </div>
+      </div>
+      <div class="builder-context__block">
+        <div class="builder-context__eyebrow">License / Application Type</div>
+        <div class="builder-context__value">Commercial Fishing License : Original (One)</div>
+        <div class="builder-context__tags">
+          <span class="tag tag--muted">Authenticated</span>
+          <span class="tag tag--muted">Task Management</span>
+          <span class="tag tag--muted">Business</span>
+        </div>
+      </div>
+      <a href="#">Preview</a>
+    </div>
+    -->
+
+    <!-- ══ Builder shell ═══════════════════════════════════════════════════
+         Step 2 of the Set up phase. The rail keeps the whole path visible;
+         this canvas holds only the six answers that shape the application.
+         ═══════════════════════════════════════════════════════════════════ -->
+    <main class="builder-shell">
+
+      <!-- Phase rail -->
+      <aside class="builder-rail">
+        <a class="builder-rail__back" href="applications.html">
+          <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> All applications
+        </a>
+
+        <div class="builder-rail__progress" style="margin-top: 14px">
+          <div class="builder-rail__progress-row">
+            <span class="builder-rail__eyebrow">Setup phases</span>
+            <span class="builder-rail__pct">12%</span>
+          </div>
+          <div class="builder-rail__track">
+            <div class="builder-rail__fill" style="width: 12%"></div>
+          </div>
+        </div>
+
+        <nav class="builder-phases" aria-label="Setup phases">
+
+          <div class="builder-phase is-current">
+            <a class="builder-phase__row" href="builder-application-type.html" aria-current="step">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Set up</span>
+                <span class="builder-phase__summary">Details &middot; Applicant info</span>
+              </span>
+            </a>
+            <ul class="builder-steps">
+              <li class="builder-steps__item is-done"><a href="builder-getting-started.html">Getting Started</a></li>
+              <li class="builder-steps__item is-current"><a href="builder-application-type.html">Application Type</a></li>
+              <li class="builder-steps__item"><a href="#">Title Information</a></li>
+              <li class="builder-steps__item"><a href="#">Form No., Deactivation &amp; Search Terms</a></li>
+              <li class="builder-steps__item"><a href="#">Applicant Information</a></li>
+            </ul>
+          </div>
+
+          <div class="builder-phase">
+            <a class="builder-phase__row" href="#">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Build</span>
+                <span class="builder-phase__summary">Questions &middot; Conditions</span>
+              </span>
+            </a>
+          </div>
+
+          <div class="builder-phase">
+            <a class="builder-phase__row" href="#">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Rules</span>
+                <span class="builder-phase__summary">Payment &middot; License</span>
+              </span>
+            </a>
+          </div>
+
+          <div class="builder-phase">
+            <a class="builder-phase__row" href="#">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Publish</span>
+                <span class="builder-phase__summary">Preview &middot; Notification</span>
+              </span>
+            </a>
+          </div>
+
+        </nav>
+      </aside>
+
+      <!-- Step canvas -->
+      <div class="builder-canvas">
+        <div class="builder-canvas__inner">
+
+          <p class="builder-eyebrow">Set up &middot; Application Type</p>
+          <h1 class="builder-title">How should this application behave?</h1>
+          <p class="builder-lede">Six answers set the shape of the application: accounts, uploads, fees, licensing and
+            signature. They decide which of the later steps appear.</p>
+
+          <div class="info-notice info-notice--warning">
+            <i class="fa-solid fa-lock" aria-hidden="true"></i>
+            <div>Answers become read-only once Title Information is complete. Entity licenses hide the Individual,
+              Business and ID-collection options.</div>
+          </div>
+
+          <div class="answer-summary">
+            <span class="answer-summary__label">6 required answers</span>
+            <span class="answer-summary__count" id="answer-count"><strong>1 answered</strong> &middot; 5 remaining</span>
+          </div>
+
+          <ol class="question-cards" id="question-cards">
+
+            <!-- 1. Account, with the internal review branch it unlocks -->
+            <li class="question-card is-answered" data-question="account">
+              <span class="question-card__num">1</span>
+              <div class="question-card__body">
+                <h2 class="question-card__title">Does the user of this application need an account?
+                  <span class="field-required">Required</span></h2>
+                <p class="question-card__text">An account lets the applicant save progress, return later, and track
+                  status.</p>
+                <div class="choice-group">
+                  <label class="choice is-selected"><input type="radio" name="account" value="yes" checked> Yes</label>
+                  <label class="choice"><input type="radio" name="account" value="no"> No</label>
+                </div>
+
+                <div class="question-followup" id="account-followup">
+                  <div class="question-followup__eyebrow">Follow-up</div>
+                  <h3 class="question-followup__title">Does this application require internal review?</h3>
+                  <div class="choice-group">
+                    <label class="choice"><input type="radio" name="internal-review" value="yes"> Yes</label>
+                    <label class="choice"><input type="radio" name="internal-review" value="no"> No</label>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <!-- 2. Document upload -->
+            <li class="question-card" data-question="upload">
+              <span class="question-card__num">2</span>
+              <div class="question-card__body">
+                <h2 class="question-card__title">Does the application need document upload?
+                  <span class="field-required">Required</span></h2>
+                <div class="choice-group">
+                  <label class="choice"><input type="radio" name="upload" value="yes"> Yes</label>
+                  <label class="choice"><input type="radio" name="upload" value="no"> No</label>
+                </div>
+              </div>
+            </li>
+
+            <!-- 3. Individual or business -->
+            <li class="question-card" data-question="subject">
+              <span class="question-card__num">3</span>
+              <div class="question-card__body">
+                <h2 class="question-card__title">Is the application for an individual or a business?
+                  <span class="field-required">Required</span></h2>
+                <p class="question-card__text">Choosing one reveals the matching ID-collection question.</p>
+                <div class="choice-group">
+                  <label class="choice"><input type="radio" name="subject" value="individual"> Individual</label>
+                  <label class="choice"><input type="radio" name="subject" value="business"> Business</label>
+                </div>
+              </div>
+            </li>
+
+            <!-- 4. Fee -->
+            <li class="question-card" data-question="fee">
+              <span class="question-card__num">4</span>
+              <div class="question-card__body">
+                <h2 class="question-card__title">Is there a fee for submitting this application?
+                  <span class="field-required">Required</span></h2>
+                <div class="choice-group">
+                  <label class="choice"><input type="radio" name="fee" value="yes"> Yes</label>
+                  <label class="choice"><input type="radio" name="fee" value="no"> No</label>
+                </div>
+              </div>
+            </li>
+
+            <!-- 5. License or permit -->
+            <li class="question-card" data-question="license">
+              <span class="question-card__num">5</span>
+              <div class="question-card__body">
+                <h2 class="question-card__title">Does this application allow a license or permit?
+                  <span class="field-required">Required</span></h2>
+                <div class="choice-group">
+                  <label class="choice"><input type="radio" name="license" value="yes"> Yes</label>
+                  <label class="choice"><input type="radio" name="license" value="no"> No</label>
+                </div>
+              </div>
+            </li>
+
+            <!-- 6. Electronic signature -->
+            <li class="question-card" data-question="signature">
+              <span class="question-card__num">6</span>
+              <div class="question-card__body">
+                <h2 class="question-card__title">Will this application require an electronic signature?
+                  <span class="field-required">Required</span></h2>
+                <div class="choice-group">
+                  <label class="choice"><input type="radio" name="signature" value="yes"> Yes</label>
+                  <label class="choice"><input type="radio" name="signature" value="no"> No</label>
+                </div>
+              </div>
+            </li>
+
+          </ol>
+
+          <!-- Wizard action bar: back on the left, advance on the right -->
+          <div class="builder-actions">
+            <a href="builder-getting-started.html" class="btn btn--secondary">
+              <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Getting Started
+            </a>
+            <div class="builder-actions__right">
+              <a href="applications.html">Save &amp; exit</a>
+              <a href="#" class="btn btn--primary">
+                Title Information <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/toolbar.js"></script>
+  <script>
+    initToolbar('#toolbar', { activeKey: 'applications' });
+
+    var TOTAL_QUESTIONS = 6;
+    var cards = document.getElementById('question-cards');
+    var countEl = document.getElementById('answer-count');
+    var followup = document.getElementById('account-followup');
+
+    /* The pill carries the selected state; the radio inside stays the control */
+    function paintGroup(group) {
+      group.querySelectorAll('.choice').forEach(function (choice) {
+        choice.classList.toggle('is-selected', choice.querySelector('input').checked);
+      });
+    }
+
+    function updateCount() {
+      var answered = 0;
+      cards.querySelectorAll('.question-card').forEach(function (card) {
+        /* The follow-up is not one of the six, so only the first group counts */
+        var group = card.querySelector('.choice-group');
+        var isAnswered = !!group.querySelector('input:checked');
+        card.classList.toggle('is-answered', isAnswered);
+        if (isAnswered) answered++;
+      });
+
+      var remaining = TOTAL_QUESTIONS - answered;
+      countEl.innerHTML = '<strong>' + answered + ' answered</strong> &middot; ' + remaining + ' remaining';
+    }
+
+    cards.addEventListener('change', function (e) {
+      if (e.target.type !== 'radio') return;
+
+      paintGroup(e.target.closest('.choice-group'));
+
+      /* Only an account holder can be routed to internal review */
+      if (e.target.name === 'account') {
+        var needsAccount = e.target.value === 'yes';
+        followup.hidden = !needsAccount;
+        if (!needsAccount) {
+          followup.querySelectorAll('input').forEach(function (input) { input.checked = false; });
+          paintGroup(followup.querySelector('.choice-group'));
+        }
+      }
+
+      updateCount();
+    });
+
+    updateCount();
+  </script>
+
+</body>
+
+</html>

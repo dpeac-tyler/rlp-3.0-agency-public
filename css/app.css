@@ -3550,3 +3550,648 @@ a.stat:focus-visible {
   gap: 12px;
   margin-top: 20px;
 }
+
+/* ---------------------------------------------------------------------- */
+/* Application builder: navy phase rail + step canvas                     */
+/* Used by create-application.html and every later builder step. The      */
+/* builder is 20+ screens, so wayfinding moves out of the breadcrumb and  */
+/* into a persistent rail: four phases, with the current phase's steps    */
+/* expanded beneath it. The rail is flush under the toolbar and carries   */
+/* the header navy, so the builder reads as a mode you are inside of.     */
+/* ---------------------------------------------------------------------- */
+
+/* The builder page is a full-height column so the rail always reaches the
+   bottom of the window, whatever the step's content height. Scoped to
+   .app--builder so no other page's chrome is affected. */
+.app--builder {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app--builder .builder-shell {
+  flex: 1 1 auto;
+}
+
+.builder-shell {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  align-items: stretch;
+  min-height: 640px;
+}
+
+@media (max-width: 1100px) {
+  .builder-shell {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Rail ----------------------------------------------------------------- */
+
+.builder-rail {
+  background: var(--c-header-navy);
+  color: #fff;
+  padding-bottom: 32px;
+}
+
+.builder-rail__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 22px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--c-toolbar-on-dark);
+  text-decoration: none;
+}
+
+.builder-rail__back:hover {
+  color: #fff;
+}
+
+.builder-rail__identity {
+  padding: 14px 22px 18px;
+  border-bottom: 1px solid var(--c-header-divider);
+}
+
+.builder-rail__title {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.builder-rail__status {
+  margin-top: 4px;
+  font-size: 16px;
+  color: var(--c-toolbar-idle);
+}
+
+.builder-rail__progress {
+  padding: 16px 22px 18px;
+  border-bottom: 1px solid var(--c-header-divider);
+}
+
+.builder-rail__progress-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.builder-rail__eyebrow {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--c-toolbar-on-dark);
+}
+
+.builder-rail__pct {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--c-toolbar-on-dark);
+}
+
+.builder-rail__track {
+  margin-top: 10px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--c-header-divider);
+  overflow: hidden;
+}
+
+.builder-rail__fill {
+  height: 100%;
+  background: var(--c-gold);
+}
+
+/* Phases --------------------------------------------------------------- */
+
+.builder-phases {
+  padding-top: 8px;
+}
+
+.builder-phase__row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 22px 12px 19px;
+  border-left: 3px solid transparent;
+  text-decoration: none;
+  color: inherit;
+}
+
+.builder-phase__row:hover {
+  background: var(--c-toolbar-navy);
+  color: inherit;
+}
+
+/* Current phase: gold edge, lifted panel, and its steps listed below */
+.builder-phase.is-current > .builder-phase__row {
+  background: var(--c-toolbar-navy);
+  border-left-color: var(--c-gold);
+}
+
+.builder-phase__marker {
+  flex: 0 0 auto;
+  width: 15px;
+  height: 15px;
+  margin-top: 4px;
+  border: 2px solid var(--c-toolbar-idle);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.builder-phase.is-current .builder-phase__marker {
+  border-color: var(--c-gold);
+}
+
+.builder-phase.is-current .builder-phase__marker::after {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--c-gold);
+}
+
+.builder-phase__name {
+  display: block;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.builder-phase__summary {
+  display: block;
+  margin-top: 2px;
+  font-size: 16px;
+  color: var(--c-toolbar-idle);
+}
+
+/* Steps inside the current phase */
+
+.builder-steps {
+  list-style: none;
+  margin: 6px 0 10px;
+  padding: 0 22px 0 46px;
+}
+
+.builder-steps__item a {
+  display: block;
+  padding: 7px 0;
+  font-size: 16px;
+  color: var(--c-toolbar-idle);
+  text-decoration: none;
+}
+
+.builder-steps__item a:hover {
+  color: #fff;
+}
+
+.builder-steps__item.is-current a {
+  font-weight: 700;
+  color: #fff;
+}
+
+/* Caret marks the step you are on without moving the label off the list */
+.builder-steps__item.is-current a::before {
+  content: '\25B8';
+  margin-left: -14px;
+  margin-right: 6px;
+  color: var(--c-gold);
+}
+
+/* Canvas --------------------------------------------------------------- */
+
+.builder-canvas {
+  padding: 26px 32px 48px;
+  background: var(--c-surface);
+}
+
+/* The builder canvas runs full width, with no measure cap on the step content */
+.builder-canvas__inner {
+  width: 100%;
+}
+
+.builder-eyebrow {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--c-gold-icon);
+}
+
+/* The rail carries wayfinding, so the step title drops .page-title's rule */
+.builder-title {
+  margin: 10px 0 0;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.builder-lede {
+  margin: 14px 0 0;
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--c-text-primary);
+}
+
+.builder-section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.builder-section-head .section-heading {
+  margin: 0;
+}
+
+/* Heading without .section-heading's rule. The builder separates blocks
+   with whitespace and a single divider instead of one rule per heading. */
+.section-heading--plain {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.builder-divider {
+  margin: 36px 0 32px;
+  border: none;
+  border-top: 1px solid var(--c-border);
+}
+
+/* Step cards: the map of the whole path, two per row */
+
+.step-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (max-width: 900px) {
+  .step-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+.step-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: var(--c-tile-bg);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-panel);
+  padding: 18px 20px;
+}
+
+.step-card__num {
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--r-chip-sm);
+  background: var(--c-hairline);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--c-text-secondary);
+}
+
+/* The step you are about to start reads as filled, like the rail marker */
+.step-card.is-current .step-card__num {
+  background: var(--c-header-navy);
+  color: #fff;
+}
+
+.step-card__title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--c-header-navy);
+}
+
+.step-card__optional {
+  margin-left: 8px;
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--c-text-secondary);
+}
+
+.step-card__text {
+  margin: 4px 0 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--c-text-secondary);
+}
+
+/* Choice card: the only fields on this screen, plus the step's actions */
+
+.builder-card {
+  margin-top: 20px;
+  background: #fff;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-panel);
+  padding: 24px 28px 0;
+}
+
+.builder-card .field + .field {
+  margin-top: 22px;
+}
+
+.builder-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 24px;
+  padding: 18px 0;
+  border-top: 1px solid var(--c-hairline);
+}
+
+.builder-card__footer .btn i {
+  margin-left: 10px;
+}
+
+.builder-section-head a,
+.builder-card__footer a:not(.btn) {
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* Completed step in the rail, and the phase rail without the identity block
+   (the context bar carries the name once the application exists) */
+.builder-steps__item.is-done a::before {
+  content: '\2713';
+  margin-left: -14px;
+  margin-right: 6px;
+  color: var(--c-gold);
+}
+
+.builder-steps__item.is-done a {
+  color: #fff;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Builder context bar                                                    */
+/* Full-width record band under the toolbar, above the rail: what is being */
+/* built, its draft state, and the two choices from Getting Started. Same  */
+/* geometry as .task-bar, tinted so it reads as chrome, not content.       */
+/* ---------------------------------------------------------------------- */
+
+.builder-context {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 32px;
+  flex-wrap: wrap;
+  background: var(--c-tile-bg);
+  border-bottom: 1px solid var(--c-border);
+  padding: 16px 32px;
+}
+
+.builder-context__block {
+  min-width: 0;
+}
+
+.builder-context__eyebrow {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--c-text-secondary);
+}
+
+.builder-context__name {
+  margin-top: 4px;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--c-text-primary);
+}
+
+.builder-context__value {
+  margin-top: 4px;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--c-text-primary);
+}
+
+.builder-context__meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+  font-size: 16px;
+  color: var(--c-text-secondary);
+}
+
+.builder-context__tags {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Question cards (Application Type)                                      */
+/* One decision per card, numbered like the step cards, with the follow-up */
+/* it unlocks nested inside so the branch stays attached to its parent.    */
+/* ---------------------------------------------------------------------- */
+
+.answer-summary {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.answer-summary__label {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--c-text-secondary);
+}
+
+.answer-summary__count {
+  font-size: 16px;
+  color: var(--c-text-secondary);
+}
+
+.answer-summary__count strong {
+  color: var(--c-text-primary);
+}
+
+.question-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.question-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: #fff;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-panel);
+  padding: 20px 22px;
+}
+
+.question-card__body {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.question-card__num {
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--r-chip-sm);
+  background: var(--c-hairline);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--c-text-secondary);
+}
+
+.question-card.is-answered .question-card__num {
+  background: var(--c-header-navy);
+  color: #fff;
+}
+
+.question-card__title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--c-text-primary);
+}
+
+.question-card__text {
+  margin: 6px 0 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--c-text-secondary);
+}
+
+/* Choice pills: a native radio inside a bordered target, so the control
+   stays keyboard- and screen-reader-native while reading as a button */
+
+.choice-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.choice {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 112px;
+  height: 44px;
+  padding: 0 18px;
+  border: 1px solid #c9ccd0;
+  border-radius: var(--r-pill);
+  background: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--c-text-primary);
+  cursor: pointer;
+}
+
+.choice:hover {
+  border-color: #9ea3a8;
+}
+
+.choice input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--c-blue);
+}
+
+/* Inset ring rather than a 2px border, so selecting never shifts the row */
+.choice.is-selected {
+  border-color: var(--c-blue);
+  box-shadow: inset 0 0 0 1px var(--c-blue);
+  background: #eaf1f8;
+}
+
+/* Follow-up revealed by the answer above it */
+
+.question-followup {
+  margin-top: 16px;
+  background: var(--c-tile-bg);
+  border-left: 3px solid var(--c-gold);
+  border-radius: 0 4px 4px 0;
+  padding: 14px 18px 16px;
+}
+
+.question-followup[hidden] {
+  display: none;
+}
+
+.question-followup__eyebrow {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--c-gold-icon);
+}
+
+.question-followup__title {
+  margin: 4px 0 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--c-text-primary);
+}
+
+/* Step action bar: pinned to the bottom of the canvas on a long step, so
+   Back / Next stay reachable without scrolling to the end */
+
+.builder-actions {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 32px;
+  padding: 16px 0;
+  background: #fff;
+  border-top: 1px solid var(--c-border);
+}
+
+.builder-actions__right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.builder-actions a:not(.btn) {
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.builder-actions .btn i {
+  margin: 0 0 0 10px;
+}
+
+.builder-actions .btn--secondary i {
+  margin: 0 10px 0 0;
+}

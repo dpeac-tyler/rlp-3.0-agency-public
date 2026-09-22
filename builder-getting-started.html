@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Application &mdash; Getting Started &mdash; RLP Agency Console</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+
+<body>
+
+  <div class="app app--builder">
+
+    <!-- Header (shared chrome) -->
+    <header class="app-header">
+      <a class="app-header__brand" href="index.html">
+        <img class="app-header__logo" src="assets/tyler-t.png" alt="Tenant logo">
+        <span class="app-header__brand-name">Name of Agency</span>
+      </a>
+      <nav class="app-header__links" aria-label="Account">
+        <a href="settings.html">Settings</a>
+        <span class="app-header__divider" aria-hidden="true"></span>
+        <a href="search.html">Search</a>
+        <span class="app-header__divider" aria-hidden="true"></span>
+        <a href="#">Help</a>
+        <span class="app-header__divider" aria-hidden="true"></span>
+        <a href="#">Logout</a>
+      </nav>
+    </header>
+
+    <!-- Customizable toolbar (shared chrome, rendered by js/toolbar.js) -->
+    <div id="toolbar"></div>
+
+    <!-- ══ Builder shell ═══════════════════════════════════════════════════
+         The builder runs 20+ screens, so wayfinding lives in the navy rail
+         instead of a breadcrumb: four phases, with the current phase's steps
+         expanded underneath.
+         ═══════════════════════════════════════════════════════════════════ -->
+    <main class="builder-shell">
+
+      <!-- Phase rail -->
+      <aside class="builder-rail">
+        <a class="builder-rail__back" href="applications.html">
+          <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> All applications
+        </a>
+
+        <div class="builder-rail__identity">
+          <div class="builder-rail__title">New application</div>
+          <div class="builder-rail__status">Not started</div>
+        </div>
+
+        <div class="builder-rail__progress">
+          <div class="builder-rail__progress-row">
+            <span class="builder-rail__eyebrow">Setup phases</span>
+            <span class="builder-rail__pct">0%</span>
+          </div>
+          <div class="builder-rail__track">
+            <div class="builder-rail__fill" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <nav class="builder-phases" aria-label="Setup phases">
+
+          <div class="builder-phase is-current">
+            <a class="builder-phase__row" href="builder-getting-started.html" aria-current="step">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Set up</span>
+                <span class="builder-phase__summary">Details &middot; Applicant info</span>
+              </span>
+            </a>
+            <ul class="builder-steps">
+              <li class="builder-steps__item is-current"><a href="builder-getting-started.html">Getting Started</a></li>
+              <li class="builder-steps__item"><a href="builder-application-type.html">Application Type</a></li>
+              <li class="builder-steps__item"><a href="#">Title Information</a></li>
+              <li class="builder-steps__item"><a href="#">Form No., Deactivation &amp; Search Terms</a></li>
+              <li class="builder-steps__item"><a href="#">Applicant Information</a></li>
+            </ul>
+          </div>
+
+          <div class="builder-phase">
+            <a class="builder-phase__row" href="#">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Build</span>
+                <span class="builder-phase__summary">Questions &middot; Conditions</span>
+              </span>
+            </a>
+          </div>
+
+          <div class="builder-phase">
+            <a class="builder-phase__row" href="#">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Rules</span>
+                <span class="builder-phase__summary">Payment &middot; License</span>
+              </span>
+            </a>
+          </div>
+
+          <div class="builder-phase">
+            <a class="builder-phase__row" href="#">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Publish</span>
+                <span class="builder-phase__summary">Preview &middot; Notification</span>
+              </span>
+            </a>
+          </div>
+
+        </nav>
+      </aside>
+
+      <!-- Step canvas -->
+      <div class="builder-canvas">
+        <div class="builder-canvas__inner">
+
+          <p class="builder-eyebrow">Set up &middot; Getting Started</p>
+          <h1 class="builder-title">Let's build your application</h1>
+          <p class="builder-lede">Here's the whole path first: eight steps, grouped into four phases.
+            Everything saves as a draft, and nothing goes live until you publish in step 8.</p>
+
+          <!-- ── The whole path, so step 1 arrives with context ──────────── -->
+          <div class="builder-section-head">
+            <h2 class="section-heading section-heading--plain">What you'll do in the 8 steps</h2>
+            <a href="#">Read the full guide</a>
+          </div>
+
+          <ol class="step-cards">
+            <li class="step-card is-current">
+              <span class="step-card__num">1</span>
+              <div>
+                <h3 class="step-card__title">Application Details</h3>
+                <p class="step-card__text">Type, name, internal form number, description and a help URL.</p>
+              </div>
+            </li>
+            <li class="step-card">
+              <span class="step-card__num">2</span>
+              <div>
+                <h3 class="step-card__title">Applicant Information</h3>
+                <p class="step-card__text">Decide what you need to collect from the applicant or entity.</p>
+              </div>
+            </li>
+            <li class="step-card">
+              <span class="step-card__num">3</span>
+              <div>
+                <h3 class="step-card__title">Question Builder</h3>
+                <p class="step-card__text">Add the questions you need, choosing from the question types.</p>
+              </div>
+            </li>
+            <li class="step-card">
+              <span class="step-card__num">4</span>
+              <div>
+                <h3 class="step-card__title">Conditions <span class="step-card__optional">Optional</span></h3>
+                <p class="step-card__text">Show or hide questions based on earlier answers.</p>
+              </div>
+            </li>
+            <li class="step-card">
+              <span class="step-card__num">5</span>
+              <div>
+                <h3 class="step-card__title">Payment</h3>
+                <p class="step-card__text">Set the price of the license or permit.</p>
+              </div>
+            </li>
+            <li class="step-card">
+              <span class="step-card__num">6</span>
+              <div>
+                <h3 class="step-card__title">Preview</h3>
+                <p class="step-card__text">See the application exactly as your applicants will.</p>
+              </div>
+            </li>
+            <li class="step-card">
+              <span class="step-card__num">7</span>
+              <div>
+                <h3 class="step-card__title">License</h3>
+                <p class="step-card__text">Effective dates and an optional certificate template.</p>
+              </div>
+            </li>
+            <li class="step-card">
+              <span class="step-card__num">8</span>
+              <div>
+                <h3 class="step-card__title">Notification</h3>
+                <p class="step-card__text">The message applicants get when the license is issued.</p>
+              </div>
+            </li>
+          </ol>
+
+          <hr class="builder-divider">
+
+          <!-- ── The two choices that shape every later step ─────────────── -->
+          <h2 class="section-heading section-heading--plain">Start with the license and application type</h2>
+          <p class="help-text" style="margin-top: 10px">These two choices decide which later steps
+            appear, and you can change them until Title Information is complete. Your agency has 24 license types to
+            choose from, and the application type is what the applicant is doing, whether that's an original
+            application, a renewal, or an update to a license they already hold. Fields marked
+            <span class="field-required">Required</span> must be completed.
+          </p>
+
+          <div class="builder-card">
+
+            <div class="field" id="license-type-field">
+              <label for="license-type-input">License type <span class="field-required">Required</span></label>
+              <span class="field-error" id="license-type-error" hidden>Select a license type.</span>
+              <div class="combobox" id="license-type">
+                <input type="text" class="combobox__input" id="license-type-input" placeholder="Select a license type"
+                       autocomplete="off" role="combobox" aria-expanded="false" aria-autocomplete="list"
+                       aria-controls="license-type-list">
+                <input type="hidden" id="license-type-value">
+                <button type="button" class="combobox__toggle" tabindex="-1" aria-hidden="true">
+                  <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <ul class="combobox__list" id="license-type-list" role="listbox" hidden></ul>
+              </div>
+            </div>
+
+            <div class="field" id="application-type-field">
+              <label for="application-type">Application type <span class="field-required">Required</span></label>
+              <span class="field-error" id="application-type-error" hidden>Select an application type.</span>
+              <select id="application-type">
+                <option value="">Please Select</option>
+                <option value="original-one">Original (One)</option>
+                <option value="original-many">Original (Many)</option>
+                <option value="renewal">Renewal</option>
+                <option value="maintenance-update">Maintenance/Update</option>
+              </select>
+            </div>
+
+            <!-- Wizard action bar: leave on the left, advance on the right -->
+            <div class="builder-card__footer">
+              <a href="applications.html">Save &amp; exit</a>
+              <button type="button" class="btn btn--primary" id="start-building-btn">
+                Start building <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/toolbar.js"></script>
+  <script src="js/combobox.js"></script>
+  <script>
+    initToolbar('#toolbar', { activeKey: 'applications' });
+
+    /* 24 license types: long enough that the list is a combobox, not a select */
+    var LICENSE_TYPES = [
+      'Aquaculture Permit', 'Architect License', 'Boat Dealer License', 'Boiler Operator License',
+      'Building Contractor License', 'Commercial Fishing License', 'Contractor License',
+      'Cosmetology License', 'Electrical Contractor License', 'Firearm Business License',
+      'Food Establishment Permit', 'Hunting Guide License', 'Land Surveyor License',
+      'Liquor License', 'Massage Therapist License', 'Mobile Food Vendor Permit',
+      'Nursery Grower License', 'Pesticide Applicator License', 'Plumbing Contractor License',
+      'Professional Engineer License', 'Real Estate Broker License', 'Septic Installer License',
+      'Timber Harvest Permit', 'Well Driller License'
+    ];
+
+    var licenseType = initCombobox('#license-type', {
+      options: LICENSE_TYPES.map(function (name) {
+        return { value: name.toLowerCase().replace(/[^a-z0-9]+/g, '-'), label: name };
+      }),
+      onSelect: function () { markError('license-type-field', 'license-type-error', false); }
+    });
+
+    var appTypeSelect = document.getElementById('application-type');
+
+    /* Inline field errors only. The builder has no error summary band. */
+    function markError(fieldId, errorId, invalid) {
+      document.getElementById(fieldId).classList.toggle('field--error', invalid);
+      document.getElementById(errorId).hidden = !invalid;
+    }
+
+    document.getElementById('start-building-btn').addEventListener('click', function () {
+      var noLicense = !licenseType.getValue();
+      var noAppType = !appTypeSelect.value;
+
+      markError('license-type-field', 'license-type-error', noLicense);
+      markError('application-type-field', 'application-type-error', noAppType);
+
+      if (noLicense || noAppType) {
+        document.getElementById(noLicense ? 'license-type-input' : 'application-type').focus();
+        return;
+      }
+
+      window.location.href = 'builder-application-type.html';
+    });
+
+    appTypeSelect.addEventListener('change', function () {
+      if (appTypeSelect.value) markError('application-type-field', 'application-type-error', false);
+    });
+  </script>
+
+</body>
+
+</html>
