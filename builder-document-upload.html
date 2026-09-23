@@ -7,6 +7,8 @@
   <title>Document Upload &mdash; RLP Agency Console</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="css/app.css">
+  <!-- Sets the collapsed-rail class before paint, so it never flashes open -->
+  <script src="js/builder-rail.js"></script>
 </head>
 
 <body>
@@ -66,18 +68,20 @@
     <main class="builder-shell">
 
       <!-- Phase rail -->
-      <aside class="builder-rail">
-        <a class="builder-rail__back" href="applications.html">
-          <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> All applications
-        </a>
+      <aside class="builder-rail" id="builder-rail">
+        <button type="button" class="builder-rail__toggle" id="rail-toggle"
+                aria-expanded="true" aria-controls="builder-rail" title="Collapse menu">
+          <i class="fa-solid fa-angles-left" aria-hidden="true"></i>
+          <span class="builder-rail__toggle-label" id="rail-toggle-label">Collapse menu</span>
+        </button>
 
         <div class="builder-rail__progress" style="margin-top: 14px">
           <div class="builder-rail__progress-row">
             <span class="builder-rail__eyebrow">Setup phases</span>
-            <span class="builder-rail__pct">75%</span>
+            <span class="builder-rail__pct">50%</span>
           </div>
           <div class="builder-rail__track">
-            <div class="builder-rail__fill" style="width: 75%"></div>
+            <div class="builder-rail__fill" style="width: 50%"></div>
           </div>
         </div>
 
@@ -103,7 +107,12 @@
                   Integration</a></li>
               <li class="builder-steps__item is-current"><a href="builder-document-upload.html">Document Upload</a>
               </li>
-              <li class="builder-steps__item"><a href="#">Applicant Information</a></li>
+              <li class="builder-steps__item"><a href="builder-user-information.html">User Information</a></li>
+              <li class="builder-steps__item"><a href="builder-personal-information.html">Personal
+                  Information</a></li>
+              <li class="builder-steps__item"><a href="#">Contact Information</a></li>
+              <li class="builder-steps__item"><a href="#">Mailing Address</a></li>
+              <li class="builder-steps__item"><a href="#">Demographic Information</a></li>
             </ul>
           </div>
 
@@ -286,7 +295,7 @@
               <span class="builder-actions__note" id="next-note">Write the instructions to continue</span>
               <a href="applications.html">Save &amp; exit</a>
               <button type="button" class="btn btn--primary" id="next-btn" disabled>
-                Applicant Information <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                User Information <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
               </button>
             </div>
           </div>
@@ -474,7 +483,7 @@
     });
 
     nextBtn.addEventListener('click', function () {
-      window.location.href = '#';
+      window.location.href = 'builder-user-information.html';
     });
 
     /* Character counter: a countdown, the way RLP words them, turning red once

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Information &mdash; RLP Agency Console</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/app.css">
+  <!-- Sets the collapsed-rail class before paint, so it never flashes open -->
+  <script src="js/builder-rail.js"></script>
+</head>
+
+<body>
+
+  <div class="app app--builder">
+
+    <!-- Header (shared chrome) -->
+    <header class="app-header">
+      <a class="app-header__brand" href="index.html">
+        <img class="app-header__logo" src="assets/tyler-t.png" alt="Tenant logo">
+        <span class="app-header__brand-name">Name of Agency</span>
+      </a>
+      <nav class="app-header__links" aria-label="Account">
+        <a href="settings.html">Settings</a>
+        <span class="app-header__divider" aria-hidden="true"></span>
+        <a href="search.html">Search</a>
+        <span class="app-header__divider" aria-hidden="true"></span>
+        <a href="#">Help</a>
+        <span class="app-header__divider" aria-hidden="true"></span>
+        <a href="#">Logout</a>
+      </nav>
+    </header>
+
+    <!-- Customizable toolbar (shared chrome, rendered by js/toolbar.js) -->
+    <div id="toolbar"></div>
+
+    <!-- ══ Context bar ══════════════════════════════════════════════════════ -->
+    <div class="builder-context">
+      <div class="builder-context__block">
+        <div class="builder-context__eyebrow">Application / Permit Name</div>
+        <div class="builder-context__name">Commercial Fishing Permit: Original (One)</div>
+        <div class="builder-context__meta">
+          <span class="badge badge--gold">Draft</span>
+          <span>Form No. DNR-CF-102 &middot; saved 10 min ago</span>
+        </div>
+      </div>
+      <div class="builder-context__block">
+        <div class="builder-context__eyebrow">License / Application Type</div>
+        <div class="builder-context__value">Commercial Fishing License : Original (One)</div>
+        <div class="builder-context__tags">
+          <span class="tag tag--muted">Authenticated</span>
+          <span class="tag tag--muted">Individual</span>
+          <span class="tag tag--muted">Signature</span>
+          <span class="tag tag--muted">Document Upload</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ Builder shell ═══════════════════════════════════════════════════
+         Step 8 of the Set up phase, and the opener for the applicant half of it.
+         No fields: it explains what the next four steps do and what carries
+         over, which is the job v2 gave to a congratulation page.
+         ═══════════════════════════════════════════════════════════════════ -->
+    <main class="builder-shell">
+
+      <!-- Phase rail -->
+      <aside class="builder-rail" id="builder-rail">
+        <button type="button" class="builder-rail__toggle" id="rail-toggle"
+                aria-expanded="true" aria-controls="builder-rail" title="Collapse menu">
+          <i class="fa-solid fa-angles-left" aria-hidden="true"></i>
+          <span class="builder-rail__toggle-label" id="rail-toggle-label">Collapse menu</span>
+        </button>
+
+        <div class="builder-rail__progress" style="margin-top: 14px">
+          <div class="builder-rail__progress-row">
+            <span class="builder-rail__eyebrow">Setup phases</span>
+            <span class="builder-rail__pct">58%</span>
+          </div>
+          <div class="builder-rail__track">
+            <div class="builder-rail__fill" style="width: 58%"></div>
+          </div>
+        </div>
+
+        <nav class="builder-phases" aria-label="Setup phases">
+
+          <div class="builder-phase is-current">
+            <a class="builder-phase__row" href="builder-user-information.html" aria-current="step">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Set up</span>
+                <span class="builder-phase__summary">Details &middot; Applicant info</span>
+              </span>
+            </a>
+            <ul class="builder-steps">
+              <li class="builder-steps__item is-done"><a href="builder-getting-started.html">Getting Started</a></li>
+              <li class="builder-steps__item is-done"><a href="builder-application-type.html">Application Type</a></li>
+              <li class="builder-steps__item is-done"><a href="builder-title-information.html">Title Information</a></li>
+              <li class="builder-steps__item is-done"><a href="builder-form-number-search-terms.html">Form No., Deactivation &amp; Search Terms</a></li>
+              <li class="builder-steps__item is-done"><a href="builder-task-management.html">Task Management</a></li>
+              <li class="builder-steps__item is-done"><a href="builder-external-integration.html">External Integration</a></li>
+              <li class="builder-steps__item is-done"><a href="builder-document-upload.html">Document Upload</a></li>
+              <li class="builder-steps__item is-current"><a href="builder-user-information.html">User Information</a></li>
+              <li class="builder-steps__item"><a href="builder-personal-information.html">Personal Information</a></li>
+              <li class="builder-steps__item"><a href="#">Contact Information</a></li>
+              <li class="builder-steps__item"><a href="#">Mailing Address</a></li>
+              <li class="builder-steps__item"><a href="#">Demographic Information</a></li>
+            </ul>
+          </div>
+
+          <div class="builder-phase">
+            <a class="builder-phase__row" href="#">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Build</span>
+                <span class="builder-phase__summary">Questions &middot; Conditions</span>
+              </span>
+            </a>
+          </div>
+
+          <div class="builder-phase">
+            <a class="builder-phase__row" href="#">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Rules</span>
+                <span class="builder-phase__summary">Payment &middot; License</span>
+              </span>
+            </a>
+          </div>
+
+          <div class="builder-phase">
+            <a class="builder-phase__row" href="#">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Publish</span>
+                <span class="builder-phase__summary">Preview &middot; Notification</span>
+              </span>
+            </a>
+          </div>
+
+        </nav>
+      </aside>
+
+      <!-- Step canvas -->
+      <div class="builder-canvas">
+        <div class="builder-canvas__inner">
+
+          <p class="builder-eyebrow">Set up &middot; User Information</p>
+          <h1 class="builder-title">Now decide what you ask the applicant</h1>
+          <p class="builder-lede">The application itself is set up. What is left is the information the applicant hands over.</p>
+
+          <p class="help-text" style="margin-top: 14px">The application details are saved. Drafts stay in the
+            Drafts area of your dashboard, so you can leave and come back at any point without losing this work.</p>
+
+          <p class="help-text" style="margin-top: 12px">The next four steps decide what the applicant is asked about
+            themselves. On each one you tick the fields you want on the application, and the panel beside the list
+            shows those fields the way the applicant will see them.</p>
+
+          <ul class="help-list" style="margin-top: 12px">
+            <li><strong>Personal Information</strong> &mdash; name, prefix and suffix.</li>
+            <li><strong>Contact Information</strong> &mdash; phone numbers and email.</li>
+            <li><strong>Mailing Address</strong> &mdash; where post is sent.</li>
+            <li><strong>Demographic Information</strong> &mdash; optional detail your agency reports on.</li>
+          </ul>
+
+          <p class="help-text" style="margin-top: 12px">A few fields are collected on every application and cannot be
+            switched off. Those rows are marked, with the reason next to them.</p>
+
+          <div class="builder-actions">
+            <a href="builder-document-upload.html" class="btn btn--secondary">
+              <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Document Upload
+            </a>
+            <div class="builder-actions__right">
+              <a href="applications.html">Save &amp; exit</a>
+              <button type="button" class="btn btn--primary" id="next-btn">
+                Personal Information <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/toolbar.js"></script>
+  <script>
+    initToolbar('#toolbar', { activeKey: 'applications' });
+
+    document.getElementById('next-btn').addEventListener('click', function () {
+      window.location.href = 'builder-personal-information.html';
+    });
+  </script>
+
+</body>
+
+</html>

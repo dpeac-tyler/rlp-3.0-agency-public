@@ -3621,19 +3621,75 @@ a.stat:focus-visible {
   padding-bottom: 32px;
 }
 
-.builder-rail__back {
-  display: inline-flex;
+/* Collapsed rail. Only above the stacking breakpoint: below it the rail sits
+   above the canvas and is not competing for width, so there is nothing to win
+   back and the toggle is hidden. */
+@media (min-width: 1101px) {
+  .rail-collapsed .builder-shell {
+    grid-template-columns: 56px minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 1100px) {
+  .builder-rail__toggle {
+    display: none;
+  }
+}
+
+/* Sits on the row the "All applications" link used to occupy, so the rail
+   gains the control without spending any extra vertical space on it. */
+.builder-rail__toggle {
+  display: flex;
   align-items: center;
   gap: 10px;
+  width: 100%;
+  margin: 0;
   padding: 20px 22px 0;
+  border: none;
+  background: none;
+  font-family: inherit;
   font-size: 16px;
   font-weight: 600;
   color: var(--c-toolbar-on-dark);
-  text-decoration: none;
+  text-align: left;
+  cursor: pointer;
 }
 
-.builder-rail__back:hover {
+.builder-rail__toggle:hover,
+.builder-rail__toggle:focus-visible {
   color: #fff;
+}
+
+.builder-rail__toggle i {
+  transition: transform .15s;
+}
+
+/* Collapsed: the chevron flips and centres, the label and everything else that
+   needs the full width goes. The progress bar stays, so the strip keeps a
+   crumb of wayfinding. */
+.rail-collapsed .builder-rail__toggle {
+  justify-content: center;
+  padding: 20px 0 0;
+}
+
+.rail-collapsed .builder-rail__toggle i {
+  transform: rotate(180deg);
+}
+
+.rail-collapsed .builder-rail__toggle-label,
+.rail-collapsed .builder-rail__eyebrow,
+.rail-collapsed .builder-phases {
+  display: none;
+}
+
+/* 8px, not the expanded 22px: "100%" at 14px bold needs about 34px and the
+   strip only has 56px to give */
+.rail-collapsed .builder-rail__progress {
+  padding: 14px 8px;
+}
+
+.rail-collapsed .builder-rail__progress-row {
+  justify-content: center;
 }
 
 .builder-rail__identity {
@@ -4131,6 +4187,159 @@ a.stat:focus-visible {
    instruction in the card title and the control underneath it */
 .question-card__body .field {
   margin-top: 14px;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Field picker + live preview (Applicant Information steps)               */
+/* The agency ticks which fields the applicant will see; the panel beside  */
+/* it renders those fields in the constituent's own visual language, so    */
+/* the consequence of a tick is visible without leaving the step.          */
+/* ---------------------------------------------------------------------- */
+
+.picker-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+  margin-top: 16px;
+}
+
+@media (max-width: 1100px) {
+  .picker-split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.picker-split__head {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--c-text-secondary);
+}
+
+/* Field picker table ---------------------------------------------------- */
+
+.picker-table th.picker-table__toggle,
+.picker-table td.picker-table__toggle {
+  width: 96px;
+  text-align: center;
+}
+
+.picker-table td.picker-table__toggle input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--c-blue);
+  cursor: pointer;
+}
+
+/* A locked row is collected on every application and cannot be switched off,
+   so its checkboxes read as settled rather than merely unavailable */
+.picker-table td.picker-table__toggle input[type="checkbox"]:disabled {
+  cursor: not-allowed;
+}
+
+/* No zebra striping here. With five rows the shaded ones would land exactly on
+   First and Last Name, and the stripe would read as the lock marker. */
+.picker-table tbody tr:nth-child(even) {
+  background: none;
+}
+
+.picker-table th[scope="row"] {
+  padding: 14px;
+  font-weight: 600;
+  color: var(--c-text-primary);
+  white-space: normal;
+}
+
+.picker-table__hint {
+  display: block;
+  margin-top: 2px;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--c-text-secondary);
+}
+
+.picker-table__lock {
+  margin-left: 6px;
+  font-size: 13px;
+  color: var(--c-text-secondary);
+}
+
+/* Preview panel -------------------------------------------------------- */
+
+/* Constituent chrome, not agency chrome: the navy block header and white body
+   are what the applicant actually sees, which is the point of the panel. */
+.preview-panel {
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-panel);
+  overflow: hidden;
+  position: sticky;
+  top: 20px;
+}
+
+.preview-panel__header {
+  background: #112e51;
+  padding: 12px 18px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.preview-panel__body {
+  background: #fff;
+  padding: 18px;
+}
+
+.preview-panel__note {
+  margin: 0 0 14px;
+  font-size: 15px;
+  font-style: italic;
+  color: var(--c-text-secondary);
+}
+
+.preview-field + .preview-field {
+  margin-top: 16px;
+}
+
+.preview-field__label {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--c-text-primary);
+}
+
+.preview-field__label em {
+  margin-left: 6px;
+  font-size: 14px;
+  font-style: italic;
+  font-weight: 400;
+  color: #1b1b1b;
+}
+
+/* Inert on purpose: this is a picture of the applicant's form, not the form */
+.preview-field__input {
+  margin-top: 6px;
+  width: 100%;
+  height: 40px;
+  border: 1px solid #c9ccd0;
+  border-radius: var(--r-pill);
+  background: var(--c-hairline);
+}
+
+.preview-field__input--select::after {
+  content: '\25BE';
+  float: right;
+  margin: 8px 12px 0 0;
+  color: var(--c-text-secondary);
+}
+
+.preview-empty {
+  margin: 0;
+  font-size: 16px;
+  font-style: italic;
+  color: var(--c-text-secondary);
 }
 
 /* ---------------------------------------------------------------------- */
