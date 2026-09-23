@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="css/app.css">
   <!-- Sets the collapsed-rail class before paint, so it never flashes open -->
   <script src="js/builder-rail.js"></script>
+  <script src="js/builder-locks.js"></script>
 </head>
 
 <body>
@@ -97,9 +98,9 @@
               </span>
             </a>
             <ul class="builder-steps">
-              <li class="builder-steps__item is-done"><a href="builder-getting-started.html">Getting Started</a></li>
-              <li class="builder-steps__item is-done"><a href="builder-application-type.html">Application Type</a></li>
-              <li class="builder-steps__item is-current"><a href="builder-title-information.html">Title Information</a>
+              <li class="builder-steps__item is-done" data-lockable><a href="builder-getting-started.html">Getting Started</a></li>
+              <li class="builder-steps__item is-done" data-lockable><a href="builder-application-type.html">Application Type</a></li>
+              <li class="builder-steps__item is-current" data-lockable><a href="builder-title-information.html">Title Information</a>
               </li>
               <li class="builder-steps__item"><a href="builder-form-number-search-terms.html">Form No., Deactivation &amp; Search Terms</a></li>
               <li class="builder-steps__item"><a href="builder-task-management.html">Task Management</a></li>
@@ -164,10 +165,12 @@
           <p class="help-text" style="margin-top: 12px">The description should be a brief explanation of the
             application, so applicants clearly understand what they are about to submit.</p>
 
-          <p class="help-text" style="margin-top: 12px"><strong>Note:</strong> The More Info URL is not the URL that
-            will be assigned to this application. It is a link to a website that may have more comprehensive
-            information, FAQs and the like, for applicants who need additional detail about the license or permit
-            they are submitting.</p>
+          <div class="info-notice">
+            <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+            <div><strong>Note:</strong> The More Info URL is not the URL that will be assigned to this application.
+              It is a link to a website that may have more comprehensive information, FAQs and the like, for
+              applicants who need additional detail about the license or permit they are submitting.</div>
+          </div>
 
           <p class="help-text" style="margin-top: 12px"><em>Required</em> indicates a required field.</p>
 

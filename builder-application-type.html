@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="css/app.css">
   <!-- Sets the collapsed-rail class before paint, so it never flashes open -->
   <script src="js/builder-rail.js"></script>
+  <script src="js/builder-locks.js"></script>
 </head>
 
 <body>
@@ -97,9 +98,9 @@
               </span>
             </a>
             <ul class="builder-steps">
-              <li class="builder-steps__item is-done"><a href="builder-getting-started.html">Getting Started</a></li>
-              <li class="builder-steps__item is-current"><a href="builder-application-type.html">Application Type</a></li>
-              <li class="builder-steps__item"><a href="builder-title-information.html">Title Information</a></li>
+              <li class="builder-steps__item is-done" data-lockable><a href="builder-getting-started.html">Getting Started</a></li>
+              <li class="builder-steps__item is-current" data-lockable><a href="builder-application-type.html">Application Type</a></li>
+              <li class="builder-steps__item" data-lockable><a href="builder-title-information.html">Title Information</a></li>
               <li class="builder-steps__item"><a href="builder-form-number-search-terms.html">Form No., Deactivation &amp; Search Terms</a></li>
               <li class="builder-steps__item"><a href="builder-task-management.html">Task Management</a></li>
               <li class="builder-steps__item"><a href="builder-external-integration.html">External Integration</a></li>
@@ -202,8 +203,11 @@
             </ol>
           </div>
 
-          <p class="help-text" style="margin-top: 16px"><strong>Note:</strong> For an Asset License, Individual,
-            Business, and ID Collection options have been removed as they&rsquo;re not asset related.</p>
+          <div class="info-notice">
+            <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+            <div><strong>Note:</strong> For an Asset License, Individual, Business, and ID Collection options have
+              been removed as they&rsquo;re not asset related.</div>
+          </div>
 
           <p class="help-text" style="margin-top: 12px">Please answer all questions.</p>
 

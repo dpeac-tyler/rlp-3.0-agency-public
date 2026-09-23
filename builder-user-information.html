@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="css/app.css">
   <!-- Sets the collapsed-rail class before paint, so it never flashes open -->
   <script src="js/builder-rail.js"></script>
+  <script src="js/builder-locks.js"></script>
 </head>
 
 <body>
@@ -93,9 +94,9 @@
               </span>
             </a>
             <ul class="builder-steps">
-              <li class="builder-steps__item is-done"><a href="builder-getting-started.html">Getting Started</a></li>
-              <li class="builder-steps__item is-done"><a href="builder-application-type.html">Application Type</a></li>
-              <li class="builder-steps__item is-done"><a href="builder-title-information.html">Title Information</a></li>
+              <li class="builder-steps__item is-done" data-lockable><a href="builder-getting-started.html">Getting Started</a></li>
+              <li class="builder-steps__item is-done" data-lockable><a href="builder-application-type.html">Application Type</a></li>
+              <li class="builder-steps__item is-done" data-lockable><a href="builder-title-information.html">Title Information</a></li>
               <li class="builder-steps__item is-done"><a href="builder-form-number-search-terms.html">Form No., Deactivation &amp; Search Terms</a></li>
               <li class="builder-steps__item is-done"><a href="builder-task-management.html">Task Management</a></li>
               <li class="builder-steps__item is-done"><a href="builder-external-integration.html">External Integration</a></li>
@@ -156,14 +157,44 @@
             themselves. On each one you tick the fields you want on the application, and the panel beside the list
             shows those fields the way the applicant will see them.</p>
 
-          <ul class="help-list" style="margin-top: 12px">
-            <li><strong>Personal Information</strong> &mdash; name, prefix and suffix.</li>
-            <li><strong>Contact Information</strong> &mdash; phone numbers and email.</li>
-            <li><strong>Mailing Address</strong> &mdash; where post is sent.</li>
-            <li><strong>Demographic Information</strong> &mdash; optional detail your agency reports on.</li>
-          </ul>
+          <!-- Same overview panel the Application Type step opens with, so the
+               set reads at once before any of it is worked through. Numbered to
+               match the order of the steps in the rail. -->
+          <div class="question-overview">
+            <p class="question-overview__title">What you&rsquo;ll set up next</p>
+            <ol class="question-overview__list">
+              <li>
+                <span class="question-overview__num">1</span>
+                <div>Personal Information
+                  <span class="question-overview__sub">Name, prefix and suffix. First and last name are always
+                    collected.</span>
+                </div>
+              </li>
+              <li>
+                <span class="question-overview__num">2</span>
+                <div>Contact Information
+                  <span class="question-overview__sub">Phone numbers and email address. The email address is the
+                    applicant&rsquo;s sign-in, so it is always collected.</span>
+                </div>
+              </li>
+              <li>
+                <span class="question-overview__num">3</span>
+                <div>Mailing Address
+                  <span class="question-overview__sub">Where post is sent, and optionally a physical or alternate
+                    address as well.</span>
+                </div>
+              </li>
+              <li>
+                <span class="question-overview__num">4</span>
+                <div>Demographic Information
+                  <span class="question-overview__sub">Optional detail your agency reports on. You choose what goes
+                    inside each dropdown as well as whether it appears.</span>
+                </div>
+              </li>
+            </ol>
+          </div>
 
-          <p class="help-text" style="margin-top: 12px">A few fields are collected on every application and cannot be
+          <p class="help-text" style="margin-top: 16px">A few fields are collected on every application and cannot be
             switched off. Those rows are marked, with the reason next to them.</p>
 
           <div class="builder-actions">
