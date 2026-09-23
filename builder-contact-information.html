@@ -159,7 +159,7 @@
             section, and it updates as you tick. It is a picture of the form, not the form itself, so nothing in it
             can be typed into.</p>
 
-          <div class="picker-split">
+          <div class="picker-split picker-split--ruled">
 
             <!-- Field picker. A real table, so each checkbox is named by its
                  row and its column rather than sitting unlabelled in a grid. -->
@@ -243,9 +243,11 @@
               <p class="help-text" style="margin-top: 12px"><span id="picker-count">2 of 3 fields displayed</span></p>
             </div>
 
+            <div class="picker-split__rule" aria-hidden="true"></div>
+
             <!-- Live preview. Constituent chrome on purpose: navy block header
                  and white body are what the applicant sees. -->
-            <div>
+            <div class="picker-split__preview">
               <p class="picker-split__head">What the applicant sees</p>
               <div class="preview-panel">
                 <div class="preview-panel__header">Contact Information</div>

@@ -4268,9 +4268,43 @@ a.stat:focus-visible {
   margin-top: 16px;
 }
 
+/* Ruled variant: a full-height rule between the picker and the preview, so the
+   two halves read as separate things rather than one wide table. Trying it on
+   the Demographic step first, since that page is the longest.
+
+   The rule is its own 1px grid column with align-self: stretch, which is what
+   makes it span the tallest column rather than collapsing to nothing under the
+   grid's align-items: start. */
+.picker-split--ruled {
+  grid-template-columns: minmax(0, 1.35fr) 1px minmax(0, 1fr);
+  gap: 36px;
+}
+
+.picker-split__rule {
+  align-self: stretch;
+  width: 1px;
+  background: var(--c-border);
+}
+
+/* Stretching the preview column gives the sticky panel inside it room to
+   travel. Left at the grid's align-items: start it was only as tall as its own
+   content, so position: sticky had no range and never actually stuck. */
+.picker-split__preview {
+  align-self: stretch;
+}
+
 @media (max-width: 1100px) {
   .picker-split {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Stacked, so a vertical rule between them means nothing */
+  .picker-split--ruled {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .picker-split__rule {
+    display: none;
   }
 }
 
