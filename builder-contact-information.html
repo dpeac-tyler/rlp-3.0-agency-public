@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Personal Information &mdash; RLP Agency Console</title>
+  <title>Contact Information &mdash; RLP Agency Console</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="css/app.css">
   <!-- Sets the collapsed-rail class before paint, so it never flashes open -->
@@ -42,7 +42,7 @@
         <div class="builder-context__name">Commercial Fishing Permit: Original (One)</div>
         <div class="builder-context__meta">
           <span class="badge badge--gold">Draft</span>
-          <span>Form No. DNR-CF-102 &middot; saved 12 min ago</span>
+          <span>Form No. DNR-CF-102 &middot; saved 14 min ago</span>
         </div>
       </div>
       <div class="builder-context__block">
@@ -58,11 +58,10 @@
     </div>
 
     <!-- ══ Builder shell ═══════════════════════════════════════════════════
-         Step 9 of the Set up phase, and the first of the four field pickers.
-         The agency ticks which name fields the applicant is asked for; the
-         panel beside the table renders exactly those fields in the applicant's
-         own visual language, so the effect of a tick is visible on the spot
-         rather than a page away.
+         Step 10 of the Set up phase, the second of the four field pickers.
+         Two wrinkles the name step did not have: Telephone Number locks
+         Displayed but leaves Required open, and displaying Email Address also
+         brings a Re-Enter Email Address field the picker never lists.
          ═══════════════════════════════════════════════════════════════════ -->
     <main class="builder-shell">
 
@@ -77,17 +76,17 @@
         <div class="builder-rail__progress" style="margin-top: 14px">
           <div class="builder-rail__progress-row">
             <span class="builder-rail__eyebrow">Setup phases</span>
-            <span class="builder-rail__pct">66%</span>
+            <span class="builder-rail__pct">75%</span>
           </div>
           <div class="builder-rail__track">
-            <div class="builder-rail__fill" style="width: 66%"></div>
+            <div class="builder-rail__fill" style="width: 75%"></div>
           </div>
         </div>
 
         <nav class="builder-phases" aria-label="Setup phases">
 
           <div class="builder-phase is-current">
-            <a class="builder-phase__row" href="builder-personal-information.html" aria-current="step">
+            <a class="builder-phase__row" href="builder-contact-information.html" aria-current="step">
               <span class="builder-phase__marker" aria-hidden="true"></span>
               <span>
                 <span class="builder-phase__name">Set up</span>
@@ -103,8 +102,8 @@
               <li class="builder-steps__item is-done"><a href="builder-external-integration.html">External Integration</a></li>
               <li class="builder-steps__item is-done"><a href="builder-document-upload.html">Document Upload</a></li>
               <li class="builder-steps__item is-done"><a href="builder-user-information.html">User Information</a></li>
-              <li class="builder-steps__item is-current"><a href="builder-personal-information.html">Personal Information</a></li>
-              <li class="builder-steps__item"><a href="builder-contact-information.html">Contact Information</a></li>
+              <li class="builder-steps__item is-done"><a href="builder-personal-information.html">Personal Information</a></li>
+              <li class="builder-steps__item is-current"><a href="builder-contact-information.html">Contact Information</a></li>
               <li class="builder-steps__item"><a href="builder-mailing-address.html">Mailing Address</a></li>
               <li class="builder-steps__item"><a href="builder-demographic-information.html">Demographic Information</a></li>
             </ul>
@@ -147,8 +146,8 @@
       <div class="builder-canvas">
         <div class="builder-canvas__inner">
 
-          <p class="builder-eyebrow">Set up &middot; Personal Information</p>
-          <h1 class="builder-title">Which personal details will you collect?</h1>
+          <p class="builder-eyebrow">Set up &middot; Contact Information</p>
+          <h1 class="builder-title">How will you reach the applicant?</h1>
           <p class="builder-lede">Tick <strong>Displayed</strong> for each field you want on the application, and
             <strong>Required</strong> for the ones the applicant must fill in.</p>
 
@@ -176,68 +175,50 @@
                 </thead>
                 <tbody id="picker-body">
 
-                  <tr data-field="prefix" data-label="Prefix" data-control="select">
-                    <th scope="row">Prefix</th>
-                    <td>Mr., Mrs., Ms., Dr.</td>
-                    <td class="picker-table__toggle">
-                      <input type="checkbox" data-displayed aria-label="Display Prefix on the application">
-                    </td>
-                    <td class="picker-table__toggle">
-                      <input type="checkbox" data-required disabled aria-label="Make Prefix required">
-                    </td>
-                  </tr>
-
-                  <tr data-field="first-name" data-label="First Name" data-lock-displayed data-lock-required>
-                    <th scope="row">First Name
+                  <tr data-field="telephone" data-label="Telephone Number" data-lock-displayed>
+                    <th scope="row">Telephone Number
                       <i class="fa-solid fa-lock picker-table__lock" aria-hidden="true"></i>
                       <span class="picker-table__hint">Always collected</span>
                     </th>
-                    <td>The applicant’s legal first name</td>
+                    <td>Primary number, used for anything that needs a call</td>
                     <td class="picker-table__toggle">
                       <input type="checkbox" data-displayed checked disabled
-                             aria-label="Display First Name on the application, always on">
+                             aria-label="Display Telephone Number on the application, always on">
                     </td>
                     <td class="picker-table__toggle">
-                      <input type="checkbox" data-required checked disabled
-                             aria-label="Make First Name required, always required">
+                      <input type="checkbox" data-required checked
+                             aria-label="Make Telephone Number required">
                     </td>
                   </tr>
 
-                  <tr data-field="middle-name" data-label="Middle Name">
-                    <th scope="row">Middle Name</th>
-                    <td>Full middle name or initial</td>
+                  <tr data-field="alt-telephone" data-label="Alt. Telephone Number">
+                    <th scope="row">Alt. Telephone Number</th>
+                    <td>A second number to try</td>
                     <td class="picker-table__toggle">
-                      <input type="checkbox" data-displayed aria-label="Display Middle Name on the application">
+                      <input type="checkbox" data-displayed
+                             aria-label="Display Alt. Telephone Number on the application">
                     </td>
                     <td class="picker-table__toggle">
-                      <input type="checkbox" data-required disabled aria-label="Make Middle Name required">
+                      <input type="checkbox" data-required disabled
+                             aria-label="Make Alt. Telephone Number required">
                     </td>
                   </tr>
 
-                  <tr data-field="last-name" data-label="Last Name" data-lock-displayed data-lock-required>
-                    <th scope="row">Last Name
+                  <tr data-field="email" data-label="Email Address"
+                      data-lock-displayed data-lock-required
+                      data-derived="Re-Enter Email Address">
+                    <th scope="row">Email Address
                       <i class="fa-solid fa-lock picker-table__lock" aria-hidden="true"></i>
-                      <span class="picker-table__hint">Always collected</span>
+                      <span class="picker-table__hint">Always collected and required</span>
                     </th>
-                    <td>The applicant’s legal last name</td>
+                    <td>Sign-in address, and where every notice is sent</td>
                     <td class="picker-table__toggle">
                       <input type="checkbox" data-displayed checked disabled
-                             aria-label="Display Last Name on the application, always on">
+                             aria-label="Display Email Address on the application, always on">
                     </td>
                     <td class="picker-table__toggle">
                       <input type="checkbox" data-required checked disabled
-                             aria-label="Make Last Name required, always required">
-                    </td>
-                  </tr>
-
-                  <tr data-field="suffix" data-label="Suffix" data-control="select">
-                    <th scope="row">Suffix</th>
-                    <td>Jr., Sr., II, III</td>
-                    <td class="picker-table__toggle">
-                      <input type="checkbox" data-displayed aria-label="Display Suffix on the application">
-                    </td>
-                    <td class="picker-table__toggle">
-                      <input type="checkbox" data-required disabled aria-label="Make Suffix required">
+                             aria-label="Make Email Address required, always required">
                     </td>
                   </tr>
 
@@ -246,10 +227,18 @@
 
               <p class="choice-lock-note" style="margin-top: 14px">
                 <i class="fa-solid fa-lock" aria-hidden="true"></i>
-                First and last name identify the applicant on the licence, so every application collects them.
+                This is an authenticated application, so the email address is the applicant&rsquo;s sign-in and the
+                channel for every notice. A telephone number is always collected too, though you can decide whether
+                the applicant has to give one.
               </p>
 
-              <p class="help-text" style="margin-top: 12px"><span id="picker-count">2 of 5 fields displayed</span></p>
+              <p class="help-text" style="margin-top: 12px">
+                <strong>Note:</strong> because Email Address is displayed, the application also asks the applicant to
+                re-enter it, so a typo cannot lock them out of their own submission. That second field is not listed
+                above because you do not control it, but you will see it in the preview.
+              </p>
+
+              <p class="help-text" style="margin-top: 12px"><span id="picker-count">2 of 3 fields displayed</span></p>
             </div>
 
             <!-- Live preview. Constituent chrome on purpose: navy block header
@@ -257,7 +246,7 @@
             <div>
               <p class="picker-split__head">What the applicant sees</p>
               <div class="preview-panel">
-                <div class="preview-panel__header">Personal Information</div>
+                <div class="preview-panel__header">Contact Information</div>
                 <div class="preview-panel__body">
                   <p class="preview-panel__note">Preview only, nothing here can be filled in.</p>
                   <div id="preview-fields"></div>
@@ -270,13 +259,13 @@
           </div>
 
           <div class="builder-actions">
-            <a href="builder-user-information.html" class="btn btn--secondary">
-              <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> User Information
+            <a href="builder-personal-information.html" class="btn btn--secondary">
+              <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Personal Information
             </a>
             <div class="builder-actions__right">
               <a href="applications.html?saved=1">Save &amp; exit</a>
               <button type="button" class="btn btn--primary" id="next-btn">
-                Contact Information <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                Mailing Address <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
               </button>
             </div>
           </div>
@@ -294,7 +283,7 @@
     initFieldPicker();
 
     document.getElementById('next-btn').addEventListener('click', function () {
-      window.location.href = 'builder-contact-information.html';
+      window.location.href = 'builder-mailing-address.html';
     });
   </script>
 

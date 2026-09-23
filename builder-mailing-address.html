@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Personal Information &mdash; RLP Agency Console</title>
+  <title>Address Information &mdash; RLP Agency Console</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="css/app.css">
   <!-- Sets the collapsed-rail class before paint, so it never flashes open -->
@@ -42,7 +42,7 @@
         <div class="builder-context__name">Commercial Fishing Permit: Original (One)</div>
         <div class="builder-context__meta">
           <span class="badge badge--gold">Draft</span>
-          <span>Form No. DNR-CF-102 &middot; saved 12 min ago</span>
+          <span>Form No. DNR-CF-102 &middot; saved 16 min ago</span>
         </div>
       </div>
       <div class="builder-context__block">
@@ -58,11 +58,10 @@
     </div>
 
     <!-- ══ Builder shell ═══════════════════════════════════════════════════
-         Step 9 of the Set up phase, and the first of the four field pickers.
-         The agency ticks which name fields the applicant is asked for; the
-         panel beside the table renders exactly those fields in the applicant's
-         own visual language, so the effect of a tick is visible on the spot
-         rather than a page away.
+         Step 11 of the Set up phase, the third of the four field pickers.
+         Two tables rather than one: the address fields themselves, then the
+         extra address blocks. A block is a whole repeat of the field set, so
+         ticking one adds a second copy of the same fields to the preview.
          ═══════════════════════════════════════════════════════════════════ -->
     <main class="builder-shell">
 
@@ -77,17 +76,17 @@
         <div class="builder-rail__progress" style="margin-top: 14px">
           <div class="builder-rail__progress-row">
             <span class="builder-rail__eyebrow">Setup phases</span>
-            <span class="builder-rail__pct">66%</span>
+            <span class="builder-rail__pct">83%</span>
           </div>
           <div class="builder-rail__track">
-            <div class="builder-rail__fill" style="width: 66%"></div>
+            <div class="builder-rail__fill" style="width: 83%"></div>
           </div>
         </div>
 
         <nav class="builder-phases" aria-label="Setup phases">
 
           <div class="builder-phase is-current">
-            <a class="builder-phase__row" href="builder-personal-information.html" aria-current="step">
+            <a class="builder-phase__row" href="builder-mailing-address.html" aria-current="step">
               <span class="builder-phase__marker" aria-hidden="true"></span>
               <span>
                 <span class="builder-phase__name">Set up</span>
@@ -103,9 +102,9 @@
               <li class="builder-steps__item is-done"><a href="builder-external-integration.html">External Integration</a></li>
               <li class="builder-steps__item is-done"><a href="builder-document-upload.html">Document Upload</a></li>
               <li class="builder-steps__item is-done"><a href="builder-user-information.html">User Information</a></li>
-              <li class="builder-steps__item is-current"><a href="builder-personal-information.html">Personal Information</a></li>
-              <li class="builder-steps__item"><a href="builder-contact-information.html">Contact Information</a></li>
-              <li class="builder-steps__item"><a href="builder-mailing-address.html">Mailing Address</a></li>
+              <li class="builder-steps__item is-done"><a href="builder-personal-information.html">Personal Information</a></li>
+              <li class="builder-steps__item is-done"><a href="builder-contact-information.html">Contact Information</a></li>
+              <li class="builder-steps__item is-current"><a href="builder-mailing-address.html">Mailing Address</a></li>
               <li class="builder-steps__item"><a href="builder-demographic-information.html">Demographic Information</a></li>
             </ul>
           </div>
@@ -147,8 +146,8 @@
       <div class="builder-canvas">
         <div class="builder-canvas__inner">
 
-          <p class="builder-eyebrow">Set up &middot; Personal Information</p>
-          <h1 class="builder-title">Which personal details will you collect?</h1>
+          <p class="builder-eyebrow">Set up &middot; Mailing Address</p>
+          <h1 class="builder-title">What address will you collect?</h1>
           <p class="builder-lede">Tick <strong>Displayed</strong> for each field you want on the application, and
             <strong>Required</strong> for the ones the applicant must fill in.</p>
 
@@ -174,70 +173,121 @@
                     <th scope="col" class="picker-table__toggle">Required</th>
                   </tr>
                 </thead>
-                <tbody id="picker-body">
+                <tbody id="picker-body" data-group-label="Mailing Address">
 
-                  <tr data-field="prefix" data-label="Prefix" data-control="select">
-                    <th scope="row">Prefix</th>
-                    <td>Mr., Mrs., Ms., Dr.</td>
-                    <td class="picker-table__toggle">
-                      <input type="checkbox" data-displayed aria-label="Display Prefix on the application">
-                    </td>
-                    <td class="picker-table__toggle">
-                      <input type="checkbox" data-required disabled aria-label="Make Prefix required">
-                    </td>
-                  </tr>
-
-                  <tr data-field="first-name" data-label="First Name" data-lock-displayed data-lock-required>
-                    <th scope="row">First Name
+                  <tr data-field="address-line-1" data-label="Address Line 1" data-lock-displayed data-lock-required>
+                    <th scope="row">Address Line 1
                       <i class="fa-solid fa-lock picker-table__lock" aria-hidden="true"></i>
-                      <span class="picker-table__hint">Always collected</span>
+                      <span class="picker-table__hint">Always collected and required</span>
                     </th>
-                    <td>The applicant’s legal first name</td>
+                    <td>Street number and name</td>
                     <td class="picker-table__toggle">
                       <input type="checkbox" data-displayed checked disabled
-                             aria-label="Display First Name on the application, always on">
+                             aria-label="Display Address Line 1 on the application, always on">
                     </td>
                     <td class="picker-table__toggle">
                       <input type="checkbox" data-required checked disabled
-                             aria-label="Make First Name required, always required">
+                             aria-label="Make Address Line 1 required, always required">
                     </td>
                   </tr>
 
-                  <tr data-field="middle-name" data-label="Middle Name">
-                    <th scope="row">Middle Name</th>
-                    <td>Full middle name or initial</td>
+                  <tr data-field="address-line-2" data-label="Address Line 2">
+                    <th scope="row">Address Line 2</th>
+                    <td>Apartment, unit or suite</td>
                     <td class="picker-table__toggle">
-                      <input type="checkbox" data-displayed aria-label="Display Middle Name on the application">
+                      <input type="checkbox" data-displayed
+                             aria-label="Display Address Line 2 on the application">
                     </td>
                     <td class="picker-table__toggle">
-                      <input type="checkbox" data-required disabled aria-label="Make Middle Name required">
+                      <input type="checkbox" data-required disabled
+                             aria-label="Make Address Line 2 required">
                     </td>
                   </tr>
 
-                  <tr data-field="last-name" data-label="Last Name" data-lock-displayed data-lock-required>
-                    <th scope="row">Last Name
+                  <tr data-field="city" data-label="City" data-lock-displayed data-lock-required>
+                    <th scope="row">City
                       <i class="fa-solid fa-lock picker-table__lock" aria-hidden="true"></i>
-                      <span class="picker-table__hint">Always collected</span>
+                      <span class="picker-table__hint">Always collected and required</span>
                     </th>
-                    <td>The applicant’s legal last name</td>
+                    <td>Town or city name</td>
                     <td class="picker-table__toggle">
                       <input type="checkbox" data-displayed checked disabled
-                             aria-label="Display Last Name on the application, always on">
+                             aria-label="Display City on the application, always on">
                     </td>
                     <td class="picker-table__toggle">
                       <input type="checkbox" data-required checked disabled
-                             aria-label="Make Last Name required, always required">
+                             aria-label="Make City required, always required">
                     </td>
                   </tr>
 
-                  <tr data-field="suffix" data-label="Suffix" data-control="select">
-                    <th scope="row">Suffix</th>
-                    <td>Jr., Sr., II, III</td>
+                  <tr data-field="state-province-region" data-label="State/Province/Region" data-preview-label="State" data-control="select" data-lock-displayed data-lock-required>
+                    <th scope="row">State/Province/Region
+                      <i class="fa-solid fa-lock picker-table__lock" aria-hidden="true"></i>
+                      <span class="picker-table__hint">Always collected and required</span>
+                    </th>
+                    <td>Picked from a list, so it cannot be mistyped</td>
                     <td class="picker-table__toggle">
-                      <input type="checkbox" data-displayed aria-label="Display Suffix on the application">
+                      <input type="checkbox" data-displayed checked disabled
+                             aria-label="Display State/Province/Region on the application, always on">
                     </td>
                     <td class="picker-table__toggle">
-                      <input type="checkbox" data-required disabled aria-label="Make Suffix required">
+                      <input type="checkbox" data-required checked disabled
+                             aria-label="Make State/Province/Region required, always required">
+                    </td>
+                  </tr>
+
+                  <tr data-field="zip-code-or-postal-code" data-label="Zip Code or Postal Code" data-preview-label="Zip Code" data-lock-displayed data-lock-required>
+                    <th scope="row">Zip Code or Postal Code
+                      <i class="fa-solid fa-lock picker-table__lock" aria-hidden="true"></i>
+                      <span class="picker-table__hint">Always collected and required</span>
+                    </th>
+                    <td>Five digits, or a postal code outside the US</td>
+                    <td class="picker-table__toggle">
+                      <input type="checkbox" data-displayed checked disabled
+                             aria-label="Display Zip Code or Postal Code on the application, always on">
+                    </td>
+                    <td class="picker-table__toggle">
+                      <input type="checkbox" data-required checked disabled
+                             aria-label="Make Zip Code or Postal Code required, always required">
+                    </td>
+                  </tr>
+
+                  <tr data-field="ward" data-label="Ward" data-control="select">
+                    <th scope="row">Ward</th>
+                    <td>Local electoral ward, where your agency tracks it</td>
+                    <td class="picker-table__toggle">
+                      <input type="checkbox" data-displayed
+                             aria-label="Display Ward on the application">
+                    </td>
+                    <td class="picker-table__toggle">
+                      <input type="checkbox" data-required disabled
+                             aria-label="Make Ward required">
+                    </td>
+                  </tr>
+
+                  <tr data-field="county" data-label="County" data-control="select">
+                    <th scope="row">County</th>
+                    <td>County the address falls in</td>
+                    <td class="picker-table__toggle">
+                      <input type="checkbox" data-displayed
+                             aria-label="Display County on the application">
+                    </td>
+                    <td class="picker-table__toggle">
+                      <input type="checkbox" data-required disabled
+                             aria-label="Make County required">
+                    </td>
+                  </tr>
+
+                  <tr data-field="country" data-label="Country" data-control="select">
+                    <th scope="row">Country</th>
+                    <td>Only worth asking if you accept addresses outside the US</td>
+                    <td class="picker-table__toggle">
+                      <input type="checkbox" data-displayed
+                             aria-label="Display Country on the application">
+                    </td>
+                    <td class="picker-table__toggle">
+                      <input type="checkbox" data-required disabled
+                             aria-label="Make Country required">
                     </td>
                   </tr>
 
@@ -246,10 +296,41 @@
 
               <p class="choice-lock-note" style="margin-top: 14px">
                 <i class="fa-solid fa-lock" aria-hidden="true"></i>
-                First and last name identify the applicant on the licence, so every application collects them.
+                A licence has to be postable, so the street, city, state and zip of the mailing address are always
+                collected and always required.
               </p>
 
-              <p class="help-text" style="margin-top: 12px"><span id="picker-count">2 of 5 fields displayed</span></p>
+              <p class="picker-split__head" style="margin-top: 26px">Extra address blocks</p>
+              <p class="help-text" style="margin-bottom: 10px">Each block asks for the same fields again under its
+                own heading. Tick one and it appears in the preview straight away.</p>
+              <table class="data-table picker-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Address block</th>
+                    <th scope="col">Description</th>
+                    <th scope="col" class="picker-table__toggle">Displayed</th>
+                  </tr>
+                </thead>
+                <tbody id="picker-blocks">
+
+                  <tr data-block data-block-label="Physical Address">
+                    <th scope="row">Physical Address</th>
+                    <td>Where the applicant actually is, when that differs from where post goes</td>
+                    <td class="picker-table__toggle">
+                      <input type="checkbox" data-displayed aria-label="Display Physical Address on the application">
+                    </td>
+                  </tr>
+
+                  <tr data-block data-block-label="Alternate Address">
+                    <th scope="row">Alternate Address</th>
+                    <td>A third address, for a seasonal or secondary location</td>
+                    <td class="picker-table__toggle">
+                      <input type="checkbox" data-displayed aria-label="Display Alternate Address on the application">
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <p class="help-text" style="margin-top: 12px"><span id="picker-count">5 of 8 fields displayed</span></p>
             </div>
 
             <!-- Live preview. Constituent chrome on purpose: navy block header
@@ -257,7 +338,7 @@
             <div>
               <p class="picker-split__head">What the applicant sees</p>
               <div class="preview-panel">
-                <div class="preview-panel__header">Personal Information</div>
+                <div class="preview-panel__header">Address Information</div>
                 <div class="preview-panel__body">
                   <p class="preview-panel__note">Preview only, nothing here can be filled in.</p>
                   <div id="preview-fields"></div>
@@ -270,13 +351,13 @@
           </div>
 
           <div class="builder-actions">
-            <a href="builder-user-information.html" class="btn btn--secondary">
-              <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> User Information
+            <a href="builder-contact-information.html" class="btn btn--secondary">
+              <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Contact Information
             </a>
             <div class="builder-actions__right">
               <a href="applications.html?saved=1">Save &amp; exit</a>
               <button type="button" class="btn btn--primary" id="next-btn">
-                Contact Information <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                Demographic Information <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
               </button>
             </div>
           </div>
@@ -294,7 +375,7 @@
     initFieldPicker();
 
     document.getElementById('next-btn').addEventListener('click', function () {
-      window.location.href = 'builder-contact-information.html';
+      window.location.href = 'builder-demographic-information.html';
     });
   </script>
 

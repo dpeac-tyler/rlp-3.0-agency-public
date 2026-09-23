@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Personal Information &mdash; RLP Agency Console</title>
+  <title>Demographic Information &mdash; RLP Agency Console</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="css/app.css">
   <!-- Sets the collapsed-rail class before paint, so it never flashes open -->
@@ -42,7 +42,7 @@
         <div class="builder-context__name">Commercial Fishing Permit: Original (One)</div>
         <div class="builder-context__meta">
           <span class="badge badge--gold">Draft</span>
-          <span>Form No. DNR-CF-102 &middot; saved 12 min ago</span>
+          <span>Form No. DNR-CF-102 &middot; saved 18 min ago</span>
         </div>
       </div>
       <div class="builder-context__block">
@@ -58,11 +58,9 @@
     </div>
 
     <!-- ══ Builder shell ═══════════════════════════════════════════════════
-         Step 9 of the Set up phase, and the first of the four field pickers.
-         The agency ticks which name fields the applicant is asked for; the
-         panel beside the table renders exactly those fields in the applicant's
-         own visual language, so the effect of a tick is visible on the spot
-         rather than a page away.
+         Step 12 of the Set up phase, the last of the four field pickers and
+         the last step before the Build phase. Nothing here is locked and
+         nothing is on by default: every one of these is the agency's call.
          ═══════════════════════════════════════════════════════════════════ -->
     <main class="builder-shell">
 
@@ -77,17 +75,17 @@
         <div class="builder-rail__progress" style="margin-top: 14px">
           <div class="builder-rail__progress-row">
             <span class="builder-rail__eyebrow">Setup phases</span>
-            <span class="builder-rail__pct">66%</span>
+            <span class="builder-rail__pct">91%</span>
           </div>
           <div class="builder-rail__track">
-            <div class="builder-rail__fill" style="width: 66%"></div>
+            <div class="builder-rail__fill" style="width: 91%"></div>
           </div>
         </div>
 
         <nav class="builder-phases" aria-label="Setup phases">
 
           <div class="builder-phase is-current">
-            <a class="builder-phase__row" href="builder-personal-information.html" aria-current="step">
+            <a class="builder-phase__row" href="builder-demographic-information.html" aria-current="step">
               <span class="builder-phase__marker" aria-hidden="true"></span>
               <span>
                 <span class="builder-phase__name">Set up</span>
@@ -103,10 +101,10 @@
               <li class="builder-steps__item is-done"><a href="builder-external-integration.html">External Integration</a></li>
               <li class="builder-steps__item is-done"><a href="builder-document-upload.html">Document Upload</a></li>
               <li class="builder-steps__item is-done"><a href="builder-user-information.html">User Information</a></li>
-              <li class="builder-steps__item is-current"><a href="builder-personal-information.html">Personal Information</a></li>
-              <li class="builder-steps__item"><a href="builder-contact-information.html">Contact Information</a></li>
-              <li class="builder-steps__item"><a href="builder-mailing-address.html">Mailing Address</a></li>
-              <li class="builder-steps__item"><a href="builder-demographic-information.html">Demographic Information</a></li>
+              <li class="builder-steps__item is-done"><a href="builder-personal-information.html">Personal Information</a></li>
+              <li class="builder-steps__item is-done"><a href="builder-contact-information.html">Contact Information</a></li>
+              <li class="builder-steps__item is-done"><a href="builder-mailing-address.html">Mailing Address</a></li>
+              <li class="builder-steps__item is-current"><a href="builder-demographic-information.html">Demographic Information</a></li>
             </ul>
           </div>
 
@@ -147,10 +145,10 @@
       <div class="builder-canvas">
         <div class="builder-canvas__inner">
 
-          <p class="builder-eyebrow">Set up &middot; Personal Information</p>
-          <h1 class="builder-title">Which personal details will you collect?</h1>
-          <p class="builder-lede">Tick <strong>Displayed</strong> for each field you want on the application, and
-            <strong>Required</strong> for the ones the applicant must fill in.</p>
+          <p class="builder-eyebrow">Set up &middot; Demographic Information</p>
+          <h1 class="builder-title">Any demographic detail to collect?</h1>
+          <p class="builder-lede">Nothing on this step is switched on, and nothing has to be. Tick only what your agency
+            genuinely reports on.</p>
 
           <p class="help-text" style="margin-top: 14px">Anything displayed but not required is optional for the
             applicant. Anything not displayed is never asked for and never stored.</p>
@@ -176,80 +174,68 @@
                 </thead>
                 <tbody id="picker-body">
 
-                  <tr data-field="prefix" data-label="Prefix" data-control="select">
-                    <th scope="row">Prefix</th>
-                    <td>Mr., Mrs., Ms., Dr.</td>
+                  <tr data-field="race" data-label="Race" data-control="select">
+                    <th scope="row">Race</th>
+                    <td>Chosen from your agency’s reporting categories</td>
                     <td class="picker-table__toggle">
-                      <input type="checkbox" data-displayed aria-label="Display Prefix on the application">
+                      <input type="checkbox" data-displayed aria-label="Display Race on the application">
                     </td>
                     <td class="picker-table__toggle">
-                      <input type="checkbox" data-required disabled aria-label="Make Prefix required">
-                    </td>
-                  </tr>
-
-                  <tr data-field="first-name" data-label="First Name" data-lock-displayed data-lock-required>
-                    <th scope="row">First Name
-                      <i class="fa-solid fa-lock picker-table__lock" aria-hidden="true"></i>
-                      <span class="picker-table__hint">Always collected</span>
-                    </th>
-                    <td>The applicant’s legal first name</td>
-                    <td class="picker-table__toggle">
-                      <input type="checkbox" data-displayed checked disabled
-                             aria-label="Display First Name on the application, always on">
-                    </td>
-                    <td class="picker-table__toggle">
-                      <input type="checkbox" data-required checked disabled
-                             aria-label="Make First Name required, always required">
+                      <input type="checkbox" data-required disabled aria-label="Make Race required">
                     </td>
                   </tr>
 
-                  <tr data-field="middle-name" data-label="Middle Name">
-                    <th scope="row">Middle Name</th>
-                    <td>Full middle name or initial</td>
+                  <tr data-field="gender" data-label="Gender" data-control="select">
+                    <th scope="row">Gender</th>
+                    <td>Chosen from your agency’s reporting categories</td>
                     <td class="picker-table__toggle">
-                      <input type="checkbox" data-displayed aria-label="Display Middle Name on the application">
+                      <input type="checkbox" data-displayed aria-label="Display Gender on the application">
                     </td>
                     <td class="picker-table__toggle">
-                      <input type="checkbox" data-required disabled aria-label="Make Middle Name required">
-                    </td>
-                  </tr>
-
-                  <tr data-field="last-name" data-label="Last Name" data-lock-displayed data-lock-required>
-                    <th scope="row">Last Name
-                      <i class="fa-solid fa-lock picker-table__lock" aria-hidden="true"></i>
-                      <span class="picker-table__hint">Always collected</span>
-                    </th>
-                    <td>The applicant’s legal last name</td>
-                    <td class="picker-table__toggle">
-                      <input type="checkbox" data-displayed checked disabled
-                             aria-label="Display Last Name on the application, always on">
-                    </td>
-                    <td class="picker-table__toggle">
-                      <input type="checkbox" data-required checked disabled
-                             aria-label="Make Last Name required, always required">
+                      <input type="checkbox" data-required disabled aria-label="Make Gender required">
                     </td>
                   </tr>
 
-                  <tr data-field="suffix" data-label="Suffix" data-control="select">
-                    <th scope="row">Suffix</th>
-                    <td>Jr., Sr., II, III</td>
+                  <tr data-field="eye-color" data-label="Eye Color" data-control="select">
+                    <th scope="row">Eye Color</th>
+                    <td>Only worth asking where the licence itself shows it</td>
                     <td class="picker-table__toggle">
-                      <input type="checkbox" data-displayed aria-label="Display Suffix on the application">
+                      <input type="checkbox" data-displayed aria-label="Display Eye Color on the application">
                     </td>
                     <td class="picker-table__toggle">
-                      <input type="checkbox" data-required disabled aria-label="Make Suffix required">
+                      <input type="checkbox" data-required disabled aria-label="Make Eye Color required">
+                    </td>
+                  </tr>
+
+                  <tr data-field="hair-color" data-label="Hair Color" data-control="select">
+                    <th scope="row">Hair Color</th>
+                    <td>Only worth asking where the licence itself shows it</td>
+                    <td class="picker-table__toggle">
+                      <input type="checkbox" data-displayed aria-label="Display Hair Color on the application">
+                    </td>
+                    <td class="picker-table__toggle">
+                      <input type="checkbox" data-required disabled aria-label="Make Hair Color required">
+                    </td>
+                  </tr>
+
+                  <tr data-field="height-weight" data-label="Height/Weight">
+                    <th scope="row">Height/Weight</th>
+                    <td>Height in feet and inches, weight in pounds</td>
+                    <td class="picker-table__toggle">
+                      <input type="checkbox" data-displayed aria-label="Display Height/Weight on the application">
+                    </td>
+                    <td class="picker-table__toggle">
+                      <input type="checkbox" data-required disabled aria-label="Make Height/Weight required">
                     </td>
                   </tr>
 
                 </tbody>
               </table>
 
-              <p class="choice-lock-note" style="margin-top: 14px">
-                <i class="fa-solid fa-lock" aria-hidden="true"></i>
-                First and last name identify the applicant on the licence, so every application collects them.
-              </p>
-
-              <p class="help-text" style="margin-top: 12px"><span id="picker-count">2 of 5 fields displayed</span></p>
+              <p class="help-text" style="margin-top: 14px">Demographic questions are sensitive, and an applicant
+                who cannot see why you are asking is more likely to abandon the application. Ask for the fewest of
+                these you can, and leave them optional unless the licence itself has to carry them.</p>
+              <p class="help-text" style="margin-top: 12px"><span id="picker-count">0 of 5 fields displayed</span></p>
             </div>
 
             <!-- Live preview. Constituent chrome on purpose: navy block header
@@ -257,7 +243,7 @@
             <div>
               <p class="picker-split__head">What the applicant sees</p>
               <div class="preview-panel">
-                <div class="preview-panel__header">Personal Information</div>
+                <div class="preview-panel__header">Demographic Information</div>
                 <div class="preview-panel__body">
                   <p class="preview-panel__note">Preview only, nothing here can be filled in.</p>
                   <div id="preview-fields"></div>
@@ -270,13 +256,13 @@
           </div>
 
           <div class="builder-actions">
-            <a href="builder-user-information.html" class="btn btn--secondary">
-              <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> User Information
+            <a href="builder-mailing-address.html" class="btn btn--secondary">
+              <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Mailing Address
             </a>
             <div class="builder-actions__right">
               <a href="applications.html?saved=1">Save &amp; exit</a>
               <button type="button" class="btn btn--primary" id="next-btn">
-                Contact Information <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                Build: Question Builder <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
               </button>
             </div>
           </div>
@@ -294,7 +280,7 @@
     initFieldPicker();
 
     document.getElementById('next-btn').addEventListener('click', function () {
-      window.location.href = 'builder-contact-information.html';
+      window.location.href = '#';
     });
   </script>
 

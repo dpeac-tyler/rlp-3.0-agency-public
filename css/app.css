@@ -4309,6 +4309,23 @@ a.stat:focus-visible {
   color: var(--c-text-secondary);
 }
 
+/* Heading for a repeated group inside the preview — Mailing Address renders
+   the same field set again under Physical Address and Alternate Address. */
+.preview-group__head {
+  margin: 0 0 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--c-border);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--c-text-secondary);
+}
+
+.preview-group__head ~ .preview-group__head {
+  margin-top: 22px;
+}
+
 .preview-field + .preview-field {
   margin-top: 16px;
 }
