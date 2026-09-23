@@ -4319,13 +4319,6 @@ a.stat:focus-visible {
   transform: rotate(90deg);
 }
 
-/* A displayed dropdown with nothing in it would reach the applicant as an
-   empty list, so the count says so instead of reading as a normal state */
-.picker-options__toggle.is-empty {
-  color: #b50909;
-  font-weight: 700;
-}
-
 .picker-options {
   margin-top: 10px;
   padding: 14px 16px;
@@ -4379,6 +4372,19 @@ a.stat:focus-visible {
 
 .picker-options__actions button:hover {
   color: var(--c-blue-hover);
+}
+
+/* Says out loud what the cascade just did to a control the user did not click.
+   Visible as well as announced, so the change is never a mystery. */
+.picker-status {
+  margin: 12px 0 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--c-text-primary);
+}
+
+.picker-status:empty {
+  display: none;
 }
 
 /* Preview panel -------------------------------------------------------- */
@@ -4471,11 +4477,6 @@ a.stat:focus-visible {
   margin: 6px 0 0;
   font-size: 15px;
   color: var(--c-text-secondary);
-}
-
-.preview-field__options--empty {
-  font-weight: 700;
-  color: #b50909;
 }
 
 .preview-empty {

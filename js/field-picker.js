@@ -23,9 +23,16 @@
  * Option rows — a <tr class="picker-options-row" data-options-for="race">
  * immediately after its parent, holding a .picker-options__toggle disclosure
  * and a .picker-options panel of [data-option] checkboxes. Options carry no
- * Required column. The row hides itself while the parent is not displayed, and
- * a displayed dropdown with nothing ticked is called out, since it would reach
- * the applicant as an empty list.
+ * Required column, and the row hides itself while the parent is not displayed.
+ *
+ * Invariant: a displayed dropdown always has at least one option, because an
+ * empty list is never a configuration anyone wants. It is held from both ends,
+ * which is the only way the rule does not become a trap:
+ *   untick the last option  -> the field switches off with it
+ *   switch the field back on -> its options all come back
+ * Without the second half, a field emptied once could never be turned on
+ * again: it would switch itself straight back off. Both directions are
+ * announced, since each one changes a control the user did not click.
  *
  * Each row holds one [data-displayed] and one [data-required] checkbox.
  *
@@ -60,8 +67,10 @@ function initFieldPicker() {
     if (!displayed.checked) required.checked = false;
   }
 
-  /* Curating options only makes sense for a field the applicant will see */
-  function syncOptionsRow(row) {
+  /* Curating options only makes sense for a field the applicant will see.
+     Switching a field on restores its options, which is the half of the
+     invariant that keeps an emptied field from being stuck off. */
+  function syncOptionsRow(row, fromUser) {
     var optRow = optionsRow(row);
     if (!optRow) return;
 
@@ -69,11 +78,38 @@ function initFieldPicker() {
     optRow.hidden = !displayed;
 
     if (!displayed) {
-      var panel = optRow.querySelector('.picker-options');
-      var toggle = optRow.querySelector('.picker-options__toggle');
-      panel.hidden = true;
-      toggle.setAttribute('aria-expanded', 'false');
+      optRow.querySelector('.picker-options').hidden = true;
+      optRow.querySelector('.picker-options__toggle').setAttribute('aria-expanded', 'false');
+      return;
     }
+
+    var inputs = optionInputs(optRow);
+    if (!inputs.some(function (i) { return i.checked; })) {
+      inputs.forEach(function (i) { i.checked = true; });
+      paintOptionCount(optRow);
+      if (fromUser) {
+        announce(row.dataset.label + ' switched on, and all ' + inputs.length +
+          ' of its options came back.');
+      }
+    }
+  }
+
+  /* Emptying a dropdown switches its field off, rather than leaving a field
+     displayed with nothing in it */
+  function cascadeEmptied(optRow) {
+    var row = pickerBody.querySelector('[data-options="' + optRow.dataset.optionsFor + '"]');
+    if (!row) return false;
+
+    var displayed = row.querySelector('[data-displayed]');
+    if (!displayed.checked || displayed.disabled) return false;
+    if (optionInputs(optRow).some(function (i) { return i.checked; })) return false;
+
+    displayed.checked = false;
+    syncRow(row);
+    syncOptionsRow(row);
+    announce('Every ' + row.dataset.label + ' option was unticked, so ' +
+      row.dataset.label + ' switched off. A dropdown needs at least one option.');
+    return true;
   }
 
   function groupHtml(label, fields) {
@@ -105,11 +141,7 @@ function initFieldPicker() {
      labels then a count, so nineteen race options do not swamp the panel. */
   function optionSummary(optRow) {
     var chosen = optionInputs(optRow).filter(function (i) { return i.checked; });
-
-    if (!chosen.length) {
-      return '<p class="preview-field__options preview-field__options--empty">' +
-        'No options ticked, so this list would reach the applicant empty</p>';
-    }
+    if (!chosen.length) return '';        /* unreachable while displayed */
 
     var labels = chosen.map(function (i) { return i.value; });
     var head = labels.slice(0, 3).join(', ');
@@ -119,17 +151,20 @@ function initFieldPicker() {
       (rest > 0 ? ', and ' + rest + ' more' : '') + '</p>';
   }
 
-  /* Count on the disclosure, and the warning state that goes with it */
+  /* Count on the disclosure. There is no empty state to style, because the
+     invariant keeps a displayed field from ever reaching zero options. */
   function paintOptionCount(optRow) {
     var inputs = optionInputs(optRow);
     var chosen = inputs.filter(function (i) { return i.checked; }).length;
-    var toggle = optRow.querySelector('.picker-options__toggle');
-    var count = optRow.querySelector('[data-options-count]');
+    optRow.querySelector('[data-options-count]').textContent =
+      chosen + ' of ' + inputs.length + ' options shown';
+  }
 
-    count.textContent = chosen === 0
-      ? 'No options ticked'
-      : chosen + ' of ' + inputs.length + ' options shown';
-    toggle.classList.toggle('is-empty', chosen === 0);
+  /* Remote state changes are the whole point of the cascade, so they get
+     announced rather than just happening somewhere else on screen */
+  function announce(message) {
+    var live = document.getElementById('picker-status');
+    if (live) live.textContent = message;
   }
 
   function fieldRows() {
@@ -190,6 +225,7 @@ function initFieldPicker() {
     var optRow = e.target.closest('.picker-options-row');
     if (optRow) {
       paintOptionCount(optRow);
+      cascadeEmptied(optRow);
       paintPreview();
       return;
     }
@@ -198,7 +234,7 @@ function initFieldPicker() {
     if (!row) return;
     if (e.target.matches('[data-displayed]')) {
       syncRow(row);
-      syncOptionsRow(row);
+      syncOptionsRow(row, true);
     }
     paintPreview();
   }
@@ -223,12 +259,19 @@ function initFieldPicker() {
         var on = btn.hasAttribute('data-option-all');
         optionInputs(optRow).forEach(function (i) { i.checked = on; });
         paintOptionCount(optRow);
+        if (on) {
+          announce('All options ticked.');
+        } else {
+          cascadeEmptied(optRow);
+        }
         paintPreview();
       });
     });
 
     paintOptionCount(optRow);
   });
+
+  fieldRows().forEach(function (row) { syncOptionsRow(row); });
 
   /* Skip: display none of this section and move on, the way the live app's
      Skip button behaves */
