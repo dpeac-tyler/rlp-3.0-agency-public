@@ -17,6 +17,15 @@
  *                                       one whenever it is displayed
  *   data-preview-label="State"          shorter label the applicant sees, where
  *                                       it differs from the admin title
+ *   data-options="race"                 this field's dropdown options are
+ *                                       curated too; pairs with the row below
+ *
+ * Option rows — a <tr class="picker-options-row" data-options-for="race">
+ * immediately after its parent, holding a .picker-options__toggle disclosure
+ * and a .picker-options panel of [data-option] checkboxes. Options carry no
+ * Required column. The row hides itself while the parent is not displayed, and
+ * a displayed dropdown with nothing ticked is called out, since it would reach
+ * the applicant as an empty list.
  *
  * Each row holds one [data-displayed] and one [data-required] checkbox.
  *
@@ -51,21 +60,85 @@ function initFieldPicker() {
     if (!displayed.checked) required.checked = false;
   }
 
+  /* Curating options only makes sense for a field the applicant will see */
+  function syncOptionsRow(row) {
+    var optRow = optionsRow(row);
+    if (!optRow) return;
+
+    var displayed = row.querySelector('[data-displayed]').checked;
+    optRow.hidden = !displayed;
+
+    if (!displayed) {
+      var panel = optRow.querySelector('.picker-options');
+      var toggle = optRow.querySelector('.picker-options__toggle');
+      panel.hidden = true;
+      toggle.setAttribute('aria-expanded', 'false');
+    }
+  }
+
   function groupHtml(label, fields) {
     return '<p class="preview-group__head">' + label + '</p>' + fields;
   }
 
-  function fieldHtml(label, isRequired, isSelect) {
+  function fieldHtml(label, isRequired, isSelect, extra) {
     return '<div class="preview-field">' +
       '<div class="preview-field__label">' + label +
         (isRequired ? ' <em>Required</em>' : '') +
       '</div>' +
       '<div class="preview-field__input' + (isSelect ? ' preview-field__input--select' : '') + '"></div>' +
+      (extra || '') +
     '</div>';
   }
 
+  /* The options row belonging to a field, if it has one */
+  function optionsRow(row) {
+    return row.dataset.options
+      ? document.querySelector('[data-options-for="' + row.dataset.options + '"]')
+      : null;
+  }
+
+  function optionInputs(optRow) {
+    return Array.prototype.slice.call(optRow.querySelectorAll('[data-option]'));
+  }
+
+  /* A muted line under the previewed dropdown naming what is in it. Three
+     labels then a count, so nineteen race options do not swamp the panel. */
+  function optionSummary(optRow) {
+    var chosen = optionInputs(optRow).filter(function (i) { return i.checked; });
+
+    if (!chosen.length) {
+      return '<p class="preview-field__options preview-field__options--empty">' +
+        'No options ticked, so this list would reach the applicant empty</p>';
+    }
+
+    var labels = chosen.map(function (i) { return i.value; });
+    var head = labels.slice(0, 3).join(', ');
+    var rest = labels.length - 3;
+    return '<p class="preview-field__options">' + labels.length + ' option' +
+      (labels.length === 1 ? '' : 's') + ': ' + head +
+      (rest > 0 ? ', and ' + rest + ' more' : '') + '</p>';
+  }
+
+  /* Count on the disclosure, and the warning state that goes with it */
+  function paintOptionCount(optRow) {
+    var inputs = optionInputs(optRow);
+    var chosen = inputs.filter(function (i) { return i.checked; }).length;
+    var toggle = optRow.querySelector('.picker-options__toggle');
+    var count = optRow.querySelector('[data-options-count]');
+
+    count.textContent = chosen === 0
+      ? 'No options ticked'
+      : chosen + ' of ' + inputs.length + ' options shown';
+    toggle.classList.toggle('is-empty', chosen === 0);
+  }
+
+  function fieldRows() {
+    return Array.prototype.slice.call(
+      pickerBody.querySelectorAll('tr:not(.picker-options-row)'));
+  }
+
   function paintPreview() {
-    var rows = Array.prototype.slice.call(pickerBody.querySelectorAll('tr'));
+    var rows = fieldRows();
     var shown = rows.filter(function (row) {
       return row.querySelector('[data-displayed]').checked;
     });
@@ -74,7 +147,9 @@ function initFieldPicker() {
       var isRequired = row.querySelector('[data-required]').checked;
       var isSelect = row.dataset.control === 'select';
       var label = row.dataset.previewLabel || row.dataset.label;
-      var html = fieldHtml(label, isRequired, isSelect);
+      var optRow = optionsRow(row);
+      var html = fieldHtml(label, isRequired, isSelect,
+        optRow ? optionSummary(optRow) : '');
 
       /* A derived field is not in the picker, so it can only appear here. It
          inherits the required state of the field it confirms. */
@@ -110,14 +185,67 @@ function initFieldPicker() {
   }
 
   function onChange(e) {
+    /* An option checkbox lives in the row below its field, so walk back to the
+       field row to re-sync the pair */
+    var optRow = e.target.closest('.picker-options-row');
+    if (optRow) {
+      paintOptionCount(optRow);
+      paintPreview();
+      return;
+    }
+
     var row = e.target.closest('tr');
     if (!row) return;
-    if (e.target.matches('[data-displayed]')) syncRow(row);
+    if (e.target.matches('[data-displayed]')) {
+      syncRow(row);
+      syncOptionsRow(row);
+    }
     paintPreview();
   }
 
   pickerBody.addEventListener('change', onChange);
   if (pickerBlocks) pickerBlocks.addEventListener('change', onChange);
+
+  /* Disclosures, and the All / None shortcuts that make nineteen checkboxes
+     bearable */
+  pickerBody.querySelectorAll('.picker-options-row').forEach(function (optRow) {
+    var toggle = optRow.querySelector('.picker-options__toggle');
+    var panel = optRow.querySelector('.picker-options');
+
+    toggle.addEventListener('click', function () {
+      var open = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!open));
+      panel.hidden = open;
+    });
+
+    optRow.querySelectorAll('[data-option-all], [data-option-none]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var on = btn.hasAttribute('data-option-all');
+        optionInputs(optRow).forEach(function (i) { i.checked = on; });
+        paintOptionCount(optRow);
+        paintPreview();
+      });
+    });
+
+    paintOptionCount(optRow);
+  });
+
+  /* Skip: display none of this section and move on, the way the live app's
+     Skip button behaves */
+  var skipBtn = document.getElementById('skip-btn');
+  if (skipBtn) {
+    skipBtn.addEventListener('click', function () {
+      fieldRows().forEach(function (row) {
+        var displayed = row.querySelector('[data-displayed]');
+        if (!displayed || displayed.disabled) return;
+        displayed.checked = false;
+        syncRow(row);
+        syncOptionsRow(row);
+      });
+      paintPreview();
+      window.location.href = skipBtn.dataset.href || '#';
+    });
+  }
 
   paintPreview();
 }

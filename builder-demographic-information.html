@@ -59,8 +59,9 @@
 
     <!-- ══ Builder shell ═══════════════════════════════════════════════════
          Step 12 of the Set up phase, the last of the four field pickers and
-         the last step before the Build phase. Nothing here is locked and
-         nothing is on by default: every one of these is the agency's call.
+         the last step before the Build phase. The four dropdowns here carry
+         curated option lists of their own, collapsed behind a count so the
+         picker stays readable; Race alone has nineteen entries.
          ═══════════════════════════════════════════════════════════════════ -->
     <main class="builder-shell">
 
@@ -147,8 +148,8 @@
 
           <p class="builder-eyebrow">Set up &middot; Demographic Information</p>
           <h1 class="builder-title">Any demographic detail to collect?</h1>
-          <p class="builder-lede">Nothing on this step is switched on, and nothing has to be. Tick only what your agency
-            genuinely reports on.</p>
+          <p class="builder-lede">All five of these start switched on and none of them start required. If your agency
+            does not report on any of it, use <strong>Skip</strong> to leave the whole section off.</p>
 
           <p class="help-text" style="margin-top: 14px">Anything displayed but not required is optional for the
             applicant. Anything not displayed is never asked for and never stored.</p>
@@ -174,68 +175,345 @@
                 </thead>
                 <tbody id="picker-body">
 
-                  <tr data-field="race" data-label="Race" data-control="select">
-                    <th scope="row">Race</th>
-                    <td>Chosen from your agency’s reporting categories</td>
-                    <td class="picker-table__toggle">
-                      <input type="checkbox" data-displayed aria-label="Display Race on the application">
-                    </td>
-                    <td class="picker-table__toggle">
-                      <input type="checkbox" data-required disabled aria-label="Make Race required">
-                    </td>
-                  </tr>
+                    <tr data-field="race" data-label="Race" data-control="select" data-options="race">
+                      <th scope="row">Race</th>
+                      <td>Nineteen options in six families</td>
+                      <td class="picker-table__toggle">
+                        <input type="checkbox" data-displayed checked
+                               aria-label="Display Race on the application">
+                      </td>
+                      <td class="picker-table__toggle">
+                        <input type="checkbox" data-required aria-label="Make Race required">
+                      </td>
+                    </tr>
+                    <tr class="picker-options-row" data-options-for="race">
+                      <td colspan="4">
+                        <button type="button" class="picker-options__toggle" aria-expanded="false"
+                                aria-controls="race-options">
+                          <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                          <span data-options-count>19 of 19 options shown</span>
+                        </button>
+                        <div class="picker-options" id="race-options" hidden>
+                        <p class="picker-options__group">White</p>
+                        <div class="picker-options__grid">
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="White" checked>
+                            White
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="White - European" checked>
+                            White - European
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="White - Middle Eastern" checked>
+                            White - Middle Eastern
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="White - North African" checked>
+                            White - North African
+                          </label>
+                        </div>
+                        <p class="picker-options__group">Black or African American</p>
+                        <div class="picker-options__grid">
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Black or African American" checked>
+                            Black or African American
+                          </label>
+                        </div>
+                        <p class="picker-options__group">Asian</p>
+                        <div class="picker-options__grid">
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Asian" checked>
+                            Asian
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Asian - Asian Indian" checked>
+                            Asian - Asian Indian
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Asian - Chinese" checked>
+                            Asian - Chinese
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Asian - Filipino" checked>
+                            Asian - Filipino
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Asian - Japanese" checked>
+                            Asian - Japanese
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Asian - Korean" checked>
+                            Asian - Korean
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Asian - Vietnamese" checked>
+                            Asian - Vietnamese
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Other Asian Race" checked>
+                            Other Asian Race
+                          </label>
+                        </div>
+                        <p class="picker-options__group">Hispanic, Latino, or Spanish origin</p>
+                        <div class="picker-options__grid">
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Hispanic, Latino, or Spanish origin" checked>
+                            Hispanic, Latino, or Spanish origin
+                          </label>
+                        </div>
+                        <p class="picker-options__group">Native Hawaiian or Other Pacific Islander</p>
+                        <div class="picker-options__grid">
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Native Hawaiian or Pacific Islander" checked>
+                            Native Hawaiian or Pacific Islander
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Native Hawaiian or Pacific Islander - Guamanian or Chamorro" checked>
+                            Native Hawaiian or Pacific Islander - Guamanian or Chamorro
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Native Hawaiian or Other Pacific Islander - Samoan" checked>
+                            Native Hawaiian or Other Pacific Islander - Samoan
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Native Hawaiian or Other Pacific Islander - Other Pacific Islander" checked>
+                            Native Hawaiian or Other Pacific Islander - Other Pacific Islander
+                          </label>
+                        </div>
+                        <p class="picker-options__group">Prefer not to disclose</p>
+                        <div class="picker-options__grid">
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="I do not wish to disclose" checked>
+                            I do not wish to disclose
+                          </label>
+                        </div>
+                          <div class="picker-options__actions">
+                            <span>Tick:</span>
+                            <button type="button" data-option-all>All race options</button>
+                            <button type="button" data-option-none>None</button>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
 
-                  <tr data-field="gender" data-label="Gender" data-control="select">
-                    <th scope="row">Gender</th>
-                    <td>Chosen from your agency’s reporting categories</td>
-                    <td class="picker-table__toggle">
-                      <input type="checkbox" data-displayed aria-label="Display Gender on the application">
-                    </td>
-                    <td class="picker-table__toggle">
-                      <input type="checkbox" data-required disabled aria-label="Make Gender required">
-                    </td>
-                  </tr>
+                    <tr data-field="gender" data-label="Gender" data-control="select" data-options="gender">
+                      <th scope="row">Gender</th>
+                      <td>Six options, including a decline-to-answer</td>
+                      <td class="picker-table__toggle">
+                        <input type="checkbox" data-displayed checked
+                               aria-label="Display Gender on the application">
+                      </td>
+                      <td class="picker-table__toggle">
+                        <input type="checkbox" data-required aria-label="Make Gender required">
+                      </td>
+                    </tr>
+                    <tr class="picker-options-row" data-options-for="gender">
+                      <td colspan="4">
+                        <button type="button" class="picker-options__toggle" aria-expanded="false"
+                                aria-controls="gender-options">
+                          <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                          <span data-options-count>6 of 6 options shown</span>
+                        </button>
+                        <div class="picker-options" id="gender-options" hidden>
+                        <div class="picker-options__grid">
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Female" checked>
+                            Female
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Male" checked>
+                            Male
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Gender Variant/Non-Conforming" checked>
+                            Gender Variant/Non-Conforming
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Transgender Female" checked>
+                            Transgender Female
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Transgender Male" checked>
+                            Transgender Male
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="I do not wish to disclose" checked>
+                            I do not wish to disclose
+                          </label>
+                        </div>
+                          <div class="picker-options__actions">
+                            <span>Tick:</span>
+                            <button type="button" data-option-all>All gender options</button>
+                            <button type="button" data-option-none>None</button>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
 
-                  <tr data-field="eye-color" data-label="Eye Color" data-control="select">
-                    <th scope="row">Eye Color</th>
-                    <td>Only worth asking where the licence itself shows it</td>
-                    <td class="picker-table__toggle">
-                      <input type="checkbox" data-displayed aria-label="Display Eye Color on the application">
-                    </td>
-                    <td class="picker-table__toggle">
-                      <input type="checkbox" data-required disabled aria-label="Make Eye Color required">
-                    </td>
-                  </tr>
+                    <tr data-field="eye-color" data-label="Eye Color" data-control="select" data-options="eye-color">
+                      <th scope="row">Eye Color</th>
+                      <td>Only worth asking where the licence itself shows it</td>
+                      <td class="picker-table__toggle">
+                        <input type="checkbox" data-displayed checked
+                               aria-label="Display Eye Color on the application">
+                      </td>
+                      <td class="picker-table__toggle">
+                        <input type="checkbox" data-required aria-label="Make Eye Color required">
+                      </td>
+                    </tr>
+                    <tr class="picker-options-row" data-options-for="eye-color">
+                      <td colspan="4">
+                        <button type="button" class="picker-options__toggle" aria-expanded="false"
+                                aria-controls="eye-color-options">
+                          <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                          <span data-options-count>10 of 10 options shown</span>
+                        </button>
+                        <div class="picker-options" id="eye-color-options" hidden>
+                        <div class="picker-options__grid">
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Blue" checked>
+                            Blue
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Brown" checked>
+                            Brown
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Black" checked>
+                            Black
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Green" checked>
+                            Green
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Gray" checked>
+                            Gray
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Hazel" checked>
+                            Hazel
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Pink" checked>
+                            Pink
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Maroon" checked>
+                            Maroon
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Dichromatic" checked>
+                            Dichromatic
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Unknown" checked>
+                            Unknown
+                          </label>
+                        </div>
+                          <div class="picker-options__actions">
+                            <span>Tick:</span>
+                            <button type="button" data-option-all>All eye color options</button>
+                            <button type="button" data-option-none>None</button>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
 
-                  <tr data-field="hair-color" data-label="Hair Color" data-control="select">
-                    <th scope="row">Hair Color</th>
-                    <td>Only worth asking where the licence itself shows it</td>
-                    <td class="picker-table__toggle">
-                      <input type="checkbox" data-displayed aria-label="Display Hair Color on the application">
-                    </td>
-                    <td class="picker-table__toggle">
-                      <input type="checkbox" data-required disabled aria-label="Make Hair Color required">
-                    </td>
-                  </tr>
+                    <tr data-field="hair-color" data-label="Hair Color" data-control="select" data-options="hair-color">
+                      <th scope="row">Hair Color</th>
+                      <td>Only worth asking where the licence itself shows it</td>
+                      <td class="picker-table__toggle">
+                        <input type="checkbox" data-displayed checked
+                               aria-label="Display Hair Color on the application">
+                      </td>
+                      <td class="picker-table__toggle">
+                        <input type="checkbox" data-required aria-label="Make Hair Color required">
+                      </td>
+                    </tr>
+                    <tr class="picker-options-row" data-options-for="hair-color">
+                      <td colspan="4">
+                        <button type="button" class="picker-options__toggle" aria-expanded="false"
+                                aria-controls="hair-color-options">
+                          <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                          <span data-options-count>10 of 10 options shown</span>
+                        </button>
+                        <div class="picker-options" id="hair-color-options" hidden>
+                        <div class="picker-options__grid">
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Auburn" checked>
+                            Auburn
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Bald" checked>
+                            Bald
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Black" checked>
+                            Black
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Blonde" checked>
+                            Blonde
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Brown" checked>
+                            Brown
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Gray" checked>
+                            Gray
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Red" checked>
+                            Red
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Sandy" checked>
+                            Sandy
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="White" checked>
+                            White
+                          </label>
+                          <label class="checkbox-option__label">
+                            <input type="checkbox" data-option value="Unknown" checked>
+                            Unknown
+                          </label>
+                        </div>
+                          <div class="picker-options__actions">
+                            <span>Tick:</span>
+                            <button type="button" data-option-all>All hair color options</button>
+                            <button type="button" data-option-none>None</button>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
 
                   <tr data-field="height-weight" data-label="Height/Weight">
                     <th scope="row">Height/Weight</th>
-                    <td>Height in feet and inches, weight in pounds</td>
+                    <td>Height in feet and inches, weight in pounds. Not a dropdown, so it has no options</td>
                     <td class="picker-table__toggle">
-                      <input type="checkbox" data-displayed aria-label="Display Height/Weight on the application">
+                      <input type="checkbox" data-displayed checked
+                             aria-label="Display Height/Weight on the application">
                     </td>
                     <td class="picker-table__toggle">
-                      <input type="checkbox" data-required disabled aria-label="Make Height/Weight required">
+                      <input type="checkbox" data-required aria-label="Make Height/Weight required">
                     </td>
                   </tr>
 
                 </tbody>
               </table>
 
-              <p class="help-text" style="margin-top: 14px">Demographic questions are sensitive, and an applicant
-                who cannot see why you are asking is more likely to abandon the application. Ask for the fewest of
-                these you can, and leave them optional unless the licence itself has to carry them.</p>
-              <p class="help-text" style="margin-top: 12px"><span id="picker-count">0 of 5 fields displayed</span></p>
+              <p class="help-text" style="margin-top: 14px">The first four are dropdowns, and you choose what goes
+                inside them as well as whether they appear. Open the options under a field to add or remove
+                individual entries. Untick a field and its options go with it.</p>
+
+              <p class="help-text" style="margin-top: 12px">Demographic questions are sensitive, and an applicant who
+                cannot see why you are asking is more likely to abandon the application. Ask for the fewest of these
+                you can, and leave them optional unless the licence itself has to carry them.</p>
+              <p class="help-text" style="margin-top: 12px"><span id="picker-count">5 of 5 fields displayed</span></p>
             </div>
 
             <!-- Live preview. Constituent chrome on purpose: navy block header
@@ -261,6 +539,7 @@
             </a>
             <div class="builder-actions__right">
               <a href="applications.html?saved=1">Save &amp; exit</a>
+              <button type="button" class="btn btn--secondary" id="skip-btn" data-href="#">Skip</button>
               <button type="button" class="btn btn--primary" id="next-btn">
                 Build: Question Builder <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
               </button>

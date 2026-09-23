@@ -4277,6 +4277,110 @@ a.stat:focus-visible {
   color: var(--c-text-secondary);
 }
 
+/* Option disclosure ---------------------------------------------------- */
+
+/* A dropdown field's options are curated too, and Race alone has nineteen of
+   them. Collapsed behind a count so the picker stays a five-row overview, and
+   hidden outright while the parent field is not displayed. */
+.picker-options-row > td {
+  padding: 0 14px 14px;
+  border-top: none;
+}
+
+.picker-options-row[hidden] {
+  display: none;
+}
+
+.picker-options__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-size: 15px;
+  color: var(--c-blue);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.picker-options__toggle:hover {
+  color: var(--c-blue-hover);
+}
+
+.picker-options__toggle i {
+  font-size: 11px;
+  text-decoration: none;
+  transition: transform .15s;
+}
+
+.picker-options__toggle[aria-expanded="true"] i {
+  transform: rotate(90deg);
+}
+
+/* A displayed dropdown with nothing in it would reach the applicant as an
+   empty list, so the count says so instead of reading as a normal state */
+.picker-options__toggle.is-empty {
+  color: #b50909;
+  font-weight: 700;
+}
+
+.picker-options {
+  margin-top: 10px;
+  padding: 14px 16px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-panel);
+  background: var(--c-tile-bg);
+}
+
+.picker-options[hidden] {
+  display: none;
+}
+
+.picker-options__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 8px 20px;
+}
+
+/* Race's options come in families, so the family name heads its variants */
+.picker-options__group {
+  margin: 16px 0 6px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--c-text-secondary);
+}
+
+.picker-options__group:first-child {
+  margin-top: 0;
+}
+
+.picker-options__actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--c-border);
+  font-size: 15px;
+}
+
+.picker-options__actions button {
+  padding: 0;
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-size: 15px;
+  color: var(--c-blue);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.picker-options__actions button:hover {
+  color: var(--c-blue-hover);
+}
+
 /* Preview panel -------------------------------------------------------- */
 
 /* Constituent chrome, not agency chrome: the navy block header and white body
@@ -4359,6 +4463,19 @@ a.stat:focus-visible {
   float: right;
   margin: 8px 12px 0 0;
   color: var(--c-text-secondary);
+}
+
+/* What is actually inside a previewed dropdown, so the agency can see the
+   consequence of curating its options without opening anything */
+.preview-field__options {
+  margin: 6px 0 0;
+  font-size: 15px;
+  color: var(--c-text-secondary);
+}
+
+.preview-field__options--empty {
+  font-weight: 700;
+  color: #b50909;
 }
 
 .preview-empty {
