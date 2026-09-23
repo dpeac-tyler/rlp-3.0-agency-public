@@ -1693,6 +1693,15 @@ a.stat:focus-visible {
   white-space: nowrap;
 }
 
+/* The row you just came from. Flagged on arrival from the builder's Save &
+   exit, tinted rather than bordered so it does not read as a status. Beats
+   .data-table's zebra stripe, which is why it repeats the specificity. */
+.data-table tbody tr.is-just-saved,
+.data-table tbody tr.is-just-saved:nth-child(even) {
+  background: #fff8e6;
+  box-shadow: inset 3px 0 0 var(--c-gold);
+}
+
 .data-table .select-column,
 .data-table .select-cell {
   width: 20px;
