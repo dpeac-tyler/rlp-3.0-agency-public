@@ -4260,26 +4260,19 @@ a.stat:focus-visible {
 /* the consequence of a tick is visible without leaving the step.          */
 /* ---------------------------------------------------------------------- */
 
+/* Three columns: the picker, a 1px rule, then the preview. The rule keeps the
+   two halves reading as separate things rather than one wide table, and 36px
+   either side of it gives them room to breathe. */
 .picker-split {
   display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
-  gap: 28px;
+  grid-template-columns: minmax(0, 1.35fr) 1px minmax(0, 1fr);
+  gap: 36px;
   align-items: start;
   margin-top: 16px;
 }
 
-/* Ruled variant: a full-height rule between the picker and the preview, so the
-   two halves read as separate things rather than one wide table. Trying it on
-   the Demographic step first, since that page is the longest.
-
-   The rule is its own 1px grid column with align-self: stretch, which is what
-   makes it span the tallest column rather than collapsing to nothing under the
-   grid's align-items: start. */
-.picker-split--ruled {
-  grid-template-columns: minmax(0, 1.35fr) 1px minmax(0, 1fr);
-  gap: 36px;
-}
-
+/* align-self: stretch is what makes the rule span the tallest column. Under
+   the grid's align-items: start it would collapse to nothing. */
 .picker-split__rule {
   align-self: stretch;
   width: 1px;
@@ -4294,12 +4287,8 @@ a.stat:focus-visible {
 }
 
 @media (max-width: 1100px) {
+  /* Stacked, so a vertical rule between the two means nothing */
   .picker-split {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  /* Stacked, so a vertical rule between them means nothing */
-  .picker-split--ruled {
     grid-template-columns: minmax(0, 1fr);
   }
 
