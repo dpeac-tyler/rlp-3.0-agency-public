@@ -99,8 +99,8 @@
               <li class="builder-steps__item is-done"><a href="builder-form-number-search-terms.html">Form No.,
                   Deactivation &amp; Search Terms</a></li>
               <li class="builder-steps__item is-current"><a href="builder-task-management.html">Task Management</a></li>
-              <li class="builder-steps__item"><a href="#">External Integration</a></li>
-              <li class="builder-steps__item"><a href="#">Document Upload</a></li>
+              <li class="builder-steps__item"><a href="builder-external-integration.html">External Integration</a></li>
+              <li class="builder-steps__item"><a href="builder-document-upload.html">Document Upload</a></li>
               <li class="builder-steps__item"><a href="#">Applicant Information</a></li>
             </ul>
           </div>
@@ -166,15 +166,15 @@
               <div class="question-card__body">
                 <h2 class="question-card__title">Would you like Standard or Agency Defined task naming?
                   <span class="field-required">Required</span></h2>
-                <div class="choice-group">
-                  <label class="choice"><input type="radio" name="task-naming" value="standard"> Standard</label>
-                  <label class="choice"><input type="radio" name="task-naming" value="agency"> Agency Defined</label>
-                </div>
                 <p class="help-text" style="margin-top: 12px"><strong>Standard</strong> names each task for its place
                   in the queue, so a two-task process reads Task 1 of 2, then Task 2 of 2. The names keep themselves
                   up to date as you add or remove tasks.</p>
                 <p class="help-text" style="margin-top: 8px"><strong>Agency Defined</strong> lets you pick each name
                   from the list your agency maintains.</p>
+                <div class="choice-group">
+                  <label class="choice"><input type="radio" name="task-naming" value="standard"> Standard</label>
+                  <label class="choice"><input type="radio" name="task-naming" value="agency"> Agency Defined</label>
+                </div>
               </div>
             </li>
 
@@ -187,6 +187,17 @@
                   <span class="field-required">Required</span></h2>
                 <p class="question-card__text">You can add up to five tasks. Each one needs a user group before the
                   application can go live.</p>
+
+                <button type="button" class="icon-legend-toggle icon-legend-toggle--block"
+                        aria-expanded="false" aria-controls="icon-legend--tasks">
+                  What do the control icons mean?
+                  <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                </button>
+
+                <div class="icon-legend" id="icon-legend--tasks" hidden style="margin-top: 12px">
+                  <div class="icon-legend__item"><img src="assets/icon-delete.png" alt=""> Remove task or checklist
+                    item</div>
+                </div>
 
                 <p class="item-empty" id="tasks-empty">No tasks yet. Add the first review task to get started.</p>
 
@@ -223,8 +234,10 @@
   </div>
 
   <script src="js/toolbar.js"></script>
+  <script src="js/icon-legend.js"></script>
   <script>
     initToolbar('#toolbar', { activeKey: 'applications' });
+    initIconLegends();
 
     var MAX_TASKS = 5;
     var AGENCY_TASK_NAMES = [
@@ -235,6 +248,10 @@
       'Licensing Intake', 'Licensing Review', 'Fisheries Program Staff',
       'Compliance', 'Licensing Supervisors'
     ];
+
+    /* Every added card needs ids of its own so the labels can carry a real
+       `for`, rather than floating unassociated next to their controls */
+    var taskSeq = 0;
 
     var taskList = document.getElementById('task-list');
     var tasksEmpty = document.getElementById('tasks-empty');
@@ -258,15 +275,16 @@
        and restates itself whenever the list changes. Agency Defined picks from
        the agency's own list instead. Until the question is answered the control
        says so rather than offering a name that might not survive the choice. */
-    function nameControl(index, total) {
+    function nameControl(index, total, uid) {
       var mode = namingMode();
       if (mode === 'standard') {
-        return '<input type="text" value="Task ' + index + ' of ' + total + '" readonly>';
+        return '<input type="text" id="' + uid + '-name" value="Task ' + index + ' of ' + total + '" readonly>';
       }
       if (mode === 'agency') {
-        return '<select data-task-name>' + options(AGENCY_TASK_NAMES, 'Please Select') + '</select>';
+        return '<select id="' + uid + '-name" data-task-name>' +
+          options(AGENCY_TASK_NAMES, 'Please Select') + '</select>';
       }
-      return '<input type="text" value="Answer question 1 to name this task" readonly>';
+      return '<input type="text" id="' + uid + '-name" value="Answer question 1 to name this task" readonly>';
     }
 
     function taskCount() {
@@ -287,7 +305,7 @@
         var existing = nameField.querySelector('[data-task-name]');
         var keep = existing ? existing.value : '';
         nameField.querySelector('input, select').remove();
-        nameField.insertAdjacentHTML('beforeend', nameControl(index, total));
+        nameField.insertAdjacentHTML('beforeend', nameControl(index, total, card.dataset.uid));
         var fresh = nameField.querySelector('[data-task-name]');
         if (fresh && keep) fresh.value = keep;
 
@@ -309,8 +327,10 @@
     function addTask() {
       if (taskCount() >= MAX_TASKS) return;
 
+      var uid = 'task' + (++taskSeq);
       var card = document.createElement('li');
       card.className = 'item-card';
+      card.dataset.uid = uid;
       card.innerHTML =
         '<div class="item-card__head">' +
           '<span class="item-card__num">1</span>' +
@@ -323,12 +343,13 @@
         '<div class="item-card__body">' +
           '<div class="field-grid field-grid--2">' +
             '<div class="field" data-name-field>' +
-              '<label>Task Name</label>' +
-              '<input type="text" value="" readonly>' +
+              '<label for="' + uid + '-name">Task Name</label>' +
+              '<input type="text" id="' + uid + '-name" value="" readonly>' +
             '</div>' +
             '<div class="field">' +
-              '<label>User Group <span class="field-required">Required</span></label>' +
-              '<select data-user-group>' + options(USER_GROUPS, 'Please Select') + '</select>' +
+              '<label for="' + uid + '-group">User Group <span class="field-required">Required</span></label>' +
+              '<select id="' + uid + '-group" data-user-group>' +
+                options(USER_GROUPS, 'Please Select') + '</select>' +
             '</div>' +
           '</div>' +
           '<p class="help-text" style="margin-top: 14px">Checklist items give the reviewer a list to work ' +
@@ -416,7 +437,7 @@
     taskList.addEventListener('change', updateNext);
 
     nextBtn.addEventListener('click', function () {
-      window.location.href = '#';
+      window.location.href = 'builder-external-integration.html';
     });
 
     /* Opens with one task on screen, so the pattern reads without a click */

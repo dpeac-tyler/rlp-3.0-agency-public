@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document Upload &mdash; RLP Agency Console</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+
+<body>
+
+  <div class="app app--builder">
+
+    <!-- Header (shared chrome) -->
+    <header class="app-header">
+      <a class="app-header__brand" href="index.html">
+        <img class="app-header__logo" src="assets/tyler-t.png" alt="Tenant logo">
+        <span class="app-header__brand-name">Name of Agency</span>
+      </a>
+      <nav class="app-header__links" aria-label="Account">
+        <a href="settings.html">Settings</a>
+        <span class="app-header__divider" aria-hidden="true"></span>
+        <a href="search.html">Search</a>
+        <span class="app-header__divider" aria-hidden="true"></span>
+        <a href="#">Help</a>
+        <span class="app-header__divider" aria-hidden="true"></span>
+        <a href="#">Logout</a>
+      </nav>
+    </header>
+
+    <!-- Customizable toolbar (shared chrome, rendered by js/toolbar.js) -->
+    <div id="toolbar"></div>
+
+    <!-- ══ Context bar ═══════════════════════════════════════════════════════
+         The Document Upload tag in the type block was settled back on Getting
+         Started, which is why this step exists at all.
+         ═════════════════════════════════════════════════════════════════════ -->
+    <div class="builder-context">
+      <div class="builder-context__block">
+        <div class="builder-context__eyebrow">Application / Permit Name</div>
+        <div class="builder-context__name">Commercial Fishing Permit: Original (One)</div>
+        <div class="builder-context__meta">
+          <span class="badge badge--gold">Draft</span>
+          <span>Form No. DNR-CF-102 &middot; saved 8 min ago</span>
+        </div>
+      </div>
+      <div class="builder-context__block">
+        <div class="builder-context__eyebrow">License / Application Type</div>
+        <div class="builder-context__value">Commercial Fishing License : Original (One)</div>
+        <div class="builder-context__tags">
+          <span class="tag tag--muted">Authenticated</span>
+          <span class="tag tag--muted">Individual</span>
+          <span class="tag tag--muted">Signature</span>
+          <span class="tag tag--muted">Document Upload</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ Builder shell ═══════════════════════════════════════════════════
+         Step 7 of the Set up phase, and the last one before Applicant
+         Information. Two things: the instructions the applicant reads, and the
+         list of documents the submission collects, up to twenty-five.
+         ═══════════════════════════════════════════════════════════════════ -->
+    <main class="builder-shell">
+
+      <!-- Phase rail -->
+      <aside class="builder-rail">
+        <a class="builder-rail__back" href="applications.html">
+          <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> All applications
+        </a>
+
+        <div class="builder-rail__progress" style="margin-top: 14px">
+          <div class="builder-rail__progress-row">
+            <span class="builder-rail__eyebrow">Setup phases</span>
+            <span class="builder-rail__pct">75%</span>
+          </div>
+          <div class="builder-rail__track">
+            <div class="builder-rail__fill" style="width: 75%"></div>
+          </div>
+        </div>
+
+        <nav class="builder-phases" aria-label="Setup phases">
+
+          <div class="builder-phase is-current">
+            <a class="builder-phase__row" href="builder-document-upload.html" aria-current="step">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Set up</span>
+                <span class="builder-phase__summary">Details &middot; Applicant info</span>
+              </span>
+            </a>
+            <ul class="builder-steps">
+              <li class="builder-steps__item is-done"><a href="builder-getting-started.html">Getting Started</a></li>
+              <li class="builder-steps__item is-done"><a href="builder-application-type.html">Application Type</a></li>
+              <li class="builder-steps__item is-done"><a href="builder-title-information.html">Title Information</a>
+              </li>
+              <li class="builder-steps__item is-done"><a href="builder-form-number-search-terms.html">Form No.,
+                  Deactivation &amp; Search Terms</a></li>
+              <li class="builder-steps__item is-done"><a href="builder-task-management.html">Task Management</a></li>
+              <li class="builder-steps__item is-done"><a href="builder-external-integration.html">External
+                  Integration</a></li>
+              <li class="builder-steps__item is-current"><a href="builder-document-upload.html">Document Upload</a>
+              </li>
+              <li class="builder-steps__item"><a href="#">Applicant Information</a></li>
+            </ul>
+          </div>
+
+          <div class="builder-phase">
+            <a class="builder-phase__row" href="#">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Build</span>
+                <span class="builder-phase__summary">Questions &middot; Conditions</span>
+              </span>
+            </a>
+          </div>
+
+          <div class="builder-phase">
+            <a class="builder-phase__row" href="#">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Rules</span>
+                <span class="builder-phase__summary">Payment &middot; License</span>
+              </span>
+            </a>
+          </div>
+
+          <div class="builder-phase">
+            <a class="builder-phase__row" href="#">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Publish</span>
+                <span class="builder-phase__summary">Preview &middot; Notification</span>
+              </span>
+            </a>
+          </div>
+
+        </nav>
+      </aside>
+
+      <!-- Step canvas -->
+      <div class="builder-canvas">
+        <div class="builder-canvas__inner">
+
+          <p class="builder-eyebrow">Set up &middot; Document Upload</p>
+          <h1 class="builder-title">Define the documents this application collects</h1>
+          <p class="builder-lede">Tell the applicant what to bring, then list the documents the submission asks
+            for.</p>
+
+          <ul class="help-list" style="margin-top: 14px">
+            <li>Start with the instructions and information the applicant needs about the documents you want.</li>
+            <li>Then add the documents, up to twenty-five. Each one gets details that help the applicant understand
+              what is being asked for, and help your staff manage what comes back.</li>
+            <li>Later, in Question Builder and Conditions, you can map these documents to questions. Any document you
+              do not map appears in its own Document Upload section on the application instead.</li>
+          </ul>
+
+          <p class="help-text" style="margin-top: 12px"><strong>Note:</strong> a document used by a condition cannot
+            be edited here. Remove the condition on the Conditions step first, edit the document, then reapply the
+            rule.</p>
+
+          <p class="help-text" style="margin-top: 12px"><em>Required</em> indicates a required field.</p>
+
+          <ol class="question-cards" id="question-cards">
+
+            <!-- 1. The applicant-facing instructions, written before the list
+                 they describe, the way the v2 step orders it. -->
+            <li class="question-card" data-card="instructions">
+              <span class="question-card__num">1</span>
+              <div class="question-card__body">
+                <h2 class="question-card__title">Write the instructions the applicant reads before uploading.
+                  <span class="field-required">Required</span></h2>
+                <div class="field">
+                  <label id="doc-instructions-label">Instructions
+                    <span class="field-required">Required</span></label>
+                  <div class="rte">
+                    <div class="rte__toolbar" role="toolbar" aria-label="Document instructions formatting">
+                      <button type="button" class="rte__btn" data-cmd="undo" title="Undo" aria-label="Undo">
+                        <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn" data-cmd="redo" title="Redo" aria-label="Redo">
+                        <i class="fa-solid fa-rotate-right" aria-hidden="true"></i>
+                      </button>
+                      <span class="rte__divider" aria-hidden="true"></span>
+                      <select class="rte__select" data-cmd="formatBlock" aria-label="Text style">
+                        <option value="p">Normal</option>
+                        <option value="h2">Heading</option>
+                        <option value="h3">Subheading</option>
+                      </select>
+                      <span class="rte__divider" aria-hidden="true"></span>
+                      <button type="button" class="rte__btn" data-cmd="bold" title="Bold" aria-label="Bold">
+                        <i class="fa-solid fa-bold" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn" data-cmd="italic" title="Italic" aria-label="Italic">
+                        <i class="fa-solid fa-italic" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn" data-cmd="underline" title="Underline" aria-label="Underline">
+                        <i class="fa-solid fa-underline" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn" title="Text colour" aria-label="Text colour">
+                        <i class="fa-solid fa-palette" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn" title="Link" aria-label="Link">
+                        <i class="fa-solid fa-link" aria-hidden="true"></i>
+                      </button>
+                      <span class="rte__divider" aria-hidden="true"></span>
+                      <button type="button" class="rte__btn" data-cmd="insertOrderedList" title="Numbered list" aria-label="Numbered list">
+                        <i class="fa-solid fa-list-ol" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn" data-cmd="insertUnorderedList" title="Bulleted list" aria-label="Bulleted list">
+                        <i class="fa-solid fa-list-ul" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn" title="Horizontal rule" aria-label="Horizontal rule">
+                        <i class="fa-solid fa-minus" aria-hidden="true"></i>
+                      </button>
+                      <span class="rte__divider" aria-hidden="true"></span>
+                      <button type="button" class="rte__btn" data-cmd="outdent" title="Outdent" aria-label="Outdent">
+                        <i class="fa-solid fa-outdent" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn" data-cmd="indent" title="Indent" aria-label="Indent">
+                        <i class="fa-solid fa-indent" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn" title="Align" aria-label="Align">
+                        <i class="fa-solid fa-align-left" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn" title="Quote" aria-label="Quote">
+                        <i class="fa-solid fa-quote-right" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn" data-cmd="removeFormat" title="Clear formatting" aria-label="Clear formatting">
+                        <i class="fa-solid fa-text-slash" aria-hidden="true"></i>
+                      </button>
+                      <button type="button" class="rte__btn rte__btn--text" title="Special character"
+                              aria-label="Special character">&Sigma;</button>
+                    </div>
+                    <div class="rte__body rte__body--tall" id="doc-instructions" contenteditable="true" role="textbox" aria-multiline="true"
+                         aria-labelledby="doc-instructions-label" data-required data-limit="5000"
+                         data-placeholder="What the applicant needs to know before they start uploading."></div>
+                  </div>
+                  <span class="char-counter" data-counter-for="doc-instructions">5000 characters left</span>
+                </div>
+              </div>
+            </li>
+
+            <!-- 2. The documents themselves. Capped at twenty-five, numbered,
+                 and each can carry its own instructions. -->
+            <li class="question-card" data-card="documents">
+              <span class="question-card__num">2</span>
+              <div class="question-card__body">
+                <h2 class="question-card__title">Configure the documents you will collect with this application.
+                  <span class="field-required">Required</span></h2>
+                <p class="question-card__text">Documents appear to the applicant in the order listed here. Every
+                  document needs a type; everything else is optional.</p>
+
+                <button type="button" class="icon-legend-toggle icon-legend-toggle--block"
+                        aria-expanded="false" aria-controls="icon-legend--documents">
+                  What do the control icons mean?
+                  <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                </button>
+
+                <div class="icon-legend" id="icon-legend--documents" hidden style="margin-top: 12px">
+                  <div class="icon-legend__item"><img src="assets/icon-delete.png" alt=""> Remove document</div>
+                </div>
+
+                <p class="item-empty" id="documents-empty">No documents yet. Add the first one to get started.</p>
+
+                <ol class="item-cards" id="document-list"></ol>
+
+                <div class="item-add">
+                  <button type="button" class="btn btn--warm" id="add-document-btn">Add More</button>
+                  <span class="limit-note" id="document-limit-note">0 of 25 documents added</span>
+                </div>
+              </div>
+            </li>
+
+          </ol>
+
+          <!-- Wizard action bar: back on the left, advance on the right. Next
+               waits on the instructions and on one typed document. -->
+          <div class="builder-actions">
+            <a href="builder-external-integration.html" class="btn btn--secondary">
+              <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> External Integration
+            </a>
+            <div class="builder-actions__right">
+              <span class="builder-actions__note" id="next-note">Write the instructions to continue</span>
+              <a href="applications.html">Save &amp; exit</a>
+              <button type="button" class="btn btn--primary" id="next-btn" disabled>
+                Applicant Information <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/toolbar.js"></script>
+  <script src="js/icon-legend.js"></script>
+  <script>
+    initToolbar('#toolbar', { activeKey: 'applications' });
+    initIconLegends();
+
+    var MAX_DOCS = 25;
+
+    /* Sub types hang off their type, so picking a type narrows what the second
+       dropdown can be. Sample content for a commercial fishing licence. */
+    var DOC_TYPES = {
+      'Proof of Identity': ['Driver\'s License', 'State ID Card', 'US Passport', 'Tribal ID'],
+      'Proof of Residency': ['Utility Bill', 'Lease Agreement', 'Property Tax Statement'],
+      'Vessel Documentation': ['Vessel Registration', 'US Coast Guard Certificate', 'Hull Identification Photo'],
+      'Insurance Certificate': ['Liability Coverage', 'Vessel Coverage', 'Crew Coverage'],
+      'Commercial Fishing Certification': ['Prior Season Landing Report', 'Gear Certification', 'Safety Training Record'],
+      'Business Registration': ['Articles of Incorporation', 'Assumed Name Certificate', 'Sales Tax Permit'],
+      'Other Supporting Document': []
+    };
+
+    /* Every added card needs ids of its own so the labels can carry a real
+       `for`, rather than floating unassociated next to their controls */
+    var docSeq = 0;
+
+    var docList = document.getElementById('document-list');
+    var docsEmpty = document.getElementById('documents-empty');
+    var addDocBtn = document.getElementById('add-document-btn');
+    var limitNote = document.getElementById('document-limit-note');
+    var instructions = document.getElementById('doc-instructions');
+    var nextBtn = document.getElementById('next-btn');
+    var nextNote = document.getElementById('next-note');
+
+    function optionList(values, label) {
+      return ['<option value="">' + label + '</option>'].concat(values.map(function (v) {
+        return '<option value="' + v + '">' + v + '</option>';
+      })).join('');
+    }
+
+    function docCount() {
+      return docList.children.length;
+    }
+
+    /* Renumbers the cards and keeps the empty state, the cap and the advance
+       button honest after any add or remove */
+    function paintDocs() {
+      var total = docCount();
+
+      Array.prototype.slice.call(docList.children).forEach(function (card, i) {
+        var index = i + 1;
+        card.querySelector('.item-card__num').textContent = index;
+        card.querySelector('.item-card__title').textContent = 'Document ' + index;
+        card.querySelector('[data-remove-doc]').setAttribute('aria-label', 'Remove document ' + index);
+      });
+
+      docsEmpty.hidden = total > 0;
+      addDocBtn.disabled = total >= MAX_DOCS;
+      limitNote.textContent = total + ' of ' + MAX_DOCS + ' documents added' +
+        (total >= MAX_DOCS ? ' (limit reached)' : '');
+
+      updateNext();
+    }
+
+    function addDocument() {
+      if (docCount() >= MAX_DOCS) return;
+
+      var uid = 'doc' + (++docSeq);
+      var card = document.createElement('li');
+      card.className = 'item-card';
+      card.innerHTML =
+        '<div class="item-card__head">' +
+          '<span class="item-card__num">1</span>' +
+          '<h3 class="item-card__title">Document 1</h3>' +
+          '<span class="item-card__spacer"></span>' +
+          '<button type="button" class="icon-btn" data-remove-doc aria-label="Remove document">' +
+            '<img src="assets/icon-delete.png" alt="" width="24" height="24">' +
+          '</button>' +
+        '</div>' +
+        '<div class="item-card__body">' +
+          '<div class="field-grid field-grid--2">' +
+            '<div class="field">' +
+              '<label for="' + uid + '-type">Type <span class="field-required">Required</span></label>' +
+              '<select id="' + uid + '-type" data-doc-type>' +
+                optionList(Object.keys(DOC_TYPES), 'Please Select') +
+              '</select>' +
+            '</div>' +
+            '<div class="field">' +
+              '<label for="' + uid + '-subtype">Sub Type</label>' +
+              '<select id="' + uid + '-subtype" data-doc-subtype disabled>' +
+                '<option value="">Select a type first</option>' +
+              '</select>' +
+            '</div>' +
+          '</div>' +
+          '<div class="item-card__checks">' +
+            '<label class="checkbox-option__label">' +
+              '<input type="checkbox" data-doc-required> Required on submission' +
+            '</label>' +
+            '<label class="checkbox-option__label">' +
+              '<input type="checkbox" data-doc-has-instructions> Has its own instructions' +
+            '</label>' +
+          '</div>' +
+          '<div class="field" data-doc-instructions hidden style="margin-top: 14px">' +
+            '<label for="' + uid + '-note">Instructions for this document</label>' +
+            '<textarea id="' + uid + '-note" rows="3" maxlength="500" ' +
+              'placeholder="What this document has to show, and anything that would fail review."></textarea>' +
+          '</div>' +
+        '</div>';
+
+      docList.appendChild(card);
+      paintDocs();
+    }
+
+    /* Sub Type only means something once a Type is chosen, and a type with no
+       sub types says so rather than offering an empty dropdown */
+    function syncSubType(card) {
+      var type = card.querySelector('[data-doc-type]').value;
+      var sub = card.querySelector('[data-doc-subtype]');
+      var subs = DOC_TYPES[type] || [];
+
+      if (!type) {
+        sub.innerHTML = '<option value="">Select a type first</option>';
+        sub.disabled = true;
+        return;
+      }
+      if (subs.length === 0) {
+        sub.innerHTML = '<option value="">No sub types for this type</option>';
+        sub.disabled = true;
+        return;
+      }
+      sub.innerHTML = optionList(subs, 'Please Select');
+      sub.disabled = false;
+    }
+
+    /* Unticking clears the note as well as hiding it, so nothing invisible
+       survives into the published application */
+    function syncDocInstructions(card) {
+      var on = card.querySelector('[data-doc-has-instructions]').checked;
+      var field = card.querySelector('[data-doc-instructions]');
+      field.hidden = !on;
+      if (!on) field.querySelector('textarea').value = '';
+    }
+
+    function updateNext() {
+      var written = instructions.textContent.trim() !== '';
+      var types = Array.prototype.slice.call(docList.querySelectorAll('[data-doc-type]'));
+      var oneTyped = types.some(function (select) { return select.value !== ''; });
+      var done = written && oneTyped;
+
+      nextBtn.disabled = !done;
+      nextNote.hidden = done;
+      nextNote.textContent = !written
+        ? 'Write the instructions to continue'
+        : 'Give at least one document a type to continue';
+
+      document.querySelectorAll('.question-card').forEach(function (card) {
+        card.classList.toggle('is-answered',
+          card.dataset.card === 'instructions' ? written : oneTyped);
+      });
+    }
+
+    addDocBtn.addEventListener('click', addDocument);
+
+    docList.addEventListener('click', function (e) {
+      var remove = e.target.closest('[data-remove-doc]');
+      if (!remove) return;
+      remove.closest('.item-card').remove();
+      paintDocs();
+    });
+
+    docList.addEventListener('change', function (e) {
+      var card = e.target.closest('.item-card');
+      if (!card) return;
+      if (e.target.matches('[data-doc-type]')) syncSubType(card);
+      if (e.target.matches('[data-doc-has-instructions]')) syncDocInstructions(card);
+      updateNext();
+    });
+
+    nextBtn.addEventListener('click', function () {
+      window.location.href = '#';
+    });
+
+    /* Character counter: a countdown, the way RLP words them, turning red once
+       the field runs past its limit */
+    var counter = document.querySelector('[data-counter-for="doc-instructions"]');
+    var limit = parseInt(instructions.getAttribute('data-limit'), 10);
+
+    function paintCounter() {
+      var left = limit - instructions.textContent.length;
+      counter.textContent = Math.abs(left) + ' character' + (Math.abs(left) === 1 ? '' : 's') +
+        (left < 0 ? ' over' : ' left');
+      counter.classList.toggle('char-counter--over', left < 0);
+    }
+
+    instructions.addEventListener('input', function () {
+      paintCounter();
+      updateNext();
+    });
+
+    /* Toolbar: the formatting commands that carry the demo are wired with
+       execCommand; the rest are present for fidelity and sit inert */
+    document.querySelectorAll('.rte').forEach(function (rte) {
+      var body = rte.querySelector('.rte__body');
+
+      rte.querySelectorAll('.rte__btn').forEach(function (btn) {
+        /* mousedown, so the caret is not lost before the command runs */
+        btn.addEventListener('mousedown', function (e) {
+          e.preventDefault();
+          var cmd = btn.getAttribute('data-cmd');
+          if (!cmd) return;
+          body.focus();
+          document.execCommand(cmd);
+          paintToolbar();
+        });
+      });
+
+      rte.querySelector('.rte__select').addEventListener('change', function (e) {
+        body.focus();
+        document.execCommand('formatBlock', false, e.target.value);
+      });
+
+      /* Bold / italic / underline light up with the caret */
+      function paintToolbar() {
+        ['bold', 'italic', 'underline'].forEach(function (cmd) {
+          var btn = rte.querySelector('[data-cmd="' + cmd + '"]');
+          var on = false;
+          try { on = document.queryCommandState(cmd); } catch (err) { on = false; }
+          btn.classList.toggle('is-active', on);
+        });
+      }
+
+      body.addEventListener('keyup', paintToolbar);
+      body.addEventListener('mouseup', paintToolbar);
+    });
+
+    paintCounter();
+
+    /* Opens with two documents, the way the v2 step does, so the repeat reads
+       without a click */
+    addDocument();
+    addDocument();
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>External Integration &mdash; RLP Agency Console</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+
+<body>
+
+  <div class="app app--builder">
+
+    <!-- Header (shared chrome) -->
+    <header class="app-header">
+      <a class="app-header__brand" href="index.html">
+        <img class="app-header__logo" src="assets/tyler-t.png" alt="Tenant logo">
+        <span class="app-header__brand-name">Name of Agency</span>
+      </a>
+      <nav class="app-header__links" aria-label="Account">
+        <a href="settings.html">Settings</a>
+        <span class="app-header__divider" aria-hidden="true"></span>
+        <a href="search.html">Search</a>
+        <span class="app-header__divider" aria-hidden="true"></span>
+        <a href="#">Help</a>
+        <span class="app-header__divider" aria-hidden="true"></span>
+        <a href="#">Logout</a>
+      </nav>
+    </header>
+
+    <!-- Customizable toolbar (shared chrome, rendered by js/toolbar.js) -->
+    <div id="toolbar"></div>
+
+    <!-- ══ Context bar ═══════════════════════════════════════════════════════
+         Unchanged from the step before: nothing on this step feeds the record
+         band, it only decides whether an external lookup runs at review time.
+         ═════════════════════════════════════════════════════════════════════ -->
+    <div class="builder-context">
+      <div class="builder-context__block">
+        <div class="builder-context__eyebrow">Application / Permit Name</div>
+        <div class="builder-context__name">Commercial Fishing Permit: Original (One)</div>
+        <div class="builder-context__meta">
+          <span class="badge badge--gold">Draft</span>
+          <span>Form No. DNR-CF-102 &middot; saved 6 min ago</span>
+        </div>
+      </div>
+      <div class="builder-context__block">
+        <div class="builder-context__eyebrow">License / Application Type</div>
+        <div class="builder-context__value">Commercial Fishing License : Original (One)</div>
+        <div class="builder-context__tags">
+          <span class="tag tag--muted">Authenticated</span>
+          <span class="tag tag--muted">Individual</span>
+          <span class="tag tag--muted">Signature</span>
+          <span class="tag tag--muted">Document Upload</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ Builder shell ═══════════════════════════════════════════════════
+         Step 6 of the Set up phase. One decision: whether a Child Support
+         Payment Verification lookup runs as part of review. Answering yes
+         obliges the agency to tell the applicant why, so the Child Support
+         Verification Text the applicant reads is collected here.
+         ═══════════════════════════════════════════════════════════════════ -->
+    <main class="builder-shell">
+
+      <!-- Phase rail -->
+      <aside class="builder-rail">
+        <a class="builder-rail__back" href="applications.html">
+          <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> All applications
+        </a>
+
+        <div class="builder-rail__progress" style="margin-top: 14px">
+          <div class="builder-rail__progress-row">
+            <span class="builder-rail__eyebrow">Setup phases</span>
+            <span class="builder-rail__pct">62%</span>
+          </div>
+          <div class="builder-rail__track">
+            <div class="builder-rail__fill" style="width: 62%"></div>
+          </div>
+        </div>
+
+        <nav class="builder-phases" aria-label="Setup phases">
+
+          <div class="builder-phase is-current">
+            <a class="builder-phase__row" href="builder-external-integration.html" aria-current="step">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Set up</span>
+                <span class="builder-phase__summary">Details &middot; Applicant info</span>
+              </span>
+            </a>
+            <ul class="builder-steps">
+              <li class="builder-steps__item is-done"><a href="builder-getting-started.html">Getting Started</a></li>
+              <li class="builder-steps__item is-done"><a href="builder-application-type.html">Application Type</a></li>
+              <li class="builder-steps__item is-done"><a href="builder-title-information.html">Title Information</a>
+              </li>
+              <li class="builder-steps__item is-done"><a href="builder-form-number-search-terms.html">Form No.,
+                  Deactivation &amp; Search Terms</a></li>
+              <li class="builder-steps__item is-done"><a href="builder-task-management.html">Task Management</a></li>
+              <li class="builder-steps__item is-current"><a href="builder-external-integration.html">External
+                  Integration</a></li>
+              <li class="builder-steps__item"><a href="builder-document-upload.html">Document Upload</a></li>
+              <li class="builder-steps__item"><a href="#">Applicant Information</a></li>
+            </ul>
+          </div>
+
+          <div class="builder-phase">
+            <a class="builder-phase__row" href="#">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Build</span>
+                <span class="builder-phase__summary">Questions &middot; Conditions</span>
+              </span>
+            </a>
+          </div>
+
+          <div class="builder-phase">
+            <a class="builder-phase__row" href="#">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Rules</span>
+                <span class="builder-phase__summary">Payment &middot; License</span>
+              </span>
+            </a>
+          </div>
+
+          <div class="builder-phase">
+            <a class="builder-phase__row" href="#">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Publish</span>
+                <span class="builder-phase__summary">Preview &middot; Notification</span>
+              </span>
+            </a>
+          </div>
+
+        </nav>
+      </aside>
+
+      <!-- Step canvas -->
+      <div class="builder-canvas">
+        <div class="builder-canvas__inner">
+
+          <p class="builder-eyebrow">Set up &middot; External Integration</p>
+          <h1 class="builder-title">Add an external verification check</h1>
+          <p class="builder-lede">Child Support Payment Verification is the one external lookup available to an
+            application today.</p>
+
+          <p class="help-text" style="margin-top: 14px">Turn the lookup on and the applicant is asked for the details
+            it needs to run, and the result comes back to the reviewer as part of the review process. Leave it off and
+            this step adds nothing to the application.</p>
+
+          <p class="help-text" style="margin-top: 12px">Turning it on also means writing the Child Support
+            Verification Text, which tells the applicant why their child support status is being checked. You write
+            it here, on this step, and it is required before the application can go live.</p>
+
+          <p class="help-text" style="margin-top: 12px"><em>Required</em> indicates a required field.</p>
+
+          <ol class="question-cards" id="question-cards">
+
+            <!-- 1. The lookup itself, with the applicant-facing statement as a
+                 follow-up, since it is only owed when the answer is yes. -->
+            <li class="question-card" data-card="child-support">
+              <span class="question-card__num">1</span>
+              <div class="question-card__body">
+                <h2 class="question-card__title">Will this application require a Child Support Payment Verification?
+                  <span class="field-required">Required</span></h2>
+                <div class="choice-group">
+                  <label class="choice"><input type="radio" name="child-support" value="yes"> Yes</label>
+                  <label class="choice"><input type="radio" name="child-support" value="no"> No</label>
+                </div>
+
+                <div class="question-followup" id="child-support-followup" hidden>
+                  <h3 class="question-followup__title"><span class="question-followup__num">1a</span>Tell the applicant
+                    why this check is being run. <span class="field-required">Required</span></h3>
+                  <p class="help-text" style="margin-top: 10px">This text appears next to the questions the lookup
+                    needs, so the applicant reads it before handing over their details. Explain the reason for the
+                    check and what happens to the result.</p>
+                  <div class="field" style="margin-top: 14px">
+                    <label id="cs-statement-label">Child Support Verification Text
+                      <span class="field-required">Required</span></label>
+                    <div class="rte">
+                      <div class="rte__toolbar" role="toolbar" aria-label="Statement formatting">
+                        <button type="button" class="rte__btn" data-cmd="undo" title="Undo" aria-label="Undo">
+                          <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="rte__btn" data-cmd="redo" title="Redo" aria-label="Redo">
+                          <i class="fa-solid fa-rotate-right" aria-hidden="true"></i>
+                        </button>
+                        <span class="rte__divider" aria-hidden="true"></span>
+                        <select class="rte__select" data-cmd="formatBlock" aria-label="Text style">
+                          <option value="p">Normal</option>
+                          <option value="h2">Heading</option>
+                          <option value="h3">Subheading</option>
+                        </select>
+                        <span class="rte__divider" aria-hidden="true"></span>
+                        <button type="button" class="rte__btn" data-cmd="bold" title="Bold" aria-label="Bold">
+                          <i class="fa-solid fa-bold" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="rte__btn" data-cmd="italic" title="Italic" aria-label="Italic">
+                          <i class="fa-solid fa-italic" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="rte__btn" data-cmd="underline" title="Underline" aria-label="Underline">
+                          <i class="fa-solid fa-underline" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="rte__btn" title="Text colour" aria-label="Text colour">
+                          <i class="fa-solid fa-palette" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="rte__btn" title="Link" aria-label="Link">
+                          <i class="fa-solid fa-link" aria-hidden="true"></i>
+                        </button>
+                        <span class="rte__divider" aria-hidden="true"></span>
+                        <button type="button" class="rte__btn" data-cmd="insertOrderedList" title="Numbered list" aria-label="Numbered list">
+                          <i class="fa-solid fa-list-ol" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="rte__btn" data-cmd="insertUnorderedList" title="Bulleted list" aria-label="Bulleted list">
+                          <i class="fa-solid fa-list-ul" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="rte__btn" title="Horizontal rule" aria-label="Horizontal rule">
+                          <i class="fa-solid fa-minus" aria-hidden="true"></i>
+                        </button>
+                        <span class="rte__divider" aria-hidden="true"></span>
+                        <button type="button" class="rte__btn" data-cmd="outdent" title="Outdent" aria-label="Outdent">
+                          <i class="fa-solid fa-outdent" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="rte__btn" data-cmd="indent" title="Indent" aria-label="Indent">
+                          <i class="fa-solid fa-indent" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="rte__btn" title="Align" aria-label="Align">
+                          <i class="fa-solid fa-align-left" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="rte__btn" title="Quote" aria-label="Quote">
+                          <i class="fa-solid fa-quote-right" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="rte__btn" data-cmd="removeFormat" title="Clear formatting" aria-label="Clear formatting">
+                          <i class="fa-solid fa-text-slash" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="rte__btn rte__btn--text" title="Special character"
+                                aria-label="Special character">&Sigma;</button>
+                      </div>
+                      <div class="rte__body" id="cs-statement" contenteditable="true" role="textbox" aria-multiline="true"
+                           aria-labelledby="cs-statement-label" data-limit="5000"
+                           data-placeholder="Why this application needs to check child support payment status."></div>
+                    </div>
+                    <span class="char-counter" data-counter-for="cs-statement">5000 characters left</span>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+          </ol>
+
+          <!-- Wizard action bar: back on the left, advance on the right.
+               Next waits on the answer, and on the statement if it is yes. -->
+          <div class="builder-actions">
+            <a href="builder-task-management.html" class="btn btn--secondary">
+              <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Task Management
+            </a>
+            <div class="builder-actions__right">
+              <span class="builder-actions__note" id="next-note">Answer the question above to continue</span>
+              <a href="applications.html">Save &amp; exit</a>
+              <button type="button" class="btn btn--primary" id="next-btn" disabled>
+                Document Upload <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/toolbar.js"></script>
+  <script>
+    initToolbar('#toolbar', { activeKey: 'applications' });
+
+    var cards = document.getElementById('question-cards');
+    var followup = document.getElementById('child-support-followup');
+    var statement = document.getElementById('cs-statement');
+    var nextBtn = document.getElementById('next-btn');
+    var nextNote = document.getElementById('next-note');
+
+    function answer() {
+      var picked = cards.querySelector('input[name="child-support"]:checked');
+      return picked ? picked.value : '';
+    }
+
+    /* The choice pills carry their selected state in a class, the same way the
+       Application Type step does */
+    function paintGroup(group) {
+      group.querySelectorAll('.choice').forEach(function (choice) {
+        choice.classList.toggle('is-selected', choice.querySelector('input').checked);
+      });
+    }
+
+    /* No clears the statement as well as hiding it, so a draft written under a
+       since-abandoned yes never goes live unseen */
+    function syncFollowup() {
+      var show = answer() === 'yes';
+      if (followup.hidden === show) {
+        followup.hidden = !show;
+        if (!show) statement.textContent = '';
+      }
+    }
+
+    function updateNext() {
+      var picked = answer();
+      var written = statement.textContent.trim() !== '';
+      var done = picked === 'no' || (picked === 'yes' && written);
+
+      nextBtn.disabled = !done;
+      nextNote.hidden = done;
+      nextNote.textContent = picked === ''
+        ? 'Answer the question above to continue'
+        : 'Write the Child Support Verification Text to continue';
+
+      cards.querySelector('.question-card').classList.toggle('is-answered', done);
+    }
+
+    cards.addEventListener('change', function (e) {
+      if (e.target.type !== 'radio') return;
+      paintGroup(e.target.closest('.choice-group'));
+      syncFollowup();
+      paintCounter();
+      updateNext();
+    });
+
+    /* Character counter: a countdown, the way RLP words them, turning red once
+       the field runs past its limit */
+    var counter = document.querySelector('[data-counter-for="cs-statement"]');
+    var limit = parseInt(statement.getAttribute('data-limit'), 10);
+
+    function paintCounter() {
+      var left = limit - statement.textContent.length;
+      counter.textContent = Math.abs(left) + ' character' + (Math.abs(left) === 1 ? '' : 's') +
+        (left < 0 ? ' over' : ' left');
+      counter.classList.toggle('char-counter--over', left < 0);
+    }
+
+    statement.addEventListener('input', function () {
+      paintCounter();
+      updateNext();
+    });
+
+    nextBtn.addEventListener('click', function () {
+      window.location.href = 'builder-document-upload.html';
+    });
+
+    /* Toolbar: the formatting commands that carry the demo are wired with
+       execCommand; the rest are present for fidelity and sit inert */
+    document.querySelectorAll('.rte').forEach(function (rte) {
+      var body = rte.querySelector('.rte__body');
+
+      rte.querySelectorAll('.rte__btn').forEach(function (btn) {
+        /* mousedown, so the caret is not lost before the command runs */
+        btn.addEventListener('mousedown', function (e) {
+          e.preventDefault();
+          var cmd = btn.getAttribute('data-cmd');
+          if (!cmd) return;
+          body.focus();
+          document.execCommand(cmd);
+          paintToolbar();
+        });
+      });
+
+      rte.querySelector('.rte__select').addEventListener('change', function (e) {
+        body.focus();
+        document.execCommand('formatBlock', false, e.target.value);
+      });
+
+      /* Bold / italic / underline light up with the caret */
+      function paintToolbar() {
+        ['bold', 'italic', 'underline'].forEach(function (cmd) {
+          var btn = rte.querySelector('[data-cmd="' + cmd + '"]');
+          var on = false;
+          try { on = document.queryCommandState(cmd); } catch (err) { on = false; }
+          btn.classList.toggle('is-active', on);
+        });
+      }
+
+      body.addEventListener('keyup', paintToolbar);
+      body.addEventListener('mouseup', paintToolbar);
+    });
+
+    paintCounter();
+    updateNext();
+  </script>
+
+</body>
+
+</html>

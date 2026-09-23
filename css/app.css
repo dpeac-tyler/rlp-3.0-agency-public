@@ -1027,6 +1027,12 @@ a.stat:focus-visible {
   color: var(--c-blue-hover);
 }
 
+/* Toggle that starts its own line rather than trailing an entry count */
+.icon-legend-toggle--block {
+  margin-left: 0;
+  margin-top: 14px;
+}
+
 .icon-legend-toggle i {
   margin-left: 6px;
   font-size: 12px;
@@ -1236,6 +1242,20 @@ a.stat:focus-visible {
   font-size: 16px;
   color: var(--c-text-secondary);
   line-height: 1.5;
+}
+
+/* Bulleted list in the same voice as .help-text, for help copy that has to
+   enumerate steps (Document Upload's intro) */
+.help-list {
+  margin: 8px 0 0;
+  padding-left: 22px;
+  font-size: 16px;
+  color: var(--c-text-secondary);
+  line-height: 1.5;
+}
+
+.help-list li + li {
+  margin-top: 8px;
 }
 
 /* Radio group (fieldset legend + inline options) */
@@ -3781,13 +3801,16 @@ a.stat:focus-visible {
   width: 100%;
 }
 
+/* Navy, not gold: --c-gold-icon is 4.05:1 on white, and at 14px this is not
+   large text, so it needs 4.5:1. Navy is 13.6:1 and already the chrome colour
+   used by the answered-card and item-card number chips. */
 .builder-eyebrow {
   margin: 0;
   font-size: 14px;
   font-weight: 700;
   letter-spacing: .06em;
   text-transform: uppercase;
-  color: var(--c-gold-icon);
+  color: var(--c-header-navy);
 }
 
 /* The rail carries wayfinding, so the step title drops .page-title's rule */
@@ -4166,6 +4189,14 @@ a.stat:focus-visible {
   margin-top: 0;
 }
 
+.item-card__checks {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
 /* Nested checklist rows. Lighter than an item card, since they sit one level
    further in and carry a single field each. */
 .item-rows {
@@ -4303,12 +4334,13 @@ a.stat:focus-visible {
   display: none;
 }
 
+/* Navy for the same contrast reason as .builder-eyebrow */
 .question-followup__eyebrow {
   font-size: 14px;
   font-weight: 700;
   letter-spacing: .06em;
   text-transform: uppercase;
-  color: var(--c-gold-icon);
+  color: var(--c-header-navy);
 }
 
 .question-followup__title {
