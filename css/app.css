@@ -3892,30 +3892,32 @@ a.stat:focus-visible {
   content: '\25B8';
 }
 
-/* A step whose answers are final on a resumed draft. Dimmed, not clickable,
-   and its number or tick replaced by a blocked marker, the way v2.0 renders
-   it. Styled from an <html> class set in <head> so it never paints as a live
-   link first; builder-locks.js removes the href, which is what actually stops
-   it being reached by mouse or keyboard. */
-.builder-resumed .builder-steps__item[data-lockable] a {
-  color: #8b9fbe;
-  cursor: default;
-}
-
-.builder-resumed .builder-steps__item[data-lockable] a:hover {
-  color: #8b9fbe;
-}
-
-/* U+2298, a circle with a slash, rather than an emoji no-entry sign, which
-   would render in colour and break with the rail's other glyph markers */
-.builder-resumed .builder-steps__item[data-lockable] a::before {
-  content: '\2298';
+/* A step whose answers are final on a resumed draft. Still a live link, since
+   it opens a read-only summary, but its tick becomes a lock so the rail says
+   up front that the step can be viewed and not changed. The step you are on
+   keeps its caret. Styled from an <html> class set in <head> by
+   builder-locks.js, so it never paints as a plain tick first. */
+.builder-resumed .builder-steps__item[data-lockable]:not(.is-current) a::before {
+  content: '\f023';
   position: absolute;
-  left: -14px;
-  top: 7px;
+  left: -15px;
+  top: 9px;
   margin: 0;
-  font-weight: 400;
-  color: #8b9fbe;
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  font-size: 11px;
+  color: var(--c-gold);
+}
+
+/* The three final steps carry both views. A fresh application shows the
+   form; a resumed draft shows the answers instead. !important because the
+   views include flex and grid blocks with a display of their own. */
+.builder-resumed [data-edit-view] {
+  display: none !important;
+}
+
+html:not(.builder-resumed) [data-final-view] {
+  display: none !important;
 }
 
 /* Canvas --------------------------------------------------------------- */
@@ -4251,6 +4253,44 @@ a.stat:focus-visible {
    instruction in the card title and the control underneath it */
 .question-card__body .field {
   margin-top: 14px;
+}
+
+/* The answer on a view-only step: plain text under its question, not a
+   disabled control, so it reads at full contrast */
+.final-answer {
+  margin: 6px 0 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--c-text-primary);
+}
+
+.final-answer p {
+  margin: 0;
+}
+
+.final-answer p + p {
+  margin-top: 8px;
+}
+
+/* Label / answer pairs, for a step whose answers sit in one card */
+.final-answers {
+  margin: 0;
+}
+
+.final-answers dt {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--c-text-primary);
+}
+
+.final-answers dd {
+  margin: 4px 0 0;
+  font-size: 16px;
+  color: var(--c-text-primary);
+}
+
+.final-answers dd + dt {
+  margin-top: 18px;
 }
 
 /* ---------------------------------------------------------------------- */

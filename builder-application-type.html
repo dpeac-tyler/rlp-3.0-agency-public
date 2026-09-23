@@ -153,6 +153,99 @@
 
           <p class="builder-eyebrow">Set up &middot; Application Type</p>
           <h1 class="builder-title">How should this application behave?</h1>
+
+          <!-- ══ View only: a resumed draft shows each answer as text ═══════
+               Only the follow-ups the answers opened are listed, so there is
+               no branch logic to run here. -->
+          <div data-final-view>
+            <p class="builder-lede">The answers that shaped this application, in the order they were asked.</p>
+
+            <div class="info-notice">
+              <i class="fa-solid fa-lock" aria-hidden="true"></i>
+              <div><strong>View only:</strong> These answers became final once Title Information was completed,
+                so they are shown here for reference and can't be changed.</div>
+            </div>
+
+            <ol class="question-cards">
+              <li class="question-card is-answered">
+                <span class="question-card__num">1</span>
+                <div class="question-card__body">
+                  <h2 class="question-card__title">Does the user of this application need an account?</h2>
+                  <p class="final-answer">Yes</p>
+                  <div class="question-followup">
+                    <h3 class="question-followup__title"><span class="question-followup__num">1a</span>Does this
+                      application require internal review?</h3>
+                    <p class="final-answer">Yes</p>
+                  </div>
+                </div>
+              </li>
+              <li class="question-card is-answered">
+                <span class="question-card__num">2</span>
+                <div class="question-card__body">
+                  <h2 class="question-card__title">Does the application need document upload?</h2>
+                  <p class="final-answer">Yes</p>
+                </div>
+              </li>
+              <li class="question-card is-answered">
+                <span class="question-card__num">3</span>
+                <div class="question-card__body">
+                  <h2 class="question-card__title">Is the application for an Individual or a Business?</h2>
+                  <p class="final-answer">Individual</p>
+                  <div class="question-followup">
+                    <h3 class="question-followup__title"><span class="question-followup__num">3a</span>Does this
+                      application collect ID information?</h3>
+                    <p class="final-answer">Yes</p>
+                  </div>
+                </div>
+              </li>
+              <li class="question-card is-answered">
+                <span class="question-card__num">4</span>
+                <div class="question-card__body">
+                  <h2 class="question-card__title">Is there a fee for this application?</h2>
+                  <p class="final-answer">Yes</p>
+                  <div class="question-followup">
+                    <h3 class="question-followup__title"><span class="question-followup__num">4a</span>Does this
+                      application allow payment after approval?</h3>
+                    <p class="final-answer">No</p>
+                  </div>
+                </div>
+              </li>
+              <li class="question-card is-answered">
+                <span class="question-card__num">5</span>
+                <div class="question-card__body">
+                  <h2 class="question-card__title">Does this application allow a license/permit?</h2>
+                  <p class="final-answer">Yes</p>
+                  <div class="question-followup">
+                    <h3 class="question-followup__title"><span class="question-followup__num">5a</span>Does this
+                      application issue a certificate?</h3>
+                    <p class="final-answer">Yes</p>
+                  </div>
+                </div>
+              </li>
+              <li class="question-card is-answered">
+                <span class="question-card__num">6</span>
+                <div class="question-card__body">
+                  <h2 class="question-card__title">Will this application require an electronic signature?</h2>
+                  <p class="final-answer">Yes</p>
+                </div>
+              </li>
+            </ol>
+
+            <div class="builder-actions">
+              <a href="builder-getting-started.html" class="btn btn--secondary">
+                <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Getting Started
+              </a>
+              <div class="builder-actions__right">
+                <a href="applications.html">Exit</a>
+                <a href="builder-title-information.html" class="btn btn--primary">
+                  Title Information <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- ══ Edit: a fresh application ═══════════════════════════════ -->
+          <div data-edit-view>
           <p class="builder-lede">To get started, please answer the following questions. The first set of questions
             will help you create the correct type of application.</p>
 
@@ -449,6 +542,7 @@
                 Title Information <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
               </button>
             </div>
+          </div>
           </div>
 
         </div>

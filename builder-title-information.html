@@ -154,6 +154,85 @@
 
           <p class="builder-eyebrow">Set up &middot; Title Information</p>
           <h1 class="builder-title">Name and describe this application</h1>
+
+          <!-- ══ View only: a resumed draft shows each answer as text ═══════ -->
+          <div data-final-view>
+            <p class="builder-lede">The title and copy this application was set up with.</p>
+
+            <div class="info-notice">
+              <i class="fa-solid fa-lock" aria-hidden="true"></i>
+              <div><strong>View only:</strong> These answers became final once Title Information was completed,
+                so they are shown here for reference and can't be changed.</div>
+            </div>
+
+            <ol class="question-cards">
+              <li class="question-card is-answered">
+                <span class="question-card__num">1</span>
+                <div class="question-card__body">
+                  <h2 class="question-card__title">Application Title</h2>
+                  <p class="final-answer">Commercial Fishing Permit: Original (One)</p>
+                </div>
+              </li>
+              <li class="question-card is-answered">
+                <span class="question-card__num">2</span>
+                <div class="question-card__body">
+                  <h2 class="question-card__title">Application Display Title</h2>
+                  <p class="final-answer">Commercial Fishing Permit</p>
+                </div>
+              </li>
+              <li class="question-card is-answered">
+                <span class="question-card__num">3</span>
+                <div class="question-card__body">
+                  <h2 class="question-card__title">Application Subtitle</h2>
+                  <p class="final-answer">2026 season, inland waters</p>
+                </div>
+              </li>
+              <li class="question-card is-answered">
+                <span class="question-card__num">4</span>
+                <div class="question-card__body">
+                  <h2 class="question-card__title">More Info URL</h2>
+                  <p class="final-answer"><a href="#">https://dnr.example.gov/commercial-fishing</a></p>
+                </div>
+              </li>
+              <li class="question-card is-answered">
+                <span class="question-card__num">5</span>
+                <div class="question-card__body">
+                  <h2 class="question-card__title">Application Description</h2>
+                  <div class="final-answer">
+                    <p>Apply for a permit to harvest finfish and shellfish for sale from the state's inland waters.
+                      A permit is issued to one named individual and is valid for the 2026 season.</p>
+                  </div>
+                </div>
+              </li>
+              <li class="question-card is-answered">
+                <span class="question-card__num">6</span>
+                <div class="question-card__body">
+                  <h2 class="question-card__title">Application Instructions</h2>
+                  <div class="final-answer">
+                    <p>Before you start, have your vessel registration number, a copy of your photo ID and your
+                      commercial landing records from the last season to hand.</p>
+                    <p>The application takes about 20 minutes. You can save it and come back at any time before
+                      you submit.</p>
+                  </div>
+                </div>
+              </li>
+            </ol>
+
+            <div class="builder-actions">
+              <a href="builder-application-type.html" class="btn btn--secondary">
+                <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Application Type
+              </a>
+              <div class="builder-actions__right">
+                <a href="applications.html">Exit</a>
+                <a href="builder-form-number-search-terms.html" class="btn btn--primary">
+                  Form No. &amp; Search Terms <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- ══ Edit: a fresh application ═══════════════════════════════ -->
+          <div data-edit-view>
           <p class="builder-lede">Now let&rsquo;s give your application a title, display name, subtitle, description
             and URL.</p>
 
@@ -400,6 +479,7 @@
               </button>
             </div>
           </div>
+          </div>
 
         </div>
       </div>
@@ -416,6 +496,11 @@
     var nextBtn = document.getElementById('next-btn');
     var nextNote = document.getElementById('next-note');
     var required = Array.prototype.slice.call(document.querySelectorAll('[data-required]'));
+
+    /* A resumed draft already has its saved name */
+    if (document.documentElement.classList.contains('builder-resumed')) {
+      contextName.textContent = 'Commercial Fishing Permit: Original (One)';
+    }
 
     /* The record band has no name of its own yet, so the title fills it in */
     titleInput.addEventListener('input', function () {
