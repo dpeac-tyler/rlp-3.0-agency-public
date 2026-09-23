@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form No., Deactivation &amp; Search Terms &mdash; RLP Agency Console</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+
+<body>
+
+  <div class="app app--builder">
+
+    <!-- Header (shared chrome) -->
+    <header class="app-header">
+      <a class="app-header__brand" href="index.html">
+        <img class="app-header__logo" src="assets/tyler-t.png" alt="Tenant logo">
+        <span class="app-header__brand-name">Name of Agency</span>
+      </a>
+      <nav class="app-header__links" aria-label="Account">
+        <a href="settings.html">Settings</a>
+        <span class="app-header__divider" aria-hidden="true"></span>
+        <a href="search.html">Search</a>
+        <span class="app-header__divider" aria-hidden="true"></span>
+        <a href="#">Help</a>
+        <span class="app-header__divider" aria-hidden="true"></span>
+        <a href="#">Logout</a>
+      </nav>
+    </header>
+
+    <!-- Customizable toolbar (shared chrome, rendered by js/toolbar.js) -->
+    <div id="toolbar"></div>
+
+    <!-- ══ Context bar ═══════════════════════════════════════════════════════
+         Title Information has been saved, so the application now carries its
+         own name. The form number is the one piece still missing from the meta
+         line, and it fills in live as it is typed on this step.
+         ═════════════════════════════════════════════════════════════════════ -->
+    <div class="builder-context">
+      <div class="builder-context__block">
+        <div class="builder-context__eyebrow">Application / Permit Name</div>
+        <div class="builder-context__name">Commercial Fishing Permit: Original (One)</div>
+        <div class="builder-context__meta">
+          <span class="badge badge--gold">Draft</span>
+          <span id="context-form-no">Form No. not set</span>
+          <span>&middot; saved 2 min ago</span>
+        </div>
+      </div>
+      <div class="builder-context__block">
+        <div class="builder-context__eyebrow">License / Application Type</div>
+        <div class="builder-context__value">Commercial Fishing License : Original (One)</div>
+        <div class="builder-context__tags">
+          <span class="tag tag--muted">Authenticated</span>
+          <span class="tag tag--muted">Individual</span>
+          <span class="tag tag--muted">Signature</span>
+          <span class="tag tag--muted">Document Upload</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ Builder shell ═══════════════════════════════════════════════════
+         Step 4 of the Set up phase. Four optional settings that decide how the
+         application is identified on paper, how long it stays online, and how
+         applicants find it: form number, deactivation date, search keywords
+         and whether it is promoted on the portal landing page.
+         ═══════════════════════════════════════════════════════════════════ -->
+    <main class="builder-shell">
+
+      <!-- Phase rail -->
+      <aside class="builder-rail">
+        <a class="builder-rail__back" href="applications.html">
+          <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> All applications
+        </a>
+
+        <div class="builder-rail__progress" style="margin-top: 14px">
+          <div class="builder-rail__progress-row">
+            <span class="builder-rail__eyebrow">Setup phases</span>
+            <span class="builder-rail__pct">37%</span>
+          </div>
+          <div class="builder-rail__track">
+            <div class="builder-rail__fill" style="width: 37%"></div>
+          </div>
+        </div>
+
+        <nav class="builder-phases" aria-label="Setup phases">
+
+          <div class="builder-phase is-current">
+            <a class="builder-phase__row" href="builder-form-number-search-terms.html" aria-current="step">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Set up</span>
+                <span class="builder-phase__summary">Details &middot; Applicant info</span>
+              </span>
+            </a>
+            <ul class="builder-steps">
+              <li class="builder-steps__item is-done"><a href="builder-getting-started.html">Getting Started</a></li>
+              <li class="builder-steps__item is-done"><a href="builder-application-type.html">Application Type</a></li>
+              <li class="builder-steps__item is-done"><a href="builder-title-information.html">Title Information</a>
+              </li>
+              <li class="builder-steps__item is-current"><a href="builder-form-number-search-terms.html">Form No.,
+                  Deactivation &amp; Search Terms</a></li>
+              <li class="builder-steps__item"><a href="builder-task-management.html">Task Management</a></li>
+              <li class="builder-steps__item"><a href="#">External Integration</a></li>
+              <li class="builder-steps__item"><a href="#">Document Upload</a></li>
+              <li class="builder-steps__item"><a href="#">Applicant Information</a></li>
+            </ul>
+          </div>
+
+          <div class="builder-phase">
+            <a class="builder-phase__row" href="#">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Build</span>
+                <span class="builder-phase__summary">Questions &middot; Conditions</span>
+              </span>
+            </a>
+          </div>
+
+          <div class="builder-phase">
+            <a class="builder-phase__row" href="#">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Rules</span>
+                <span class="builder-phase__summary">Payment &middot; License</span>
+              </span>
+            </a>
+          </div>
+
+          <div class="builder-phase">
+            <a class="builder-phase__row" href="#">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Publish</span>
+                <span class="builder-phase__summary">Preview &middot; Notification</span>
+              </span>
+            </a>
+          </div>
+
+        </nav>
+      </aside>
+
+      <!-- Step canvas -->
+      <div class="builder-canvas">
+        <div class="builder-canvas__inner">
+
+          <p class="builder-eyebrow">Set up &middot; Form No., Deactivation &amp; Search Terms</p>
+          <h1 class="builder-title">Number this application and help people find it</h1>
+          <p class="builder-lede">Nothing on this step is required. You can set any of it now, or come back to it
+            before the application goes live.</p>
+
+          <p class="help-text" style="margin-top: 14px">The form number is usually the same number that appears on the
+            paper version of this form. Once the application goes live the number is locked, so it can no longer be
+            edited.</p>
+
+          <p class="help-text" style="margin-top: 12px">The application deactivation date is the last day this
+            application is available online. It has to fall on or after both today and the go-live date.</p>
+
+          <ol class="question-cards" id="question-cards">
+
+            <!-- 1. Form number. Optional now, locked at go-live, which is why
+                 the context bar tracks it as soon as it is typed. -->
+            <li class="question-card" data-card="form-number">
+              <span class="question-card__num">1</span>
+              <div class="question-card__body">
+                <h2 class="question-card__title">Type the Form Number in the field below.</h2>
+                <div class="field">
+                  <label for="form-number">Form Number</label>
+                  <input type="text" id="form-number" placeholder="DNR-CF-102">
+                  <span class="field-hint">Matches the number printed on the paper form, if there is one.</span>
+                </div>
+              </div>
+            </li>
+
+            <!-- 2. Deactivation date. Left blank the application stays online
+                 until it is retired by hand. -->
+            <li class="question-card" data-card="deactivation-date">
+              <span class="question-card__num">2</span>
+              <div class="question-card__body">
+                <h2 class="question-card__title">Set the Application Deactivation Date.</h2>
+                <p class="question-card__text">Leave this blank to keep the application online until you retire it
+                  yourself.</p>
+                <div class="field">
+                  <label for="deactivation-date">End Date</label>
+                  <input type="date" id="deactivation-date" style="max-width: 200px">
+                </div>
+              </div>
+            </li>
+
+            <!-- 3. Search terms. A plain textarea rather than the RTE, since a
+                 comma-delimited keyword list carries no formatting. -->
+            <li class="question-card" data-card="search-terms">
+              <span class="question-card__num">3</span>
+              <div class="question-card__body">
+                <h2 class="question-card__title">Type in the search terms that users can use to search for this
+                  application on the internet.</h2>
+                <p class="question-card__text">Type a comma-delimited set of search terms that citizen users may use
+                  to search for this application on the internet. Search terms may be single or multiple words.</p>
+                <div class="field">
+                  <label for="search-terms">Keywords</label>
+                  <textarea id="search-terms" rows="4" data-limit="1000"
+                            placeholder="commercial fishing, fishing permit, inland waters, trawl, gill net"></textarea>
+                  <span class="char-counter" data-counter-for="search-terms">1000 characters left</span>
+                </div>
+              </div>
+            </li>
+
+            <!-- 4. Portal promotion. A tile on the public landing page, rather
+                 than the application only being reachable through search. -->
+            <li class="question-card" data-card="portal-landing">
+              <span class="question-card__num">4</span>
+              <div class="question-card__body">
+                <h2 class="question-card__title">Choose whether this application is promoted on the portal landing
+                  page.</h2>
+                <p class="question-card__text">Left off, applicants can still reach this application through search
+                  and through a direct link.</p>
+                <div class="field">
+                  <label class="checkbox-option__label">
+                    <input type="checkbox" id="show-on-portal" name="show-on-portal">
+                    Show on Portal Landing Page
+                  </label>
+                </div>
+              </div>
+            </li>
+
+          </ol>
+
+          <!-- Wizard action bar: back on the left, advance on the right. No
+               required fields here, so Next is live from the start. -->
+          <div class="builder-actions">
+            <a href="builder-title-information.html" class="btn btn--secondary">
+              <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Title Information
+            </a>
+            <div class="builder-actions__right">
+              <a href="applications.html">Save &amp; exit</a>
+              <button type="button" class="btn btn--primary" id="next-btn">
+                Task Management <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/toolbar.js"></script>
+  <script>
+    initToolbar('#toolbar', { activeKey: 'applications' });
+
+    var formNumber = document.getElementById('form-number');
+    var contextFormNo = document.getElementById('context-form-no');
+    var nextBtn = document.getElementById('next-btn');
+
+    /* The meta line is missing only the form number, so it fills in live */
+    formNumber.addEventListener('input', function () {
+      var value = formNumber.value.trim();
+      contextFormNo.textContent = value ? 'Form No. ' + value : 'Form No. not set';
+    });
+
+    /* Same reading as the steps before it: the numbered chip fills in once the
+       card has been answered, so progress is legible at a glance. Every field
+       here is optional, so a card counts as answered on any value at all. */
+    function paintCards() {
+      document.querySelectorAll('.question-card').forEach(function (card) {
+        var controls = Array.prototype.slice.call(card.querySelectorAll('input, textarea'));
+        var answered = controls.some(function (el) {
+          return el.type === 'checkbox' ? el.checked : el.value.trim() !== '';
+        });
+        card.classList.toggle('is-answered', answered);
+      });
+    }
+
+    nextBtn.addEventListener('click', function () {
+      window.location.href = 'builder-task-management.html';
+    });
+
+    /* Character counter: a countdown, the way RLP words them, turning red once
+       the field runs past its limit */
+    document.querySelectorAll('[data-limit]').forEach(function (field) {
+      var limit = parseInt(field.getAttribute('data-limit'), 10);
+      var counter = document.querySelector('[data-counter-for="' + field.id + '"]');
+
+      function paint() {
+        var left = limit - field.value.length;
+        counter.textContent = Math.abs(left) + ' character' + (Math.abs(left) === 1 ? '' : 's') +
+          (left < 0 ? ' over' : ' left');
+        counter.classList.toggle('char-counter--over', left < 0);
+      }
+
+      field.addEventListener('input', paint);
+      paint();
+    });
+
+    document.addEventListener('input', paintCards);
+    document.addEventListener('change', paintCards);
+    paintCards();
+  </script>
+
+</body>
+
+</html>

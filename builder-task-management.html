@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Management &mdash; RLP Agency Console</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+
+<body>
+
+  <div class="app app--builder">
+
+    <!-- Header (shared chrome) -->
+    <header class="app-header">
+      <a class="app-header__brand" href="index.html">
+        <img class="app-header__logo" src="assets/tyler-t.png" alt="Tenant logo">
+        <span class="app-header__brand-name">Name of Agency</span>
+      </a>
+      <nav class="app-header__links" aria-label="Account">
+        <a href="settings.html">Settings</a>
+        <span class="app-header__divider" aria-hidden="true"></span>
+        <a href="search.html">Search</a>
+        <span class="app-header__divider" aria-hidden="true"></span>
+        <a href="#">Help</a>
+        <span class="app-header__divider" aria-hidden="true"></span>
+        <a href="#">Logout</a>
+      </nav>
+    </header>
+
+    <!-- Customizable toolbar (shared chrome, rendered by js/toolbar.js) -->
+    <div id="toolbar"></div>
+
+    <!-- ══ Context bar ═══════════════════════════════════════════════════════
+         The form number was set on the step before, so the meta line is now
+         complete and nothing on this step feeds back into it.
+         ═════════════════════════════════════════════════════════════════════ -->
+    <div class="builder-context">
+      <div class="builder-context__block">
+        <div class="builder-context__eyebrow">Application / Permit Name</div>
+        <div class="builder-context__name">Commercial Fishing Permit: Original (One)</div>
+        <div class="builder-context__meta">
+          <span class="badge badge--gold">Draft</span>
+          <span>Form No. DNR-CF-102 &middot; saved 4 min ago</span>
+        </div>
+      </div>
+      <div class="builder-context__block">
+        <div class="builder-context__eyebrow">License / Application Type</div>
+        <div class="builder-context__value">Commercial Fishing License : Original (One)</div>
+        <div class="builder-context__tags">
+          <span class="tag tag--muted">Authenticated</span>
+          <span class="tag tag--muted">Individual</span>
+          <span class="tag tag--muted">Signature</span>
+          <span class="tag tag--muted">Document Upload</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ Builder shell ═══════════════════════════════════════════════════
+         Step 5 of the Set up phase. Two decisions: how review tasks are named,
+         and the tasks themselves, each assigned to a user group and optionally
+         carrying a checklist the reviewer works through.
+         ═══════════════════════════════════════════════════════════════════ -->
+    <main class="builder-shell">
+
+      <!-- Phase rail -->
+      <aside class="builder-rail">
+        <a class="builder-rail__back" href="applications.html">
+          <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> All applications
+        </a>
+
+        <div class="builder-rail__progress" style="margin-top: 14px">
+          <div class="builder-rail__progress-row">
+            <span class="builder-rail__eyebrow">Setup phases</span>
+            <span class="builder-rail__pct">50%</span>
+          </div>
+          <div class="builder-rail__track">
+            <div class="builder-rail__fill" style="width: 50%"></div>
+          </div>
+        </div>
+
+        <nav class="builder-phases" aria-label="Setup phases">
+
+          <div class="builder-phase is-current">
+            <a class="builder-phase__row" href="builder-task-management.html" aria-current="step">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Set up</span>
+                <span class="builder-phase__summary">Details &middot; Applicant info</span>
+              </span>
+            </a>
+            <ul class="builder-steps">
+              <li class="builder-steps__item is-done"><a href="builder-getting-started.html">Getting Started</a></li>
+              <li class="builder-steps__item is-done"><a href="builder-application-type.html">Application Type</a></li>
+              <li class="builder-steps__item is-done"><a href="builder-title-information.html">Title Information</a>
+              </li>
+              <li class="builder-steps__item is-done"><a href="builder-form-number-search-terms.html">Form No.,
+                  Deactivation &amp; Search Terms</a></li>
+              <li class="builder-steps__item is-current"><a href="builder-task-management.html">Task Management</a></li>
+              <li class="builder-steps__item"><a href="#">External Integration</a></li>
+              <li class="builder-steps__item"><a href="#">Document Upload</a></li>
+              <li class="builder-steps__item"><a href="#">Applicant Information</a></li>
+            </ul>
+          </div>
+
+          <div class="builder-phase">
+            <a class="builder-phase__row" href="#">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Build</span>
+                <span class="builder-phase__summary">Questions &middot; Conditions</span>
+              </span>
+            </a>
+          </div>
+
+          <div class="builder-phase">
+            <a class="builder-phase__row" href="#">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Rules</span>
+                <span class="builder-phase__summary">Payment &middot; License</span>
+              </span>
+            </a>
+          </div>
+
+          <div class="builder-phase">
+            <a class="builder-phase__row" href="#">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Publish</span>
+                <span class="builder-phase__summary">Preview &middot; Notification</span>
+              </span>
+            </a>
+          </div>
+
+        </nav>
+      </aside>
+
+      <!-- Step canvas -->
+      <div class="builder-canvas">
+        <div class="builder-canvas__inner">
+
+          <p class="builder-eyebrow">Set up &middot; Task Management</p>
+          <h1 class="builder-title">Set up the review process</h1>
+          <p class="builder-lede">Define the tasks a submission passes through, and which user group can review
+            each one.</p>
+
+          <p class="help-text" style="margin-top: 14px">A task&rsquo;s assigned user group can claim, approve,
+            reject, deny and unclaim it. Tasks run in the order they appear below, so the order you add them in is
+            the order reviewers work through them.</p>
+
+          <p class="help-text" style="margin-top: 12px">If you need to check which user groups exist first, open
+            <a href="settings.html">Settings &rsaquo; Users / Groups</a> in a separate tab so you don&rsquo;t lose
+            this draft.</p>
+
+          <p class="help-text" style="margin-top: 12px"><em>Required</em> indicates a required field.</p>
+
+          <ol class="question-cards" id="question-cards">
+
+            <!-- 1. Naming convention. This answer decides what the Task Name
+                 control on each task card can be, so it is asked first. -->
+            <li class="question-card" data-card="task-naming">
+              <span class="question-card__num">1</span>
+              <div class="question-card__body">
+                <h2 class="question-card__title">Would you like Standard or Agency Defined task naming?
+                  <span class="field-required">Required</span></h2>
+                <div class="choice-group">
+                  <label class="choice"><input type="radio" name="task-naming" value="standard"> Standard</label>
+                  <label class="choice"><input type="radio" name="task-naming" value="agency"> Agency Defined</label>
+                </div>
+                <p class="help-text" style="margin-top: 12px"><strong>Standard</strong> names each task for its place
+                  in the queue, so a two-task process reads Task 1 of 2, then Task 2 of 2. The names keep themselves
+                  up to date as you add or remove tasks.</p>
+                <p class="help-text" style="margin-top: 8px"><strong>Agency Defined</strong> lets you pick each name
+                  from the list your agency maintains.</p>
+              </div>
+            </li>
+
+            <!-- 2. The tasks themselves. Capped at five, numbered, and each one
+                 can carry a checklist the reviewer works through. -->
+            <li class="question-card" data-card="tasks">
+              <span class="question-card__num">2</span>
+              <div class="question-card__body">
+                <h2 class="question-card__title">Add the tasks in your review process.
+                  <span class="field-required">Required</span></h2>
+                <p class="question-card__text">You can add up to five tasks. Each one needs a user group before the
+                  application can go live.</p>
+
+                <p class="item-empty" id="tasks-empty">No tasks yet. Add the first review task to get started.</p>
+
+                <ol class="item-cards" id="task-list"></ol>
+
+                <div class="item-add">
+                  <button type="button" class="btn btn--warm" id="add-task-btn">Add Task</button>
+                  <span class="limit-note" id="task-limit-note">0 of 5 tasks added</span>
+                </div>
+              </div>
+            </li>
+
+          </ol>
+
+          <!-- Wizard action bar: back on the left, advance on the right.
+               Next waits on the naming choice and one fully filled task. -->
+          <div class="builder-actions">
+            <a href="builder-form-number-search-terms.html" class="btn btn--secondary">
+              <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Form No. &amp; Search Terms
+            </a>
+            <div class="builder-actions__right">
+              <span class="builder-actions__note" id="next-note">Add at least one task to continue</span>
+              <a href="applications.html">Save &amp; exit</a>
+              <button type="button" class="btn btn--primary" id="next-btn" disabled>
+                External Integration <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/toolbar.js"></script>
+  <script>
+    initToolbar('#toolbar', { activeKey: 'applications' });
+
+    var MAX_TASKS = 5;
+    var AGENCY_TASK_NAMES = [
+      'Completeness Check', 'Document Verification', 'Background Review',
+      'Fee Reconciliation', 'Supervisor Approval'
+    ];
+    var USER_GROUPS = [
+      'Licensing Intake', 'Licensing Review', 'Fisheries Program Staff',
+      'Compliance', 'Licensing Supervisors'
+    ];
+
+    var taskList = document.getElementById('task-list');
+    var tasksEmpty = document.getElementById('tasks-empty');
+    var addTaskBtn = document.getElementById('add-task-btn');
+    var limitNote = document.getElementById('task-limit-note');
+    var nextBtn = document.getElementById('next-btn');
+    var nextNote = document.getElementById('next-note');
+
+    function namingMode() {
+      var picked = document.querySelector('input[name="task-naming"]:checked');
+      return picked ? picked.value : '';
+    }
+
+    function options(list, label) {
+      return ['<option value="">' + label + '</option>'].concat(list.map(function (name) {
+        return '<option value="' + name + '">' + name + '</option>';
+      })).join('');
+    }
+
+    /* Standard naming derives the name from position, so the field is read-only
+       and restates itself whenever the list changes. Agency Defined picks from
+       the agency's own list instead. Until the question is answered the control
+       says so rather than offering a name that might not survive the choice. */
+    function nameControl(index, total) {
+      var mode = namingMode();
+      if (mode === 'standard') {
+        return '<input type="text" value="Task ' + index + ' of ' + total + '" readonly>';
+      }
+      if (mode === 'agency') {
+        return '<select data-task-name>' + options(AGENCY_TASK_NAMES, 'Please Select') + '</select>';
+      }
+      return '<input type="text" value="Answer question 1 to name this task" readonly>';
+    }
+
+    function taskCount() {
+      return taskList.children.length;
+    }
+
+    /* Renumbers every card and rewrites the name controls, since a Standard
+       name depends on both the card's position and the total */
+    function paintTasks() {
+      var total = taskCount();
+
+      Array.prototype.slice.call(taskList.children).forEach(function (card, i) {
+        var index = i + 1;
+        card.querySelector('.item-card__num').textContent = index;
+        card.querySelector('.item-card__title').textContent = 'Task ' + index;
+
+        var nameField = card.querySelector('[data-name-field]');
+        var existing = nameField.querySelector('[data-task-name]');
+        var keep = existing ? existing.value : '';
+        nameField.querySelector('input, select').remove();
+        nameField.insertAdjacentHTML('beforeend', nameControl(index, total));
+        var fresh = nameField.querySelector('[data-task-name]');
+        if (fresh && keep) fresh.value = keep;
+
+        /* Checklist rows have no visible label, so the number lives in the
+           accessible name instead */
+        card.querySelectorAll('[data-checklist] input').forEach(function (input, j) {
+          input.setAttribute('aria-label', 'Task ' + index + ', checklist item ' + (j + 1));
+        });
+      });
+
+      tasksEmpty.hidden = total > 0;
+      addTaskBtn.disabled = total >= MAX_TASKS;
+      limitNote.textContent = total + ' of ' + MAX_TASKS + ' tasks added' +
+        (total >= MAX_TASKS ? ' (limit reached)' : '');
+
+      updateNext();
+    }
+
+    function addTask() {
+      if (taskCount() >= MAX_TASKS) return;
+
+      var card = document.createElement('li');
+      card.className = 'item-card';
+      card.innerHTML =
+        '<div class="item-card__head">' +
+          '<span class="item-card__num">1</span>' +
+          '<h3 class="item-card__title">Task 1</h3>' +
+          '<span class="item-card__spacer"></span>' +
+          '<button type="button" class="icon-btn" data-remove-task aria-label="Remove this task">' +
+            '<img src="assets/icon-delete.png" alt="" width="24" height="24">' +
+          '</button>' +
+        '</div>' +
+        '<div class="item-card__body">' +
+          '<div class="field-grid field-grid--2">' +
+            '<div class="field" data-name-field>' +
+              '<label>Task Name</label>' +
+              '<input type="text" value="" readonly>' +
+            '</div>' +
+            '<div class="field">' +
+              '<label>User Group <span class="field-required">Required</span></label>' +
+              '<select data-user-group>' + options(USER_GROUPS, 'Please Select') + '</select>' +
+            '</div>' +
+          '</div>' +
+          '<p class="help-text" style="margin-top: 14px">Checklist items give the reviewer a list to work ' +
+            'through on this task. They appear in the order you add them.</p>' +
+          '<ol class="item-rows" data-checklist></ol>' +
+          '<div class="item-add">' +
+            '<button type="button" class="btn btn--warm" data-add-checklist>Add Checklist Item</button>' +
+          '</div>' +
+        '</div>';
+
+      taskList.appendChild(card);
+      paintTasks();
+    }
+
+    function addChecklistItem(card) {
+      var row = document.createElement('li');
+      row.className = 'item-row';
+      row.innerHTML =
+        '<div class="field item-row__field">' +
+          '<input type="text" placeholder="What the reviewer needs to confirm">' +
+        '</div>' +
+        '<button type="button" class="icon-btn" data-remove-checklist aria-label="Remove this checklist item">' +
+          '<img src="assets/icon-delete.png" alt="" width="24" height="24">' +
+        '</button>';
+      card.querySelector('[data-checklist]').appendChild(row);
+      paintTasks();
+    }
+
+    /* One answered naming question and one task with a user group is the least
+       that can go forward; the rest can be filled in on a later pass */
+    function updateNext() {
+      var named = namingMode() !== '';
+      var groups = Array.prototype.slice.call(taskList.querySelectorAll('[data-user-group]'));
+      var oneComplete = groups.length > 0 && groups.some(function (select) {
+        return select.value !== '';
+      });
+      var done = named && oneComplete;
+
+      nextBtn.disabled = !done;
+      nextNote.hidden = done;
+      nextNote.textContent = !named
+        ? 'Choose a task naming convention to continue'
+        : 'Assign a user group to at least one task to continue';
+
+      document.querySelectorAll('.question-card').forEach(function (card) {
+        var answered = card.dataset.card === 'task-naming' ? named : oneComplete;
+        card.classList.toggle('is-answered', answered);
+      });
+    }
+
+    addTaskBtn.addEventListener('click', addTask);
+
+    /* The choice pills carry their selected state in a class, the same way the
+       Application Type step does */
+    document.querySelectorAll('input[name="task-naming"]').forEach(function (input) {
+      input.addEventListener('change', function () {
+        document.querySelectorAll('input[name="task-naming"]').forEach(function (other) {
+          other.closest('.choice').classList.toggle('is-selected', other.checked);
+        });
+        paintTasks();
+      });
+    });
+
+    taskList.addEventListener('click', function (e) {
+      var removeTask = e.target.closest('[data-remove-task]');
+      if (removeTask) {
+        removeTask.closest('.item-card').remove();
+        paintTasks();
+        return;
+      }
+
+      var addItem = e.target.closest('[data-add-checklist]');
+      if (addItem) {
+        addChecklistItem(addItem.closest('.item-card'));
+        return;
+      }
+
+      var removeItem = e.target.closest('[data-remove-checklist]');
+      if (removeItem) {
+        removeItem.closest('.item-row').remove();
+        paintTasks();
+      }
+    });
+
+    taskList.addEventListener('change', updateNext);
+
+    nextBtn.addEventListener('click', function () {
+      window.location.href = '#';
+    });
+
+    /* Opens with one task on screen, so the pattern reads without a click */
+    addTask();
+  </script>
+
+</body>
+
+</html>

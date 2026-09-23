@@ -3954,7 +3954,6 @@ a.stat:focus-visible {
 .builder-context {
   display: flex;
   align-items: flex-start;
-  justify-content: space-between;
   gap: 32px;
   flex-wrap: wrap;
   background: var(--c-tile-bg);
@@ -3962,8 +3961,12 @@ a.stat:focus-visible {
   padding: 16px 32px;
 }
 
+/* Two blocks, each taking half the bar so the License / Application Type */
+/* column starts at a predictable midpoint. Content stays left-aligned    */
+/* inside each half; they stack once the bar is too narrow to split.      */
 .builder-context__block {
-  min-width: 0;
+  flex: 1 1 calc(50% - 16px);
+  min-width: 240px;
 }
 
 .builder-context__eyebrow {
@@ -4097,6 +4100,145 @@ a.stat:focus-visible {
 /* A card can hold a field instead of choices — Title Information puts the
    instruction in the card title and the control underneath it */
 .question-card__body .field {
+  margin-top: 14px;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Item cards — a repeatable entry inside a question card (Task Management */
+/* tasks, and the checklist items nested inside each task). Numbered and    */
+/* stacked so the list grows downward, with the add button below it, the    */
+/* way RLP builds up a repeated section.                                    */
+/* ---------------------------------------------------------------------- */
+
+.item-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item-card {
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-panel);
+  background: var(--c-tile-bg);
+  padding: 16px 18px;
+}
+
+.item-card__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.item-card__num {
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--r-chip-sm);
+  background: var(--c-header-navy);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.item-card__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--c-text-primary);
+}
+
+/* Pushes the remove control to the right edge of the card head */
+.item-card__spacer {
+  flex: 1 1 auto;
+}
+
+.item-card__body {
+  margin-top: 12px;
+}
+
+.item-card .field-grid--2 {
+  margin-top: 0;
+}
+
+/* Nested checklist rows. Lighter than an item card, since they sit one level
+   further in and carry a single field each. */
+.item-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-panel);
+  padding: 8px 10px 8px 14px;
+}
+
+.item-row__field {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.item-row__field input[type="text"] {
+  width: 100%;
+  height: 38px;
+  border: 1px solid #c9ccd0;
+  border-radius: var(--r-pill);
+  padding: 0 14px;
+  font-family: inherit;
+  font-size: 16px;
+  color: var(--c-text-primary);
+  background: #fff;
+}
+
+.item-row__field input[type="text"]:focus {
+  outline: none;
+  border-color: var(--c-blue);
+  box-shadow: 0 0 0 1px var(--c-blue);
+}
+
+/* A Standard task name is derived from position, so it is shown read-only and
+   tinted the way a locked field is elsewhere */
+.item-card input[readonly] {
+  background: var(--c-hairline);
+  color: var(--c-text-secondary);
+}
+
+/* Empty state for a repeater that has nothing in it yet */
+.item-empty {
+  margin: 14px 0 0;
+  font-size: 16px;
+  font-style: italic;
+  color: var(--c-text-secondary);
+}
+
+.item-empty[hidden] {
+  display: none;
+}
+
+/* Sits under an add button to say how much of the cap is used up */
+.limit-note {
+  margin-left: 10px;
+  font-size: 16px;
+  color: var(--c-text-secondary);
+}
+
+.item-add {
+  display: flex;
+  align-items: center;
   margin-top: 14px;
 }
 
