@@ -13,8 +13,13 @@
  *   data-control="select"               preview it as a dropdown, not a text box
  *   data-lock-displayed                 Displayed is fixed; renders the lock marker
  *   data-lock-required                  Required is fixed, so leave it alone
- *   data-derived="Re-Enter Email"       a field the system adds alongside this
- *                                       one whenever it is displayed
+ *   data-preview-fields='[{...}]'       JSON: this row becomes more than one
+ *                                       field in the applicant's form. Each
+ *                                       part takes {label, control, placeholder,
+ *                                       note} and inherits the row's Required
+ *                                       state. Used by Email Address, which
+ *                                       brings a confirm field, and by
+ *                                       Height/Weight, which is two controls.
  *   data-preview-label="State"          shorter label the applicant sees, where
  *                                       it differs from the admin title
  *   data-options="race"                 this field's dropdown options are
@@ -116,14 +121,34 @@ function initFieldPicker() {
     return '<p class="preview-group__head">' + label + '</p>' + fields;
   }
 
-  function fieldHtml(label, isRequired, isSelect, extra) {
+  function fieldHtml(part, isRequired, extra) {
+    var isSelect = part.control === 'select';
     return '<div class="preview-field">' +
-      '<div class="preview-field__label">' + label +
+      '<div class="preview-field__label">' + part.label +
         (isRequired ? ' <em>Required</em>' : '') +
       '</div>' +
-      '<div class="preview-field__input' + (isSelect ? ' preview-field__input--select' : '') + '"></div>' +
+      '<div class="preview-field__input' + (isSelect ? ' preview-field__input--select' : '') + '">' +
+        (part.placeholder || '') +
+      '</div>' +
+      (part.note ? '<p class="preview-field__note">' + part.note + '</p>' : '') +
       (extra || '') +
     '</div>';
+  }
+
+  /* The applicant-facing fields one picker row turns into. Usually exactly
+     one; Email Address and Height/Weight are the exceptions. */
+  function previewParts(row) {
+    if (row.dataset.previewFields) {
+      try {
+        return JSON.parse(row.dataset.previewFields);
+      } catch (e) {
+        /* Malformed JSON should not blank the panel, so fall through */
+      }
+    }
+    return [{
+      label: row.dataset.previewLabel || row.dataset.label,
+      control: row.dataset.control,
+    }];
   }
 
   /* The options row belonging to a field, if it has one */
@@ -146,7 +171,7 @@ function initFieldPicker() {
     var labels = chosen.map(function (i) { return i.value; });
     var head = labels.slice(0, 3).join(', ');
     var rest = labels.length - 3;
-    return '<p class="preview-field__options">' + labels.length + ' option' +
+    return '<p class="preview-field__note">' + labels.length + ' option' +
       (labels.length === 1 ? '' : 's') + ': ' + head +
       (rest > 0 ? ', and ' + rest + ' more' : '') + '</p>';
   }
@@ -180,18 +205,13 @@ function initFieldPicker() {
 
     var fields = shown.map(function (row) {
       var isRequired = row.querySelector('[data-required]').checked;
-      var isSelect = row.dataset.control === 'select';
-      var label = row.dataset.previewLabel || row.dataset.label;
       var optRow = optionsRow(row);
-      var html = fieldHtml(label, isRequired, isSelect,
-        optRow ? optionSummary(optRow) : '');
 
-      /* A derived field is not in the picker, so it can only appear here. It
-         inherits the required state of the field it confirms. */
-      if (row.dataset.derived) {
-        html += fieldHtml(row.dataset.derived, isRequired, false);
-      }
-      return html;
+      /* The curated option list belongs to the first part, which is the one
+         the picker row actually names */
+      return previewParts(row).map(function (part, i) {
+        return fieldHtml(part, isRequired, i === 0 && optRow ? optionSummary(optRow) : '');
+      }).join('');
     }).join('');
 
     /* A ticked block repeats the whole field set under its own heading. The

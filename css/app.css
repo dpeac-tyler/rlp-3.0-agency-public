@@ -4454,26 +4454,42 @@ a.stat:focus-visible {
   color: #1b1b1b;
 }
 
-/* Inert on purpose: this is a picture of the applicant's form, not the form */
+/* Inert on purpose: this is a picture of the applicant's form, not the form.
+   Carries placeholder text where the real control has some. Flex rather than
+   a line-height, so the caret centres itself against the text. */
 .preview-field__input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   margin-top: 6px;
   width: 100%;
   height: 40px;
+  padding: 0 14px;
   border: 1px solid #c9ccd0;
   border-radius: var(--r-pill);
   background: var(--c-hairline);
+  font-size: 16px;
+  color: var(--c-text-secondary);
+  overflow: hidden;
+  white-space: nowrap;
 }
 
+/* 22px, because U+25BE only inks about a third of its em box and rendered at
+   the 16px body size it read as a speck. margin-left:auto rather than
+   justify-content, so it still sits right when there is no placeholder text
+   to push it over. */
 .preview-field__input--select::after {
   content: '\25BE';
-  float: right;
-  margin: 8px 12px 0 0;
+  flex: none;
+  margin-left: auto;
+  font-size: 22px;
+  line-height: 1;
   color: var(--c-text-secondary);
 }
 
-/* What is actually inside a previewed dropdown, so the agency can see the
-   consequence of curating its options without opening anything */
-.preview-field__options {
+/* Muted line under a previewed control: what is inside a curated dropdown, or
+   what a control accepts (Height's 0 to 11 inches) */
+.preview-field__note {
   margin: 6px 0 0;
   font-size: 15px;
   color: var(--c-text-secondary);
