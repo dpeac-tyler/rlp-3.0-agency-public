@@ -3766,10 +3766,23 @@ a.stat:focus-visible {
 
 .builder-steps__item a {
   display: block;
+  position: relative;
   padding: 7px 0;
   font-size: 16px;
   color: var(--c-toolbar-idle);
   text-decoration: none;
+}
+
+/* The done/current marker hangs in the rail's gutter, taken out of the text
+   flow so a step label that wraps keeps every line on the same left edge.
+   As inline content its negative margin only pulled the first line across. */
+.builder-steps__item.is-current a::before,
+.builder-steps__item.is-done a::before {
+  position: absolute;
+  left: -14px;
+  top: 7px;
+  margin: 0;
+  color: var(--c-gold);
 }
 
 .builder-steps__item a:hover {
@@ -3784,9 +3797,6 @@ a.stat:focus-visible {
 /* Caret marks the step you are on without moving the label off the list */
 .builder-steps__item.is-current a::before {
   content: '\25B8';
-  margin-left: -14px;
-  margin-right: 6px;
-  color: var(--c-gold);
 }
 
 /* Canvas --------------------------------------------------------------- */
@@ -3958,9 +3968,6 @@ a.stat:focus-visible {
    (the context bar carries the name once the application exists) */
 .builder-steps__item.is-done a::before {
   content: '\2713';
-  margin-left: -14px;
-  margin-right: 6px;
-  color: var(--c-gold);
 }
 
 .builder-steps__item.is-done a {
