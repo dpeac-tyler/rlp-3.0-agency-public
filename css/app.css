@@ -5249,3 +5249,1289 @@ html:not(.builder-resumed) [data-final-view] {
   margin: 0 0 8px;
   font-size: 17px;
 }
+
+/* ---------------------------------------------------------------------- */
+/* Question Builder (Build phase)                                         */
+/* One screen for what v2 split across Create Questions, Review Questions  */
+/* and Preview: question types on the left, the applicant's form in the    */
+/* middle as the place you edit, and the selected block's settings on the  */
+/* right. Every add and every move has a click and a keyboard path; drag   */
+/* and drop is a shortcut on top, never the only way.                      */
+/* ---------------------------------------------------------------------- */
+
+/* A Set up phase that is behind you: gold ring, gold tick */
+.builder-phase.is-done .builder-phase__marker {
+  border-color: var(--c-gold);
+  color: var(--c-gold);
+  font-size: 9px;
+}
+
+.builder-phase.is-done .builder-phase__marker::after {
+  content: '\2713';
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* Build / Preview switch, first in the canvas bar */
+.qb-mode {
+  flex: 0 0 auto;
+  margin-right: auto;
+}
+
+/* Same 36px height as Undo and Shortcuts, so the bar reads as one row */
+.qb-mode .btn-group__btn {
+  height: 34px;
+  padding: 0 14px;
+}
+
+.qb-mode .btn-group__btn i {
+  margin-right: 8px;
+}
+
+/* The canvas gives up its padding here: the three panels run edge to edge
+   and the action bar carries its own gutter */
+.builder-canvas--flush {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.builder-canvas--flush .builder-actions {
+  margin-top: 0;
+  padding: 16px 32px;
+  z-index: 20;
+}
+
+/* Page-scoped focus ring. The USWDS ring, 3px #2491ff with a 2px offset, so
+   focus is visible on the navy toolbar as well as on white. */
+.qb :focus-visible,
+.qb-modal :focus-visible {
+  outline: 3px solid #2491ff;
+  outline-offset: 2px;
+}
+
+.qb {
+  flex: 1 1 auto;
+  display: grid;
+  /* The side panels give ground first, down to 280 and 340, so the form
+     keeps at least 400px with the rail open */
+  grid-template-columns: minmax(280px, 340px) minmax(400px, 1fr) minmax(340px, 420px);
+  align-items: stretch;
+}
+
+@media (max-width: 1100px) {
+  .qb {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* The side panels stick under the top of the window while the form scrolls,
+   so the types and the settings stay in reach on a long form. The column
+   stretches for the background; the inner panel is what sticks. */
+.qb-side {
+  background: var(--c-tile-bg);
+  border-right: 1px solid var(--c-border);
+}
+
+.qb-side--settings {
+  background: #fff;
+  border-right: none;
+  border-left: 1px solid var(--c-border);
+}
+
+.qb-side__inner {
+  position: sticky;
+  top: 0;
+  max-height: calc(100vh - 77px);
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.qb.is-preview .qb-side {
+  display: none;
+}
+
+.qb.is-preview {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* Left panel: Add / Outline tabs ---------------------------------------- */
+
+.qb-tabs {
+  display: flex;
+  width: 100%;
+}
+
+.qb-tabs .btn-group__btn {
+  flex: 1 1 50%;
+  padding: 0 12px;
+}
+
+.qb-tabs .btn-group__btn i {
+  margin-right: 8px;
+}
+
+.qb-tabs .btn-group__btn[aria-selected="true"] {
+  background: var(--c-blue);
+  color: #fff;
+}
+
+.qb-panel-title {
+  margin: 20px 0 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--c-text-primary);
+}
+
+/* Always says where a click on a type will land */
+.qb-target {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 4px 10px;
+  border-radius: var(--r-chip-sm);
+  background: #eaf1f8;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--c-header-navy);
+}
+
+.qb-group-label {
+  margin: 20px 0 8px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--c-text-secondary);
+}
+
+.qb-types {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* One per row: v2's type names run long ("Addresses / Repeatable Fields") */
+.qb-type {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid #8d9296;
+  border-radius: var(--r-panel);
+  background: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--c-text-primary);
+  text-align: left;
+}
+
+.qb-type i {
+  flex: 0 0 auto;
+  width: 18px;
+  font-size: 16px;
+  text-align: center;
+  color: var(--c-header-navy);
+}
+
+.qb-type:hover {
+  border-color: var(--c-header-navy);
+  background: #eaf1f8;
+}
+
+.qb-type[draggable="true"] {
+  cursor: grab;
+}
+
+.qb-ways {
+  margin: 22px 0 0;
+  padding: 14px 16px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-panel);
+  background: #fff;
+}
+
+.qb-ways__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--c-text-primary);
+}
+
+.qb-ways ul {
+  margin: 6px 0 0;
+  padding-left: 20px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--c-text-secondary);
+}
+
+/* Left panel: Outline ---------------------------------------------------- */
+
+.qb-outline-count {
+  margin: 4px 0 12px;
+  font-size: 16px;
+  color: var(--c-text-secondary);
+}
+
+.qb-outline {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.qb-outline__row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  width: 100%;
+  min-height: 36px;
+  padding: 7px 10px 7px 20px;
+  border-radius: var(--r-pill);
+  font-size: 16px;
+  line-height: 1.35;
+  color: var(--c-text-primary);
+  text-align: left;
+}
+
+.qb-outline__row:hover {
+  background: #eaf1f8;
+}
+
+.qb-outline__row--section {
+  margin-top: 10px;
+  padding-left: 6px;
+  font-weight: 700;
+  color: var(--c-header-navy);
+}
+
+.qb-outline li:first-child .qb-outline__row--section {
+  margin-top: 0;
+}
+
+.qb-outline__row--followup {
+  padding-left: 36px;
+}
+
+.qb-outline__num {
+  flex: 0 0 auto;
+  min-width: 18px;
+  font-weight: 700;
+  color: var(--c-text-secondary);
+}
+
+.qb-outline__icon {
+  flex: 0 0 auto;
+  width: 16px;
+  font-size: 14px;
+  color: var(--c-text-secondary);
+}
+
+.qb-outline__row[aria-current="true"],
+.qb-outline__row[aria-current="true"]:hover {
+  background: var(--c-header-navy);
+  color: #fff;
+}
+
+.qb-outline__row[aria-current="true"] .qb-outline__num {
+  color: var(--c-gold);
+}
+
+.qb-outline__row[aria-current="true"] .qb-outline__icon {
+  color: var(--c-toolbar-idle);
+}
+
+/* Canvas ------------------------------------------------------------------ */
+
+.qb-canvas {
+  min-width: 0;
+  padding: 24px 32px 60px;
+  background: var(--c-tile-bg);
+}
+
+.qb-canvas__head {
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+.qb-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+/* Count sits at the far end of the eyebrow line, so the bar below only
+   has to hold the mode switch and its two buttons */
+.qb-canvas__eyebrow-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.qb-bar__count {
+  font-size: 16px;
+  color: var(--c-text-secondary);
+}
+
+.qb-bar__count strong {
+  color: var(--c-text-primary);
+}
+
+.qb-bar__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid #8d9296;
+  border-radius: var(--r-pill);
+  background: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--c-text-primary);
+}
+
+/* inline-flex above would otherwise beat [hidden]: Undo hides in Preview */
+.qb-bar__btn[hidden] {
+  display: none;
+}
+
+.qb-bar__btn:hover {
+  border-color: var(--c-text-secondary);
+}
+
+.qb-bar__btn:disabled {
+  border-color: var(--c-border);
+  color: var(--c-text-secondary);
+  cursor: not-allowed;
+}
+
+.qb-shortcuts-wrap {
+  position: relative;
+}
+
+.qb-shortcuts {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 40;
+  width: 320px;
+  padding: 14px 16px;
+  background: #fff;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-panel);
+  box-shadow: var(--shadow-menu);
+}
+
+.qb-shortcuts[hidden] {
+  display: none;
+}
+
+.qb-shortcuts__title {
+  margin: 0 0 10px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.qb-shortcuts dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 14px;
+  margin: 0;
+  font-size: 16px;
+}
+
+.qb-shortcuts dd {
+  margin: 0;
+  color: var(--c-text-secondary);
+}
+
+kbd {
+  display: inline-block;
+  padding: 1px 6px;
+  border: 1px solid #8d9296;
+  border-bottom-width: 2px;
+  border-radius: var(--r-chip-sm);
+  background: var(--c-tile-bg);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* The sheet: the applicant's form, drawn the way the constituent side
+   draws it. Same picture language as the Applicant Information previews. */
+.qb-sheet {
+  max-width: 780px;
+  margin: 16px auto 0;
+  padding: 22px 26px 26px;
+  background: #fff;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-panel);
+}
+
+.qb-sheet__note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 16px;
+  font-size: 16px;
+  font-style: italic;
+  color: var(--c-text-secondary);
+}
+
+.qb-sheet__note[hidden] {
+  display: none;
+}
+
+.qb-empty {
+  margin: 0;
+  padding: 24px 0;
+  font-size: 16px;
+  font-style: italic;
+  color: var(--c-text-secondary);
+  text-align: center;
+}
+
+/* Blocks ------------------------------------------------------------------ */
+
+.qb-block {
+  position: relative;
+  padding: 10px 16px;
+  border: 2px solid transparent;
+  border-radius: var(--r-panel);
+  cursor: pointer;
+  scroll-margin: 90px;
+}
+
+.qb-block:hover {
+  border-color: var(--c-border);
+}
+
+.qb.is-preview .qb-block {
+  cursor: default;
+}
+
+.qb.is-preview .qb-block:hover {
+  border-color: transparent;
+}
+
+.qb-block.is-selected,
+.qb-block.is-selected:hover {
+  border-color: var(--c-header-navy);
+  background: #f7f9fc;
+  padding-top: 12px;
+  cursor: default;
+}
+
+.qb-block.is-dragging {
+  opacity: .45;
+}
+
+/* Follow-up question: the builder's follow-up treatment, a gold rule and
+   tinted panel, so it reads as attached to the question above */
+.qb-block.is-followup {
+  background: var(--c-tile-bg);
+  border-left: 3px solid var(--c-gold);
+}
+
+.qb-block.is-followup.is-selected {
+  border-left-color: var(--c-header-navy);
+}
+
+.qb-block__cond {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 6px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--c-header-navy);
+}
+
+/* Selected block head: what it is on the left, what you can do on the right */
+.qb-block__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.qb-block__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: var(--r-chip-sm);
+  background: var(--c-header-navy);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  color: #fff;
+}
+
+.qb-tools {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--r-pill);
+  background: var(--c-header-navy);
+}
+
+.qb-tools__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 10px;
+  border-radius: var(--r-chip-sm);
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.qb-tools__btn i {
+  font-size: 14px;
+  color: var(--c-toolbar-idle);
+}
+
+.qb-tools__btn:hover {
+  background: var(--c-toolbar-navy);
+}
+
+.qb-tools__btn[aria-disabled="true"] {
+  color: var(--c-toolbar-idle);
+  cursor: not-allowed;
+}
+
+.qb-tools__btn[aria-disabled="true"]:hover {
+  background: none;
+}
+
+/* A section renders as the constituent's navy block header */
+.qb-section__bar {
+  margin: 0;
+  padding: 12px 18px;
+  border-radius: var(--r-chip-sm);
+  background: #112e51;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.qb-section__text {
+  margin: 10px 0 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--c-text-secondary);
+}
+
+.qb-desc {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--c-text-primary);
+}
+
+.qb-desc > :first-child,
+.qb-q__instr > :first-child {
+  margin-top: 0;
+}
+
+.qb-desc > :last-child,
+.qb-q__instr > :last-child {
+  margin-bottom: 0;
+}
+
+/* Question label, and the picture of the control the applicant will get */
+.qb-q__label {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--c-text-primary);
+}
+
+.qb-q__label em {
+  margin-left: 6px;
+  font-size: 14px;
+  font-weight: 400;
+  color: #1b1b1b;
+}
+
+.qb-q__instr {
+  margin: 4px 0 0;
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--c-text-secondary);
+}
+
+.qb-q__control {
+  margin-top: 8px;
+}
+
+.qb-block .preview-field__input {
+  margin-top: 0;
+}
+
+.qb-q__box--short {
+  max-width: 240px;
+}
+
+.qb-q__box i {
+  margin-left: auto;
+  color: var(--c-text-secondary);
+}
+
+.qb-q__choices {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.qb-q__choices--inline {
+  flex-direction: row;
+  gap: 28px;
+}
+
+.qb-q__choice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  color: var(--c-text-primary);
+}
+
+.qb-q__choice i {
+  font-size: 18px;
+  color: #71767a;
+}
+
+.qb-q__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+}
+
+.qb-q__table th {
+  padding: 10px 12px;
+  background: var(--c-hairline);
+  border: 1px solid var(--c-border);
+  font-weight: 700;
+  text-align: left;
+}
+
+.qb-q__table td {
+  height: 40px;
+  border: 1px solid var(--c-border);
+}
+
+/* Pictures of RLP buttons: inert, so they carry no hover or cursor */
+.qb-q__fake-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  margin-top: 8px;
+  padding: 0 16px;
+  border-radius: var(--r-pill);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.qb-q__fake-btn--warm {
+  background: var(--c-gold);
+  color: var(--c-gold-text);
+}
+
+/* RLP's file upload is an outline Upload button over a hidden input */
+.qb-q__fake-btn--outline {
+  margin-top: 0;
+  border: 2px solid var(--c-blue);
+  color: var(--c-blue);
+}
+
+.qb-q__upload {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  font-size: 16px;
+  color: var(--c-text-secondary);
+}
+
+.qb-q__ack {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.qb-q__ack i {
+  margin-top: 3px;
+  font-size: 18px;
+  color: #71767a;
+}
+
+/* Section headers after the first get breathing room above them */
+.qb-block--section + .qb-add + .qb-block--section,
+.qb-add + .qb-block--section {
+  margin-top: 14px;
+}
+
+/* "Add here" insertion rows ------------------------------------------------ */
+
+.qb-add {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  margin: 2px 0;
+  border-radius: var(--r-chip-sm);
+}
+
+.qb-add::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  border-top: 1px dashed #8d9296;
+}
+
+.qb.is-preview .qb-add {
+  display: none;
+}
+
+.qb-add__btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 30px;
+  padding: 0 14px;
+  border: 1px solid var(--c-header-navy);
+  border-radius: 16px;
+  background: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--c-header-navy);
+}
+
+.qb-add__btn:hover,
+.qb-add.is-open .qb-add__btn {
+  background: var(--c-header-navy);
+  color: #fff;
+}
+
+.qb-add.is-open::before {
+  border-top: 1px solid var(--c-header-navy);
+}
+
+/* A drag hovering over the row: gold line, tinted row, "Drop here" */
+.qb-add.is-drop {
+  background: #faf3d1;
+}
+
+.qb-add.is-drop::before {
+  border-top: 2px solid var(--c-gold);
+}
+
+/* Add here popover: filter box over a grouped listbox */
+.qb-menu {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 50%;
+  z-index: 40;
+  width: 340px;
+  transform: translateX(-50%);
+  padding: 12px;
+  background: #fff;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-panel);
+  box-shadow: var(--shadow-menu);
+  cursor: default;
+}
+
+.qb-menu__heading {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--c-text-secondary);
+}
+
+.qb-menu__filter {
+  width: 100%;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid #8d9296;
+  border-radius: var(--r-pill);
+  font-family: inherit;
+  font-size: 16px;
+}
+
+.qb-menu__list {
+  max-height: 300px;
+  overflow-y: auto;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.qb-menu__group {
+  padding: 10px 10px 4px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--c-text-secondary);
+}
+
+.qb-menu__option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 10px;
+  border-radius: var(--r-pill);
+  font-size: 16px;
+  color: var(--c-text-primary);
+  cursor: pointer;
+}
+
+.qb-menu__option i {
+  width: 16px;
+  color: var(--c-header-navy);
+}
+
+.qb-menu__option.is-active {
+  background: #eaf1f8;
+  font-weight: 700;
+  color: var(--c-header-navy);
+}
+
+.qb-menu__none {
+  padding: 10px;
+  font-size: 16px;
+  font-style: italic;
+  color: var(--c-text-secondary);
+}
+
+.qb-menu__hint {
+  margin: 8px 0 0;
+  padding-top: 8px;
+  border-top: 1px solid var(--c-hairline);
+  font-size: 14px;
+  color: var(--c-text-secondary);
+}
+
+/* Settings panel ------------------------------------------------------------ */
+
+.qb-settings__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--c-border);
+}
+
+.qb-settings__eyebrow {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--c-text-secondary);
+}
+
+.qb-settings__title {
+  margin: 2px 0 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--c-text-primary);
+}
+
+.qb-settings__close {
+  color: var(--c-text-secondary);
+  font-size: 18px;
+}
+
+.qb-settings__body .field {
+  margin-top: 18px;
+}
+
+.qb-settings__body .info-notice {
+  margin: 16px 0 0;
+}
+
+.qb-settings__body .field select,
+.qb-settings__body .field input[type="text"],
+.qb-settings__body .field input[type="number"] {
+  width: 100%;
+}
+
+.qb-settings__body .field input[type="number"] {
+  height: 44px;
+  border: 1px solid #c9ccd0;
+  border-radius: var(--r-pill);
+  padding: 0 14px;
+  font-family: inherit;
+  font-size: 16px;
+}
+
+.qb-settings__body .rte__body {
+  min-height: 72px;
+}
+
+.qb-settings__body .char-counter {
+  margin-top: 0;
+}
+
+.qb-settings__checks {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--c-border);
+}
+
+.qb-opts {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.qb-opts li {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.qb-opts input[type="text"] {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 40px !important;
+}
+
+.qb-opts .icon-btn img {
+  width: 24px;
+  height: 24px;
+}
+
+.qb-settings__body .btn--warm {
+  align-self: flex-start;
+  height: 40px;
+  padding: 0 18px;
+  margin-top: 4px;
+}
+
+.qb-settings__empty {
+  margin-top: 30px;
+  text-align: center;
+  color: var(--c-text-secondary);
+}
+
+.qb-settings__empty i {
+  font-size: 28px;
+  color: #8d9296;
+}
+
+.qb-settings__empty-title {
+  margin: 12px 0 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--c-text-primary);
+}
+
+.qb-settings__empty p {
+  margin: 6px 0 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Move to dialog ------------------------------------------------------------ */
+
+.qb-modal .modal-content {
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+}
+
+.qb-modal .modal-header {
+  align-items: flex-start;
+}
+
+.qb-modal__eyebrow {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--c-toolbar-on-dark);
+}
+
+.qb-modal .modal-title {
+  margin-top: 4px;
+}
+
+.qb-modal .modal-body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+}
+
+.qb-move__group {
+  margin: 16px 0 8px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--c-text-secondary);
+}
+
+.qb-move__option {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 6px;
+  padding: 10px 14px;
+  border: 1px solid #8d9296;
+  border-radius: var(--r-pill);
+  background: #fff;
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--c-text-primary);
+  cursor: pointer;
+}
+
+.qb-move__option input[type="radio"] {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  margin: 2px 0 0;
+  accent-color: var(--c-blue);
+}
+
+.qb-move__option.is-selected {
+  border-color: var(--c-blue);
+  box-shadow: inset 0 0 0 1px var(--c-blue);
+  background: #eaf1f8;
+}
+
+.qb-move__option.is-disabled {
+  border-color: var(--c-border);
+  background: var(--c-hairline);
+  color: var(--c-text-secondary);
+  cursor: not-allowed;
+}
+
+.qb-move__reason {
+  display: block;
+  margin-top: 2px;
+  font-size: 15px;
+}
+
+.qb-move__option .tag {
+  margin-left: 8px;
+  padding: 1px 8px;
+  font-size: 14px;
+}
+
+/* Toast with an action ------------------------------------------------------ */
+
+/* The shared toast is pointer-events: none because it only ever says
+   something. This one carries Undo, so it has to take a click. */
+.toast--action.is-visible {
+  pointer-events: auto;
+}
+
+.toast__action {
+  margin-left: 6px;
+  padding: 4px 6px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--c-blue);
+  text-decoration: underline;
+}
+
+.toast__action:hover {
+  color: var(--c-blue-hover);
+}
+
+.toast__action[hidden] {
+  display: none;
+}
+
+.toast--warning {
+  background: #faf3d1;
+  border-left-color: #ffbe2e;
+}
+
+.toast--warning i {
+  color: #8f5800;
+}
+
+/* Read by screen readers, not drawn */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Question Builder: v2 type settings ------------------------------------ */
+
+.qb-settings__group {
+  margin: 24px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--c-border);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--c-text-secondary);
+}
+
+.qb-settings__body .field-grid--2 {
+  gap: 12px;
+}
+
+.qb-cols {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.qb-col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-panel);
+  background: var(--c-tile-bg);
+}
+
+.qb-col__row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.qb-col input[type="text"] {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 40px !important;
+}
+
+.qb-col select {
+  height: 40px !important;
+}
+
+.qb-col .icon-btn img {
+  width: 24px;
+  height: 24px;
+}
+
+/* Field set picker: a real table per set, so each checkbox is named by its
+   row and column */
+.qb-fields {
+  width: 100%;
+  margin-top: 14px;
+  border-collapse: collapse;
+  font-size: 16px;
+}
+
+.qb-fields caption {
+  padding-bottom: 6px;
+  font-weight: 700;
+  text-align: left;
+  color: var(--c-text-primary);
+}
+
+.qb-fields th,
+.qb-fields td {
+  padding: 6px 4px;
+  border-bottom: 1px solid var(--c-hairline);
+  text-align: left;
+}
+
+.qb-fields thead th {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--c-text-secondary);
+}
+
+.qb-fields tbody th {
+  font-weight: 400;
+}
+
+.qb-fields thead th + th,
+.qb-fields td {
+  width: 84px;
+  text-align: center;
+}
+
+.qb-fields input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--c-blue);
+}
+
+/* Canvas pictures for the v2 types */
+.qb-q__set {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 16px;
+  padding: 14px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-panel);
+}
+
+.qb-q__set .preview-field__note em {
+  font-size: 14px;
+  color: #1b1b1b;
+}
+
+.qb-q__table .qb-q__row-label {
+  padding: 10px 12px;
+  background: none;
+  font-weight: 600;
+  text-align: left;
+}
+
+.qb-q__table tfoot td,
+.qb-q__table tfoot th {
+  border-top: 2px solid #8d9296;
+  font-weight: 700;
+  padding: 0 12px;
+}
