@@ -52,17 +52,17 @@
 
         <div class="island__kv-row">
           <span class="island__kv-key">Agency Name:</span>
-          <span class="island__kv-value">Texas Department of Licensing and Regulation</span>
+          <span class="island__kv-value">Illinois Department of Natural Resources</span>
         </div>
 
         <div class="island__kv-row">
           <span class="island__kv-key">Website:</span>
-          <span class="island__kv-value"><a href="https://www.tdlr.texas.gov" target="_blank" rel="noopener">www.tdlr.texas.gov</a></span>
+          <span class="island__kv-value"><a href="https://dnr.illinois.gov" target="_blank" rel="noopener">dnr.illinois.gov</a></span>
         </div>
 
         <div class="island__kv-row" id="address-row">
           <span class="island__kv-key">Address:</span>
-          <span class="island__kv-value" id="address-display">920 Colorado Street, Suite 400, Austin, TX 78701</span>
+          <span class="island__kv-value" id="address-display">One Natural Resources Way, Suite 100, Springfield, IL 62702</span>
         </div>
 
         <!-- Inline edit form, shown by the Edit Address button -->
@@ -70,19 +70,19 @@
           <div class="field" id="address-street-field">
             <label for="address-street">Address Line 1 <span class="field-required">Required</span></label>
             <span class="field-error" id="address-street-error" hidden>Please enter an address.</span>
-            <input type="text" id="address-street" value="920 Colorado Street" autocomplete="off">
+            <input type="text" id="address-street" value="One Natural Resources Way" autocomplete="off">
           </div>
 
           <div class="field" style="margin-top: 16px">
             <label for="address-street-2">Address Line 2</label>
-            <input type="text" id="address-street-2" value="Suite 400" autocomplete="off">
+            <input type="text" id="address-street-2" value="Suite 100" autocomplete="off">
           </div>
 
           <div class="field-grid" style="margin-top: 16px">
             <div class="field" id="address-city-field">
               <label for="address-city">City <span class="field-required">Required</span></label>
               <span class="field-error" id="address-city-error" hidden>Please enter a city.</span>
-              <input type="text" id="address-city" value="Austin" autocomplete="off">
+              <input type="text" id="address-city" value="Springfield" autocomplete="off">
             </div>
             <div class="field" id="address-state-field">
               <label for="address-state">State <span class="field-required">Required</span></label>
@@ -93,15 +93,16 @@
                 <option value="CA">California</option>
                 <option value="CO">Colorado</option>
                 <option value="FL">Florida</option>
+                <option value="IL" selected>Illinois</option>
                 <option value="NY">New York</option>
-                <option value="TX" selected>Texas</option>
+                <option value="TX">Texas</option>
                 <option value="WA">Washington</option>
               </select>
             </div>
             <div class="field" id="address-zip-field">
               <label for="address-zip">Zip Code <span class="field-required">Required</span></label>
               <span class="field-error" id="address-zip-error" hidden>Please enter a 5-digit zip code.</span>
-              <input type="text" id="address-zip" value="78701" inputmode="numeric" maxlength="10" autocomplete="off">
+              <input type="text" id="address-zip" value="62702" inputmode="numeric" maxlength="10" autocomplete="off">
             </div>
           </div>
 
@@ -115,7 +116,9 @@
     </div>
 
     <!-- Application contact — what constituents see on an application.
-         Agency Name repeats the row above; only phone and email are editable. -->
+         Agency Name repeats the row above; everything else is editable.
+         Agency URL is separate from Website: it can point at a help page or
+         a form rather than the agency home page. -->
     <div class="island island--full" id="contact">
       <div class="island__eyebrow-row">
         <span class="island__eyebrow">Application Contact</span>
@@ -128,17 +131,27 @@
 
         <div class="island__kv-row">
           <span class="island__kv-key">Agency Name:</span>
-          <span class="island__kv-value">Texas Department of Licensing and Regulation</span>
+          <span class="island__kv-value">Illinois Department of Natural Resources</span>
         </div>
 
         <div class="island__kv-row" id="phone-row">
           <span class="island__kv-key">Phone Number:</span>
-          <span class="island__kv-value" id="phone-display">(512) 463-6599</span>
+          <span class="island__kv-value" id="phone-display">(217) 555-0142</span>
         </div>
 
         <div class="island__kv-row" id="email-row">
           <span class="island__kv-key">Email Address:</span>
-          <span class="island__kv-value" id="email-display">licensing@tdlr.texas.gov</span>
+          <span class="island__kv-value" id="email-display">dnr.licensing@illinois.gov</span>
+        </div>
+
+        <div class="island__kv-row" id="url-row">
+          <span class="island__kv-key">Agency URL:</span>
+          <span class="island__kv-value" id="url-display"><a href="https://dnr.illinois.gov/licenses.html" target="_blank" rel="noopener">dnr.illinois.gov/licenses.html</a></span>
+        </div>
+
+        <div class="island__kv-row logo-row" id="logo-row">
+          <span class="island__kv-key">Agency Logo:</span>
+          <span class="island__kv-value" id="logo-display">No logo uploaded</span>
         </div>
 
         <!-- Inline edit form, shown by the Edit Application Contact button -->
@@ -146,13 +159,32 @@
           <div class="field" id="contact-phone-field">
             <label for="contact-phone">Phone Number <span class="field-required">Required</span></label>
             <span class="field-error" id="contact-phone-error" hidden>Please enter a 10-digit phone number.</span>
-            <input type="text" id="contact-phone" value="(512) 463-6599" inputmode="tel" autocomplete="off">
+            <input type="text" id="contact-phone" value="(217) 555-0142" inputmode="tel" autocomplete="off">
           </div>
 
           <div class="field" id="contact-email-field" style="margin-top: 16px">
             <label for="contact-email">Email Address <span class="field-required">Required</span></label>
             <span class="field-error" id="contact-email-error" hidden>Please enter a valid email address.</span>
-            <input type="text" id="contact-email" value="licensing@tdlr.texas.gov" autocomplete="off">
+            <input type="text" id="contact-email" value="dnr.licensing@illinois.gov" autocomplete="off">
+          </div>
+
+          <div class="field" id="contact-url-field" style="margin-top: 16px">
+            <label for="contact-url">Agency URL</label>
+            <span class="field-hint">Where constituents go for help with an application. This can be different from the agency website.</span>
+            <span class="field-error" id="contact-url-error" hidden>Please enter a valid web address.</span>
+            <input type="text" id="contact-url" value="dnr.illinois.gov/licenses.html" inputmode="url" autocomplete="off">
+          </div>
+
+          <div class="field" id="contact-logo-field" style="margin-top: 16px">
+            <label id="contact-logo-label">Agency Logo</label>
+            <span class="field-hint">Square PNG, JPG or SVG, at least 104 &times; 104px and under 1 MB. It appears at 52 &times; 52px at the top of every application.</span>
+            <span class="field-error" id="contact-logo-error" hidden>Please choose a PNG, JPG or SVG under 1 MB.</span>
+            <div class="logo-upload">
+              <span class="logo-thumb" id="contact-logo-preview"></span>
+              <button type="button" class="btn btn--secondary" id="contact-logo-btn" aria-describedby="contact-logo-label">Upload</button>
+              <button type="button" class="btn btn--secondary" id="contact-logo-remove" hidden>Remove</button>
+            </div>
+            <input type="file" id="contact-logo" accept="image/png,image/jpeg,image/svg+xml" hidden>
           </div>
 
           <div class="island__kv-actions">
@@ -310,13 +342,83 @@
   (function () {
     var phoneDisplay = document.getElementById('phone-display');
     var emailDisplay = document.getElementById('email-display');
+    var urlDisplay = document.getElementById('url-display');
+    var logoDisplay = document.getElementById('logo-display');
     var phone = document.getElementById('contact-phone');
     var email = document.getElementById('contact-email');
+    var url = document.getElementById('contact-url');
+    var logoInput = document.getElementById('contact-logo');
+    var logoBtn = document.getElementById('contact-logo-btn');
+    var logoRemove = document.getElementById('contact-logo-remove');
+    var logoPreview = document.getElementById('contact-logo-preview');
+    var logoError = document.getElementById('contact-logo-error');
+
+    /* Phone, email, URL and logo carry over to constituent-application.html */
+    var STORE_KEY = 'rlp.applicationContact';
 
     /* The saved contact, so Cancel can put the fields back */
-    var saved = { phone: phone.value, email: email.value };
+    var saved = { phone: phone.value, email: email.value, url: url.value, logo: '' };
+    try {
+      var stored = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
+      if (stored) {
+        ['phone', 'email', 'url', 'logo'].forEach(function (k) {
+          if (typeof stored[k] === 'string') saved[k] = stored[k];
+        });
+        phoneDisplay.textContent = saved.phone;
+        emailDisplay.textContent = saved.email;
+      }
+    } catch (e) {}
 
-    /* 10 digits in, (512) 463-6599 out */
+    /* The logo chosen in the open form, not yet saved */
+    var pendingLogo = saved.logo;
+
+    function thumb(src) {
+      return src ? '<img src="' + src + '" alt="">' : '<i class="fa-solid fa-landmark" aria-hidden="true"></i>';
+    }
+
+    function showLogoField() {
+      logoPreview.innerHTML = thumb(pendingLogo);
+      logoBtn.textContent = pendingLogo ? 'Replace' : 'Upload';
+      logoRemove.hidden = !pendingLogo;
+    }
+
+    function showSaved() {
+      var href = /^https?:\/\//i.test(saved.url) ? saved.url : 'https://' + saved.url;
+      urlDisplay.innerHTML = saved.url
+        ? '<a href="' + href + '" target="_blank" rel="noopener"></a>'
+        : 'Not set';
+      if (saved.url) urlDisplay.firstChild.textContent = saved.url;
+      logoDisplay.innerHTML = saved.logo
+        ? '<span class="logo-thumb">' + thumb(saved.logo) + '</span>'
+        : 'No logo uploaded';
+    }
+    showSaved();
+
+    logoBtn.addEventListener('click', function () { logoInput.click(); });
+
+    logoInput.addEventListener('change', function () {
+      var file = logoInput.files[0];
+      logoInput.value = '';
+      if (!file) return;
+      var ok = /^image\/(png|jpeg|svg\+xml)$/.test(file.type) && file.size <= 1024 * 1024;
+      logoError.hidden = ok;
+      document.getElementById('contact-logo-field').classList.toggle('field--error', !ok);
+      if (!ok) return;
+      var reader = new FileReader();
+      reader.onload = function () {
+        pendingLogo = reader.result;
+        showLogoField();
+      };
+      reader.readAsDataURL(file);
+    });
+
+    logoRemove.addEventListener('click', function () {
+      pendingLogo = '';
+      showLogoField();
+      logoBtn.focus();
+    });
+
+    /* 10 digits in, (217) 555-0142 out */
     function formatPhone(value) {
       var digits = value.replace(/\D/g, '');
       return '(' + digits.slice(0, 3) + ') ' + digits.slice(3, 6) + '-' + digits.slice(6);
@@ -326,26 +428,37 @@
       form: 'contact-form',
       editBtn: 'edit-contact',
       cancelBtn: 'contact-cancel',
-      rows: ['phone-row', 'email-row'],
-      fields: ['contact-phone', 'contact-email'],
+      rows: ['phone-row', 'email-row', 'url-row', 'logo-row'],
+      fields: ['contact-phone', 'contact-email', 'contact-url'],
       toast: 'Application contact updated successfully',
 
       fill: function () {
         phone.value = saved.phone;
         email.value = saved.email;
+        url.value = saved.url;
+        pendingLogo = saved.logo;
+        logoError.hidden = true;
+        document.getElementById('contact-logo-field').classList.remove('field--error');
+        showLogoField();
       },
 
       validate: function () {
         var invalid = [];
         if (phone.value.replace(/\D/g, '').length !== 10) invalid.push('contact-phone');
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.value.trim())) invalid.push('contact-email');
+        var u = url.value.trim();
+        if (u && !/^(https?:\/\/)?[^\s\/.]+(\.[^\s\/.]+)+(\/\S*)?$/i.test(u)) invalid.push('contact-url');
         return invalid;
       },
 
       save: function () {
-        saved = { phone: formatPhone(phone.value), email: email.value.trim() };
+        saved = { phone: formatPhone(phone.value), email: email.value.trim(), url: url.value.trim(), logo: pendingLogo };
         phoneDisplay.textContent = saved.phone;
         emailDisplay.textContent = saved.email;
+        showSaved();
+        try {
+          localStorage.setItem(STORE_KEY, JSON.stringify(saved));
+        } catch (e) {}
       }
     });
   })();

@@ -21,11 +21,12 @@
      ═════════════════════════════════════════════════════════════════════ -->
 <body class="ap-body">
 
-  <!-- Agency band. Logo is a placeholder until the agency logo work. -->
+  <!-- Agency band. Logo comes from the Application Contact on
+       agency-profile.html; the landmark icon stands in when there's no logo. -->
   <header class="ap-agency">
     <div class="ap-wrap ap-agency__inner">
       <div class="ap-agency__brand">
-        <span class="ap-agency__logo" aria-hidden="true"><i class="fa-solid fa-landmark"></i></span>
+        <span class="ap-agency__logo" id="ap-logo" aria-hidden="true"><i class="fa-solid fa-landmark"></i></span>
         <span class="ap-agency__name">Illinois Department of Natural Resources</span>
       </div>
       <nav class="ap-agency__links" aria-label="Account">
@@ -302,12 +303,15 @@
 
   </main>
 
+  <!-- Agency footer. Phone, email and Agency URL come from the Application
+       Contact on agency-profile.html. -->
   <footer class="ap-footer">
     <div class="ap-wrap ap-footer__inner">
       <span class="ap-footer__name">Illinois Department of Natural Resources</span>
       <span>Commercial Fishing Program</span>
-      <a href="tel:+12175550142">(217) 555-0142</a>
-      <a href="mailto:dnr.commercialfishing@illinois.gov">dnr.commercialfishing@illinois.gov</a>
+      <a href="tel:+12175550142" id="ap-phone">(217) 555-0142</a>
+      <a href="mailto:dnr.licensing@illinois.gov" id="ap-email">dnr.licensing@illinois.gov</a>
+      <a href="https://dnr.illinois.gov/licenses.html" id="ap-url" target="_blank" rel="noopener">dnr.illinois.gov/licenses.html</a>
     </div>
   </footer>
 

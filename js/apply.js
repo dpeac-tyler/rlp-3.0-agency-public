@@ -26,6 +26,36 @@ function initApply() {
   var cur = 0;
   var furthest = 0;
 
+  /* Application contact (phone, email, URL, logo), as saved on
+     agency-profile.html */
+  try {
+    var contact = JSON.parse(localStorage.getItem('rlp.applicationContact') || 'null');
+    if (contact) {
+      var phoneLink = document.getElementById('ap-phone');
+      var emailLink = document.getElementById('ap-email');
+      if (contact.phone) {
+        phoneLink.href = 'tel:+1' + contact.phone.replace(/\D/g, '');
+        phoneLink.textContent = contact.phone;
+      }
+      if (contact.email) {
+        emailLink.href = 'mailto:' + contact.email;
+        emailLink.textContent = contact.email;
+      }
+      var urlLink = document.getElementById('ap-url');
+      if (contact.url) {
+        urlLink.href = /^https?:\/\//i.test(contact.url) ? contact.url : 'https://' + contact.url;
+        urlLink.textContent = contact.url;
+      } else {
+        urlLink.remove();
+      }
+      if (contact.logo) {
+        var logo = document.getElementById('ap-logo');
+        logo.innerHTML = '<img src="' + contact.logo + '" alt="">';
+        logo.classList.add('has-img');
+      }
+    }
+  } catch (e) {}
+
   function stepOf(i) { return Number(panels[i].dataset.step); }
 
   function siblings(step) {
