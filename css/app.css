@@ -5692,6 +5692,12 @@ kbd {
   border-radius: var(--r-panel);
 }
 
+/* Preview drops both side columns, so the sheet takes the constituent
+   page's width */
+.qb.is-preview .qb-sheet {
+  max-width: 1200px;
+}
+
 .qb-sheet__note {
   display: flex;
   align-items: center;
@@ -5762,6 +5768,13 @@ kbd {
 .qb-block.is-followup.is-selected {
   background: #f7f9fc;
   border-left-color: var(--c-header-navy);
+}
+
+/* In preview a follow-up keeps only the gold rule, as the constituent
+   page draws it */
+.qb.is-preview .qb-block.has-cond {
+  border-left: 3px solid var(--c-gold);
+  border-radius: 0;
 }
 
 /* Elbow from the parent above into the follow-up, drawn across the Add here
@@ -6569,9 +6582,21 @@ kbd {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px 16px;
-  padding: 14px;
+  padding: 16px 18px 20px;
   border: 1px solid var(--c-border);
   border-radius: var(--r-panel);
+  background: var(--c-tile-bg);
+}
+
+/* Numbered like the constituent's repeat cards */
+.qb-q__set-num {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--c-text-secondary);
 }
 
 .qb-q__set .preview-field__note em {

@@ -522,7 +522,7 @@ function initQuestionBuilder() {
         var shown = [];
         FIELD_SETS.forEach(function (s) { s[1].forEach(function (f) { if (b.fields && b.fields[f]) shown.push(f); }); });
         if (!shown.length) return '<p class="preview-field__note" style="margin: 0">No fields chosen yet.</p>';
-        return '<div class="qb-q__set">' + shown.map(function (f) {
+        return '<div class="qb-q__set"><p class="qb-q__set-num">Entry 1</p>' + shown.map(function (f) {
           return '<div class="qb-q__set-field"><div class="preview-field__note" style="margin: 0 0 4px">' + esc(f) +
             (b.fields[f] === 'r' ? ' <em>Required</em>' : '') + '</div>' + box('') + '</div>';
         }).join('') + '</div>' +
@@ -574,7 +574,7 @@ function initQuestionBuilder() {
     /* The other end of the selected question's condition */
     var selB = ctx.build ? find(state.sel) : null;
     var linked = !!selB && !sel && ((selB.cond && selB.cond.on === b.id) || (b.cond && b.cond.on === selB.id));
-    var cls = 'qb-block qb-block--' + b.kind + (sel ? ' is-selected' : '') + (cond ? ' is-followup' : '') +
+    var cls = 'qb-block qb-block--' + b.kind + (sel ? ' is-selected' : '') + (cond ? ' is-followup' : '') + (b.cond ? ' has-cond' : '') +
       (chained ? ' is-chained' : '') + (linked ? ' is-linked' : '');
 
     var h = '<div class="' + cls + '" data-block="' + b.id + '" role="group"' +
@@ -599,7 +599,8 @@ function initQuestionBuilder() {
       '</div>';
     }
 
-    if (cond) {
+    /* Preview keeps the line too, so the gold rule explains itself */
+    if (b.cond) {
       h += '<p class="qb-block__cond"><i class="fa-solid fa-code-branch" aria-hidden="true"></i>' +
         'Shown when Question ' + ctx.nm[b.cond.on] + ' is ' + esc(b.cond.val) + '</p>';
     }
