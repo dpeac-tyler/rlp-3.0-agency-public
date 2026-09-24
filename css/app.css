@@ -5313,9 +5313,10 @@ html:not(.builder-resumed) [data-final-view] {
 .qb {
   flex: 1 1 auto;
   display: grid;
-  /* The side panels give ground first, down to 280 and 340, so the form
-     keeps at least 400px with the rail open */
-  grid-template-columns: minmax(280px, 340px) minmax(400px, 1fr) minmax(340px, 420px);
+  /* The side panels give ground first, down to 250 and 300, so the form
+     keeps at least 440px with the rail open. They reach 340 and 420 on a
+     wide screen. */
+  grid-template-columns: minmax(250px, 340px) minmax(440px, 1fr) minmax(300px, 420px);
   align-items: stretch;
 }
 
@@ -5556,6 +5557,17 @@ html:not(.builder-resumed) [data-final-view] {
   background: var(--c-tile-bg);
 }
 
+/* Narrow window, rail open: the sheet takes back some of the gutter */
+@media (max-width: 1500px) {
+  .qb-canvas {
+    padding: 20px 16px 60px;
+  }
+
+  .qb-sheet {
+    padding: 18px 16px 22px;
+  }
+}
+
 .qb-canvas__head {
   max-width: 780px;
   margin: 0 auto;
@@ -5738,15 +5750,58 @@ kbd {
   opacity: .45;
 }
 
-/* Follow-up question: the builder's follow-up treatment, a gold rule and
-   tinted panel, so it reads as attached to the question above */
+/* Follow-up question: indented one step, like the outline, with the gold
+   rule that marks follow-ups across the builder. The tint stays light:
+   anything darker swallows the grey input pictures inside it. */
 .qb-block.is-followup {
+  margin-left: 28px;
   background: var(--c-tile-bg);
   border-left: 3px solid var(--c-gold);
 }
 
 .qb-block.is-followup.is-selected {
+  background: #f7f9fc;
   border-left-color: var(--c-header-navy);
+}
+
+/* Elbow from the parent above into the follow-up, drawn across the Add here
+   row between them. Only when the two sit together. */
+.qb-block.is-chained::before {
+  content: '';
+  position: absolute;
+  left: -19px;
+  top: -40px;
+  width: 16px;
+  height: 64px;
+  border-left: 2px solid var(--c-gold);
+  border-bottom: 2px solid var(--c-gold);
+  border-bottom-left-radius: 6px;
+  pointer-events: none;
+}
+
+/* The other end of the selected question's condition */
+.qb-block.is-linked,
+.qb-block.is-linked:hover {
+  border: 2px dashed var(--c-header-navy);
+}
+
+.qb-block.is-linked.is-followup {
+  border-left: 3px solid var(--c-gold);
+}
+
+/* Parent end of a condition: says what hangs off this answer */
+.qb-block__dep {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--c-header-navy);
+}
+
+.qb-block__dep i {
+  color: var(--c-header-navy);
 }
 
 .qb-block__cond {
@@ -5785,6 +5840,7 @@ kbd {
 
 .qb-tools {
   display: inline-flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 2px;
   padding: 3px;
@@ -5795,6 +5851,7 @@ kbd {
 .qb-tools__btn {
   display: inline-flex;
   align-items: center;
+  white-space: nowrap;
   gap: 6px;
   min-height: 32px;
   padding: 0 10px;

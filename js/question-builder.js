@@ -42,9 +42,9 @@ function initQuestionBuilder() {
   };
 
   var GROUPS = [
-    ['Answers', ['Free Form', 'Multiple Choice', 'Multi-Select', 'Yes/No; Either/Or']],
+    ['Answers', ['Free Form', 'Multiple Choice', 'Multi-Select', 'Yes/No; Either/Or', 'Acknowledgment']],
     ['Data', ['Date / Date Range', 'Table', 'Table (Row Labels)', 'Addresses / Repeatable Fields']],
-    ['Content', ['Acknowledgment', 'Section', 'Description']]
+    ['Content', ['Section', 'Description']]
   ];
 
   var QTYPES = ['Acknowledgment', 'Addresses / Repeatable Fields', 'Date / Date Range', 'Free Form',
@@ -192,14 +192,6 @@ function initQuestionBuilder() {
 
   function deps(bl, id) {
     return bl.filter(function (b) { return b.cond && b.cond.on === id; });
-  }
-
-  /* A section header travels with its questions, up to the next section */
-  function range(bl, i) {
-    if (bl[i].kind !== 'section') return [i, i];
-    var j = i + 1;
-    while (j < bl.length && bl[j].kind !== 'section') j++;
-    return [i, j - 1];
   }
 
   function sectionOf(bl, i) {
@@ -364,38 +356,19 @@ function initQuestionBuilder() {
     insert(i >= 0 ? i + 1 : state.blocks.length, type);
   }
 
-  /* dir -1 up, 1 down. A section moves with all of its questions, past the
-     whole neighbouring section. */
+  /* dir -1 up, 1 down. Every block moves one place, sections included: a
+     section header is its own block and never drags its questions along. */
   function step(id, dir, focus) {
     var bl = state.blocks;
     var i = indexOf(bl, id);
     if (i < 0) return;
     var nm = nums(bl);
     var b = bl[i];
-    var out;
-
-    if (b.kind === 'section') {
-      var r = range(bl, i);
-      var grp = bl.slice(r[0], r[1] + 1);
-      var rest = bl.slice(0, r[0]).concat(bl.slice(r[1] + 1));
-      if (dir < 0) {
-        var p = r[0] - 1;
-        while (p >= 0 && bl[p].kind !== 'section') p--;
-        if (p < 0) return warn('This section is already first.');
-        out = rest.slice(0, p).concat(grp, rest.slice(p));
-      } else {
-        if (r[1] + 1 >= bl.length) return warn('This section is already last.');
-        var e2 = range(bl, r[1] + 1)[1];
-        var at = e2 - grp.length + 1;
-        out = rest.slice(0, at).concat(grp, rest.slice(at));
-      }
-    } else {
-      var j = i + dir;
-      if (j < 0 || j >= bl.length) return warn(cap(name(b, nm)) + ' is already ' + (dir < 0 ? 'first' : 'last') + '.');
-      out = bl.slice();
-      out[i] = bl[j];
-      out[j] = b;
-    }
+    var j = i + dir;
+    if (j < 0 || j >= bl.length) return warn(cap(name(b, nm)) + ' is already ' + (dir < 0 ? 'first' : 'last') + '.');
+    var out = bl.slice();
+    out[i] = bl[j];
+    out[j] = b;
 
     if (!valid(out)) return warn('Can’t move there: a follow-up question must stay below the question it depends on.');
     var n2 = nums(out);
@@ -429,21 +402,19 @@ function initQuestionBuilder() {
       cap(name(b, nm)) + ' deleted' + (b.kind === 'section' ? ', its questions joined the section above' : '') + '.');
   }
 
-  /* Places the block (or a whole section) so that it lands right after the
-     block at index `after` in the current list. -1 is the top of the form. */
+  /* Places the block so that it lands right after the block at index
+     `after` in the current list. -1 is the top of the form. */
   function moveAfter(id, after) {
     var bl = state.blocks;
     var from = indexOf(bl, id);
     if (from < 0) return;
     var pos = after + 1;
-    var r = range(bl, from);
-    if (pos > r[0] && pos <= r[1] + 1) return;
-    var grp = bl.slice(r[0], r[1] + 1);
-    var rest = bl.slice(0, r[0]).concat(bl.slice(r[1] + 1));
-    var at = pos > r[1] ? pos - grp.length : pos;
-    var out = rest.slice(0, at).concat(grp, rest.slice(at));
-    if (!valid(out)) return warn('Can’t move there: a follow-up question must stay below the question it depends on.');
+    if (pos === from || pos === from + 1) return;
     var b = bl[from];
+    var out = bl.slice();
+    out.splice(from, 1);
+    out.splice(pos > from ? pos - 1 : pos, 0, b);
+    if (!valid(out)) return warn('Can’t move there: a follow-up question must stay below the question it depends on.');
     var nm = nums(bl);
     var n2 = nums(out);
     commit(out, { sel: b.id, focus: { block: b.id } },
@@ -594,7 +565,17 @@ function initQuestionBuilder() {
     var n = ctx.nm[b.id];
     var label = isQ ? 'Question ' + n + ', ' + b.type + ': ' + plain(b.text)
       : b.kind === 'section' ? 'Section: ' + b.title : 'Description: ' + trunc(plain(b.text), 80);
-    var cls = 'qb-block qb-block--' + b.kind + (sel ? ' is-selected' : '') + (b.cond ? ' is-followup' : '');
+    var kids = isQ ? deps(state.blocks, b.id) : [];
+    var cond = ctx.build && b.cond;
+    var prev = state.blocks[i - 1];
+    /* Sits straight under its parent (or under a sibling follow-up), so the
+       elbow can join the two */
+    var chained = cond && prev && (prev.id === b.cond.on || (prev.cond && prev.cond.on === b.cond.on));
+    /* The other end of the selected question's condition */
+    var selB = ctx.build ? find(state.sel) : null;
+    var linked = !!selB && !sel && ((selB.cond && selB.cond.on === b.id) || (b.cond && b.cond.on === selB.id));
+    var cls = 'qb-block qb-block--' + b.kind + (sel ? ' is-selected' : '') + (cond ? ' is-followup' : '') +
+      (chained ? ' is-chained' : '') + (linked ? ' is-linked' : '');
 
     var h = '<div class="' + cls + '" data-block="' + b.id + '" role="group"' +
       ' tabindex="' + (ctx.build ? 0 : -1) + '"' + (ctx.build ? ' draggable="true"' : '') +
@@ -608,14 +589,17 @@ function initQuestionBuilder() {
         '<div class="qb-tools" role="toolbar" aria-label="' + esc(toolName) + ' actions">' +
           tool('up', 'fa-solid fa-arrow-up', 'Up') +
           tool('down', 'fa-solid fa-arrow-down', 'Down') +
-          (b.kind !== 'section' ? tool('move', 'fa-solid fa-arrows-up-down', 'Move to…') : '') +
+          tool('move', 'fa-solid fa-arrows-up-down', 'Move to…') +
           tool('dup', 'fa-regular fa-copy', 'Duplicate') +
-          tool('del', 'fa-regular fa-trash-can', 'Delete', locked) +
+          (locked
+            ? tool('del', 'fa-solid fa-lock', 'Locked', true,
+                'Delete, locked: ' + depText(kids, ctx.nm) + '. Remove that condition first.')
+            : tool('del', 'fa-regular fa-trash-can', 'Delete')) +
         '</div>' +
       '</div>';
     }
 
-    if (b.cond) {
+    if (cond) {
       h += '<p class="qb-block__cond"><i class="fa-solid fa-code-branch" aria-hidden="true"></i>' +
         'Shown when Question ' + ctx.nm[b.cond.on] + ' is ' + esc(b.cond.val) + '</p>';
     }
@@ -628,20 +612,37 @@ function initQuestionBuilder() {
     } else if (b.type === 'Acknowledgment') {
       h += '<div class="qb-q__ack" aria-hidden="true"><i class="fa-regular fa-square"></i>' +
         '<span class="qb-q__label">' + b.text + (b.req ? '<em>Required</em>' : '') + '</span></div>';
+      h += depHTML();
       if (b.instrOn && plain(b.instr)) h += '<div class="qb-q__instr">' + b.instr + '</div>';
     } else {
       h += '<div class="qb-q__label">' + b.text + (b.req ? '<em>Required</em>' : '') + '</div>';
+      h += depHTML();
       if (b.instrOn && plain(b.instr)) h += '<div class="qb-q__instr">' + b.instr + '</div>';
       h += '<div class="qb-q__control" aria-hidden="true">' + controlHTML(b) + '</div>';
     }
 
     return h + '</div>';
 
-    function tool(key, icon, text, disabled) {
+    /* The parent end of a condition, always on show while building */
+    function depHTML() {
+      if (!ctx.build || !kids.length) return '';
+      return '<p class="qb-block__dep"><i class="fa-solid fa-code-branch" aria-hidden="true"></i>' +
+        depText(kids, ctx.nm) + '</p>';
+    }
+
+    function tool(key, icon, text, disabled, aria) {
       return '<button type="button" class="qb-tools__btn" data-tool="' + key + '" tabindex="-1"' +
-        (disabled ? ' aria-disabled="true"' : '') + '>' +
+        (disabled ? ' aria-disabled="true"' : '') + (aria ? ' aria-label="' + esc(aria) + '"' : '') + '>' +
         '<i class="' + icon + '" aria-hidden="true"></i>' + text + '</button>';
     }
+  }
+
+  /* "Question 10 depends on this answer", or "Questions 10 and 11 depend on
+     this answer" */
+  function depText(kids, nm) {
+    var ns = kids.map(function (k) { return nm[k.id]; });
+    if (ns.length === 1) return 'Question ' + ns[0] + ' depends on this answer';
+    return 'Questions ' + ns.slice(0, -1).join(', ') + ' and ' + ns[ns.length - 1] + ' depend on this answer';
   }
 
   function renderCanvas() {
@@ -755,7 +756,7 @@ function initQuestionBuilder() {
         '<input type="text" id="set-title" maxlength="150" value="' + esc(b.title) + '"></div>';
       h += rteHTML('set-text', 'Description', b.text, 'Optional. Shown under the section title.', SECTION_DESC_LIMIT);
       h += '<div class="info-notice"><i class="fa-solid fa-circle-info" aria-hidden="true"></i>' +
-        '<div>Up and Down move the whole section, including its questions.</div></div>';
+        '<div>A section is its own block. Moving it moves only the header; the questions stay where they are.</div></div>';
     } else if (b.kind === 'desc') {
       h += rteHTML('set-text', 'Text', b.text, 'Instructions or context for applicants.', DESC_LIMIT, true);
     } else {
@@ -1367,8 +1368,8 @@ function initQuestionBuilder() {
     var red = bl.filter(function (_, x) { return x !== i; });
     state.move = { id: id, from: i, to: i };
 
-    document.getElementById('move-eyebrow').textContent = b.kind === 'q' ? 'Move Question ' + nm[b.id] : 'Move description';
-    document.getElementById('move-title').textContent = trunc(plain(b.text), 60);
+    document.getElementById('move-eyebrow').textContent = b.kind === 'q' ? 'Move Question ' + nm[b.id] : b.kind === 'section' ? 'Move section' : 'Move description';
+    document.getElementById('move-title').textContent = b.kind === 'section' ? b.title : trunc(plain(b.text), 60);
 
     var h = '';
     for (var k = 0; k <= red.length; k++) {
@@ -1427,7 +1428,7 @@ function initQuestionBuilder() {
     state.move = null;
     modal.hidden = true;
     commit(out, { sel: b.id, focus: { block: b.id } },
-      b.kind === 'q' ? name(b, nm) + ' moved, now Question ' + n2[b.id] + '.' : 'Description moved.');
+      b.kind === 'q' ? name(b, nm) + ' moved, now Question ' + n2[b.id] + '.' : cap(name(b, nm)) + ' moved.');
   });
 
   document.getElementById('move-cancel').addEventListener('click', closeMove);
