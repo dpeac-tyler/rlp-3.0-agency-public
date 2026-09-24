@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Commercial Fishing Permit | Illinois Department of Natural Resources</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+
+<!-- ══ Constituent view ════════════════════════════════════════════════════
+     The live application, as the applicant meets it once the agency has
+     finished the builder. No agency chrome: the agency's own band on top,
+     its contact details at the foot.
+
+     The qb-sheet from the Question Builder is the container for every step.
+     Each step's groups (Personal / Contact / Mailing on Information
+     Collection, the builder's sections on Questions) run as sub-steps
+     inside the sheet, so the applicant sees one group at a time.
+     ═════════════════════════════════════════════════════════════════════ -->
+<body class="ap-body">
+
+  <!-- Agency band. Logo is a placeholder until the agency logo work. -->
+  <header class="ap-agency">
+    <div class="ap-wrap ap-agency__inner">
+      <div class="ap-agency__brand">
+        <span class="ap-agency__logo" aria-hidden="true"><i class="fa-solid fa-landmark"></i></span>
+        <span class="ap-agency__name">Illinois Department of Natural Resources</span>
+      </div>
+      <nav class="ap-agency__links" aria-label="Account">
+        <span>Signed in as <strong>Marcus Whitfield</strong></span>
+        <span class="app-header__divider" aria-hidden="true"></span>
+        <a href="#">My Account</a>
+        <span class="app-header__divider" aria-hidden="true"></span>
+        <a href="#">Sign Out</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="ap-wrap ap-main">
+
+    <!-- Step indicator: the application's steps, in v2's names -->
+    <nav aria-label="Application steps">
+      <ol class="ap-steps" id="ap-steps">
+        <li class="ap-steps__item" data-step="1"><span class="ap-steps__dot"></span><span class="ap-steps__label">Information Collection</span></li>
+        <li class="ap-steps__item" data-step="2"><span class="ap-steps__dot"></span><span class="ap-steps__label">Questions</span></li>
+        <li class="ap-steps__item" data-step="3"><span class="ap-steps__dot"></span><span class="ap-steps__label">Documents</span></li>
+        <li class="ap-steps__item" data-step="4"><span class="ap-steps__dot"></span><span class="ap-steps__label">Fees</span></li>
+        <li class="ap-steps__item" data-step="5"><span class="ap-steps__dot"></span><span class="ap-steps__label">Information Summary</span></li>
+        <li class="ap-steps__item" data-step="6"><span class="ap-steps__dot"></span><span class="ap-steps__label">Electronic Signature</span></li>
+        <li class="ap-steps__item" data-step="7"><span class="ap-steps__dot"></span><span class="ap-steps__label">Payment</span></li>
+        <li class="ap-steps__item" data-step="8"><span class="ap-steps__dot"></span><span class="ap-steps__label">Confirmation</span></li>
+      </ol>
+    </nav>
+
+    <div class="ap-intro">
+      <p class="ap-intro__eyebrow" id="ap-step-eyebrow">Step 1 of 8</p>
+      <h1 class="ap-intro__title">Commercial Fishing Permit</h1>
+      <p class="ap-intro__desc">
+        Required to take and sell fish from Illinois waters commercially. The permit covers one
+        vessel and runs for the calendar year.
+      </p>
+
+      <details class="ap-instructions" open>
+        <summary>Instructions</summary>
+        <div class="ap-instructions__body">
+          <p>You will need your vessel's state registration number and the address where the vessel is moored.
+            If you held a commercial permit in the last 3 years, have that permit number ready too.</p>
+          <p>Your progress is saved as you go. You can leave and come back to finish before you pay.</p>
+        </div>
+      </details>
+    </div>
+
+    <!-- The sheet: every step renders inside it -->
+    <div class="qb-sheet ap-sheet">
+
+      <!-- Sub-steps for the current step, drawn by js/apply.js -->
+      <ol class="ap-substeps" id="ap-substeps" aria-label="Parts of this step"></ol>
+
+      <!-- ── Step 1: Information Collection ──────────────────────────────── -->
+      <section class="ap-panel" data-step="1" data-title="Personal Information">
+        <div class="ap-field">
+          <label for="first-name">First Name <em>Required</em></label>
+          <input class="ap-input" type="text" id="first-name" value="Marcus" autocomplete="given-name">
+        </div>
+        <div class="ap-field">
+          <label for="middle-name">Middle Name</label>
+          <input class="ap-input" type="text" id="middle-name" value="J." autocomplete="additional-name">
+        </div>
+        <div class="ap-field">
+          <label for="last-name">Last Name <em>Required</em></label>
+          <input class="ap-input" type="text" id="last-name" value="Whitfield" autocomplete="family-name">
+        </div>
+      </section>
+
+      <section class="ap-panel" data-step="1" data-title="Contact Information" hidden>
+        <div class="ap-field">
+          <label for="phone">Telephone Number <em>Required</em></label>
+          <input class="ap-input ap-input--md" type="tel" id="phone" placeholder="(555) 555-5555" autocomplete="tel">
+        </div>
+        <div class="ap-field">
+          <label for="email">Email Address <em>Required</em></label>
+          <input class="ap-input" type="email" id="email" autocomplete="email">
+        </div>
+        <div class="ap-field">
+          <label for="email-confirm">Confirm Email Address <em>Required</em></label>
+          <input class="ap-input" type="email" id="email-confirm" autocomplete="off">
+        </div>
+      </section>
+
+      <section class="ap-panel" data-step="1" data-title="Mailing Address" hidden>
+        <div class="ap-field">
+          <label for="addr1">Address Line 1 <em>Required</em></label>
+          <input class="ap-input" type="text" id="addr1" autocomplete="address-line1">
+        </div>
+        <div class="ap-field">
+          <label for="addr2">Address Line 2</label>
+          <input class="ap-input" type="text" id="addr2" autocomplete="address-line2">
+        </div>
+        <div class="ap-row">
+          <div class="ap-field">
+            <label for="city">City <em>Required</em></label>
+            <input class="ap-input" type="text" id="city" autocomplete="address-level2">
+          </div>
+          <div class="ap-field">
+            <label for="state">State/Province/Region <em>Required</em></label>
+            <select class="ap-input" id="state" autocomplete="address-level1">
+              <option value="">Please Select</option>
+              <option>Illinois</option>
+              <option>Indiana</option>
+              <option>Iowa</option>
+              <option>Kentucky</option>
+              <option>Missouri</option>
+              <option>Wisconsin</option>
+            </select>
+          </div>
+          <div class="ap-field">
+            <label for="zip">Zip Code or Postal Code <em>Required</em></label>
+            <input class="ap-input" type="text" id="zip" autocomplete="postal-code">
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Step 2: Questions. One sub-step per builder section. ────────── -->
+      <section class="ap-panel" data-step="2" data-title="Vessel information" hidden>
+        <p class="qb-section__text ap-section-text">Tell us about the vessel you will use for commercial fishing.</p>
+        <div class="ap-field">
+          <label for="q-vessel-name">Vessel name <em>Required</em></label>
+          <input class="ap-input" type="text" id="q-vessel-name" maxlength="70">
+        </div>
+        <div class="ap-field">
+          <label for="q-reg">State registration number <em>Required</em></label>
+          <input class="ap-input" type="text" id="q-reg" maxlength="70">
+        </div>
+        <div class="ap-field">
+          <label for="q-length">Vessel length (feet) <em>Required</em></label>
+          <input class="ap-input ap-input--sm" type="number" id="q-length" min="8" max="120" placeholder="0">
+          <span class="ap-hint">Between 8 and 120 feet</span>
+        </div>
+        <fieldset class="ap-field ap-fieldset">
+          <legend>Home port <em>Required</em></legend>
+          <label class="ap-choice"><input type="radio" name="q-port"> Alton</label>
+          <label class="ap-choice"><input type="radio" name="q-port"> Grafton</label>
+          <label class="ap-choice"><input type="radio" name="q-port"> Havana</label>
+          <label class="ap-choice"><input type="radio" name="q-port"> Peoria</label>
+          <label class="ap-choice"><input type="radio" name="q-port"> Quincy</label>
+        </fieldset>
+        <div class="ap-field">
+          <span class="ap-label" id="q-moor-label">Where is the vessel moored when not in use? <em>Required</em></span>
+          <span class="ap-hint">Add each marina or private dock you use during the season.</span>
+          <div class="ap-repeat" aria-labelledby="q-moor-label">
+            <div class="ap-repeat__card">
+              <p class="ap-repeat__num">Location 1</p>
+              <div class="ap-field">
+                <label for="moor-1-addr1">Address Line 1 <em>Required</em></label>
+                <input class="ap-input" type="text" id="moor-1-addr1">
+              </div>
+              <div class="ap-field">
+                <label for="moor-1-addr2">Address Line 2</label>
+                <input class="ap-input" type="text" id="moor-1-addr2">
+              </div>
+              <div class="ap-row">
+                <div class="ap-field">
+                  <label for="moor-1-city">City/APO/DPO/FPO <em>Required</em></label>
+                  <input class="ap-input" type="text" id="moor-1-city">
+                </div>
+                <div class="ap-field">
+                  <label for="moor-1-state">State <em>Required</em></label>
+                  <select class="ap-input" id="moor-1-state">
+                    <option value="">Please Select</option>
+                    <option>Illinois</option>
+                    <option>Iowa</option>
+                    <option>Missouri</option>
+                  </select>
+                </div>
+                <div class="ap-field">
+                  <label for="moor-1-zip">Zip Code <em>Required</em></label>
+                  <input class="ap-input" type="text" id="moor-1-zip">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div><button type="button" class="btn btn--warm ap-add-btn">Add More</button></div>
+        </div>
+      </section>
+
+      <section class="ap-panel" data-step="2" data-title="Fishing activity" hidden>
+        <fieldset class="ap-field ap-fieldset">
+          <legend>Which species do you intend to harvest? <em>Required</em></legend>
+          <label class="ap-choice"><input type="checkbox"> Catfish</label>
+          <label class="ap-choice"><input type="checkbox"> Carp</label>
+          <label class="ap-choice"><input type="checkbox"> Buffalo</label>
+          <label class="ap-choice"><input type="checkbox"> Freshwater drum</label>
+          <label class="ap-choice"><input type="checkbox"> Paddlefish</label>
+        </fieldset>
+        <fieldset class="ap-field ap-fieldset">
+          <legend>Primary gear type <em>Required</em></legend>
+          <label class="ap-choice"><input type="radio" name="q-gear"> Gill net</label>
+          <label class="ap-choice"><input type="radio" name="q-gear"> Trap net</label>
+          <label class="ap-choice"><input type="radio" name="q-gear"> Hoop net</label>
+          <label class="ap-choice"><input type="radio" name="q-gear"> Seine</label>
+          <label class="ap-choice"><input type="radio" name="q-gear"> Hook and line</label>
+        </fieldset>
+        <fieldset class="ap-field ap-fieldset">
+          <legend>When do you plan to fish this season? <em>Required</em></legend>
+          <div class="ap-daterange">
+            <div class="ap-field">
+              <label class="ap-sublabel" for="q-from">From</label>
+              <input class="ap-input ap-input--md" type="date" id="q-from">
+            </div>
+            <div class="ap-field">
+              <label class="ap-sublabel" for="q-to">To</label>
+              <input class="ap-input ap-input--md" type="date" id="q-to">
+            </div>
+          </div>
+        </fieldset>
+        <fieldset class="ap-field ap-fieldset">
+          <legend>Have you held a commercial fishing permit in the last 3 years? <em>Required</em></legend>
+          <div class="ap-choices--inline">
+            <label class="ap-choice"><input type="radio" name="q-held" value="Yes"> Yes</label>
+            <label class="ap-choice"><input type="radio" name="q-held" value="No"> No</label>
+          </div>
+        </fieldset>
+        <!-- Follow-up: the condition set on the Conditions step, live -->
+        <div class="ap-field ap-followup" data-show-when="q-held=Yes" hidden>
+          <label for="q-prev">Previous permit number</label>
+          <input class="ap-input" type="text" id="q-prev" maxlength="70">
+        </div>
+        <div class="ap-field">
+          <span class="ap-label" id="q-pounds-label">Pounds harvested last season, by species</span>
+          <table class="ap-table" aria-labelledby="q-pounds-label">
+            <thead><tr><th scope="col">Species</th><th scope="col">Pounds</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Catfish</th><td><input class="ap-cell" type="number" min="0" aria-label="Catfish pounds" data-sum="pounds"></td></tr>
+              <tr><th scope="row">Carp</th><td><input class="ap-cell" type="number" min="0" aria-label="Carp pounds" data-sum="pounds"></td></tr>
+              <tr><th scope="row">Buffalo</th><td><input class="ap-cell" type="number" min="0" aria-label="Buffalo pounds" data-sum="pounds"></td></tr>
+            </tbody>
+            <tfoot><tr><th scope="row">Total</th><td><output id="sum-pounds" class="ap-sum">0</output></td></tr></tfoot>
+          </table>
+        </div>
+        <div class="ap-field">
+          <span class="ap-label" id="q-crew-label">Crew members</span>
+          <table class="ap-table" aria-labelledby="q-crew-label">
+            <thead><tr><th scope="col">Name</th><th scope="col">Role</th><th scope="col">License No.</th></tr></thead>
+            <tbody id="crew-rows">
+              <tr>
+                <td><input class="ap-cell" type="text" aria-label="Crew member 1 name"></td>
+                <td><input class="ap-cell" type="text" aria-label="Crew member 1 role"></td>
+                <td><input class="ap-cell" type="text" aria-label="Crew member 1 license number"></td>
+              </tr>
+            </tbody>
+          </table>
+          <div><button type="button" class="btn btn--warm ap-add-btn" id="crew-add">Add Row</button></div>
+        </div>
+      </section>
+
+      <section class="ap-panel" data-step="2" data-title="Declarations" hidden>
+        <label class="ap-choice ap-ack">
+          <input type="checkbox">
+          <span>I certify that the information provided is true and complete. <em>Required</em></span>
+        </label>
+      </section>
+
+    </div>
+
+    <!-- Wizard action bar: back on the left, advance on the right -->
+    <div class="builder-actions ap-actions">
+      <div class="builder-actions__right">
+        <button type="button" class="btn btn--secondary" id="ap-back" hidden>
+          <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back
+        </button>
+        <a href="#">Cancel</a>
+      </div>
+      <div class="builder-actions__right">
+        <a href="#">Save &amp; finish later</a>
+        <button type="button" class="btn btn--primary" id="ap-next">
+          Next <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="ap-footer">
+    <div class="ap-wrap ap-footer__inner">
+      <span class="ap-footer__name">Illinois Department of Natural Resources</span>
+      <span>Commercial Fishing Program</span>
+      <a href="tel:+12175550142">(217) 555-0142</a>
+      <a href="mailto:dnr.commercialfishing@illinois.gov">dnr.commercialfishing@illinois.gov</a>
+    </div>
+  </footer>
+
+  <p class="sr-only" id="ap-live" aria-live="polite"></p>
+
+  <script src="js/apply.js"></script>
+  <script>initApply();</script>
+
+</body>
+
+</html>

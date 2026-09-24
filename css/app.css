@@ -6592,3 +6592,604 @@ kbd {
   font-weight: 700;
   padding: 0 12px;
 }
+
+/* ---------------------------------------------------------------------- */
+/* Constituent application (constituent-application.html)                */
+/* The live form. Agency band on top, the step indicator, then the        */
+/* qb-sheet as the container every step renders inside. Controls here are */
+/* real, so they are white with a darker edge than the grey pictures the  */
+/* builder draws.                                                         */
+/* ---------------------------------------------------------------------- */
+
+.ap-body {
+  background: var(--c-tile-bg);
+}
+
+.ap-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+/* Agency band */
+.ap-agency {
+  background: #fff;
+  border-bottom: 1px solid var(--c-border);
+}
+
+.ap-agency__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  min-height: 84px;
+}
+
+.ap-agency__brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Placeholder until the agency logo work */
+.ap-agency__logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--r-panel);
+  background: var(--c-header-navy);
+  font-size: 24px;
+  color: #fff;
+}
+
+.ap-agency__name {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--c-header-navy);
+}
+
+.ap-agency__links {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 16px;
+  color: var(--c-text-secondary);
+}
+
+.ap-agency__links a {
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.ap-agency__links .app-header__divider {
+  background: var(--c-border);
+}
+
+.ap-main {
+  padding-top: 28px;
+}
+
+/* Step indicator: dot and rule per step, label underneath */
+.ap-steps {
+  counter-reset: ap-step;
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-auto-flow: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ap-steps__item {
+  position: relative;
+  padding-top: 30px;
+  padding-right: 8px;
+  font-size: 15px;
+  line-height: 1.3;
+  color: var(--c-text-secondary);
+  counter-increment: ap-step;
+}
+
+.ap-steps__item::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: #c9ccd0;
+}
+
+.ap-steps__item:last-child::before {
+  display: none;
+}
+
+.ap-steps__dot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  border: 2px solid #8d9296;
+  border-radius: 50%;
+  background: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 20px;
+  text-align: center;
+  color: var(--c-text-secondary);
+}
+
+.ap-steps__dot::after {
+  content: counter(ap-step);
+}
+
+.ap-steps__item.is-done::before {
+  background: var(--c-header-navy);
+}
+
+.ap-steps__item.is-done .ap-steps__dot {
+  border-color: var(--c-header-navy);
+  background: var(--c-header-navy);
+  color: #fff;
+}
+
+.ap-steps__item.is-done .ap-steps__dot::after {
+  content: '\2713';
+}
+
+.ap-steps__item.is-current .ap-steps__dot {
+  border-color: var(--c-blue);
+  background: var(--c-blue);
+  color: #fff;
+}
+
+.ap-steps__item.is-current {
+  font-weight: 700;
+  color: var(--c-blue);
+}
+
+/* Title block */
+.ap-intro {
+  margin-top: 32px;
+}
+
+.ap-intro__eyebrow {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--c-header-navy);
+}
+
+.ap-intro__title {
+  margin: 6px 0 0;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--c-text-primary);
+}
+
+.ap-intro__desc {
+  margin: 10px 0 0;
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--c-text-secondary);
+}
+
+.ap-instructions {
+  margin-top: 20px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-panel);
+  background: #fff;
+}
+
+.ap-instructions summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--c-header-navy);
+  cursor: pointer;
+  list-style: none;
+}
+
+.ap-instructions summary::-webkit-details-marker {
+  display: none;
+}
+
+.ap-instructions summary::before {
+  content: '\f05a';
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  color: var(--c-blue);
+}
+
+.ap-instructions summary::after {
+  content: '+';
+  margin-left: auto;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.ap-instructions[open] summary::after {
+  content: '\2212';
+}
+
+.ap-instructions__body {
+  padding: 0 18px 16px 44px;
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+.ap-instructions__body p {
+  margin: 0;
+}
+
+.ap-instructions__body p + p {
+  margin-top: 8px;
+}
+
+/* The sheet, at page width rather than the builder's 780px column */
+.qb-sheet.ap-sheet {
+  max-width: none;
+  margin-top: 28px;
+  padding: 26px 32px 32px;
+  scroll-margin-top: 16px;
+}
+
+/* Sub-steps: segmented bar, same shape as v2's */
+.ap-substeps {
+  display: flex;
+  gap: 4px;
+  margin: 0 0 24px;
+  padding: 0;
+  list-style: none;
+}
+
+.ap-substeps__item {
+  flex: 0 1 220px;
+  min-width: 0;
+}
+
+.ap-substeps__item button {
+  display: block;
+  width: 100%;
+  padding: 0;
+  text-align: left;
+  color: inherit;
+}
+
+.ap-substeps__bar {
+  display: block;
+  height: 6px;
+  border-radius: 3px;
+  background: #c9ccd0;
+}
+
+.ap-substeps__label {
+  display: block;
+  margin-top: 8px;
+  font-size: 15px;
+  line-height: 1.3;
+  color: var(--c-text-secondary);
+}
+
+.ap-substeps__item.is-done .ap-substeps__bar {
+  background: var(--c-header-navy);
+}
+
+.ap-substeps__item.is-done button:hover .ap-substeps__label {
+  color: var(--c-blue);
+  text-decoration: underline;
+}
+
+.ap-substeps__item.is-current .ap-substeps__bar {
+  background: var(--c-blue);
+}
+
+.ap-substeps__item.is-current .ap-substeps__label {
+  font-weight: 700;
+  color: var(--c-blue);
+}
+
+/* Panel heading: the builder's navy section bar, with the count on it */
+.ap-panel__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.ap-panel__head:focus {
+  outline: none;
+}
+
+.ap-panel__head:focus-visible {
+  outline: 3px solid var(--c-gold);
+  outline-offset: 2px;
+}
+
+.ap-panel__count {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--c-toolbar-idle);
+}
+
+.ap-section-text {
+  margin-bottom: 4px;
+}
+
+/* Fields */
+.ap-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  margin: 22px 0 0;
+}
+
+.ap-panel > .ap-panel__head + .ap-field,
+.ap-panel > .ap-panel__head + .ap-ack {
+  margin-top: 20px;
+}
+
+.ap-field label,
+.ap-label,
+.ap-fieldset legend {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--c-text-primary);
+}
+
+.ap-field em,
+.ap-label em,
+.ap-fieldset legend em,
+.ap-ack em {
+  margin-left: 6px;
+  font-size: 14px;
+  font-style: italic;
+  font-weight: 400;
+  color: #1b1b1b;
+}
+
+.ap-field .ap-sublabel {
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--c-text-secondary);
+}
+
+.ap-hint {
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--c-text-secondary);
+}
+
+.ap-input {
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
+  border: 1px solid #8d9296;
+  border-radius: var(--r-pill);
+  background: #fff;
+  font-family: inherit;
+  font-size: 16px;
+  color: var(--c-text-primary);
+}
+
+.ap-input--sm { max-width: 160px; }
+.ap-input--md { max-width: 260px; }
+
+.ap-input:focus,
+.ap-cell:focus {
+  outline: 3px solid var(--c-gold);
+  outline-offset: 0;
+  border-color: var(--c-header-navy);
+}
+
+.ap-row {
+  display: grid;
+  grid-template-columns: 2fr 1.4fr 1fr;
+  gap: 16px;
+}
+
+.ap-row > .ap-field {
+  margin-top: 22px;
+}
+
+.ap-fieldset {
+  margin: 22px 0 0;
+  padding: 0;
+  border: 0;
+  gap: 10px;
+}
+
+.ap-fieldset legend {
+  margin-bottom: 10px;
+  padding: 0;
+}
+
+.ap-choice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.ap-field .ap-choice {
+  font-weight: 400;
+}
+
+.ap-choice input {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--c-blue);
+}
+
+.ap-choices--inline {
+  display: flex;
+  gap: 28px;
+}
+
+.ap-ack {
+  align-items: flex-start;
+  padding: 16px 18px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-panel);
+  background: var(--c-tile-bg);
+  line-height: 1.45;
+}
+
+.ap-ack input {
+  margin-top: 2px;
+}
+
+.ap-daterange {
+  display: flex;
+  gap: 16px;
+}
+
+.ap-daterange .ap-field {
+  flex: 0 1 260px;
+  margin: 0;
+}
+
+/* Follow-up: the gold rule that marks follow-ups across the builder */
+.ap-followup {
+  padding: 4px 0 4px 18px;
+  border-left: 3px solid var(--c-gold);
+}
+
+.ap-followup[hidden] {
+  display: none;
+}
+
+/* Repeatable fields: numbered cards, Add More below */
+.ap-repeat {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.ap-repeat__card {
+  padding: 16px 18px 20px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-panel);
+  background: var(--c-tile-bg);
+}
+
+.ap-repeat__num {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--c-text-secondary);
+}
+
+.ap-repeat__card .ap-field:first-of-type {
+  margin-top: 10px;
+}
+
+.ap-add-btn {
+  margin-top: 8px;
+}
+
+/* Tables with live cells */
+.ap-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+}
+
+.ap-table th,
+.ap-table td {
+  border: 1px solid var(--c-border);
+  text-align: left;
+}
+
+.ap-table thead th {
+  padding: 10px 12px;
+  background: var(--c-hairline);
+  font-weight: 700;
+}
+
+.ap-table tbody th,
+.ap-table tfoot th {
+  padding: 0 12px;
+  font-weight: 600;
+  width: 40%;
+}
+
+.ap-table td {
+  padding: 0;
+}
+
+.ap-table tfoot th,
+.ap-table tfoot td {
+  border-top: 2px solid #8d9296;
+  font-weight: 700;
+}
+
+.ap-cell {
+  width: 100%;
+  height: 42px;
+  padding: 0 12px;
+  border: 0;
+  background: #fff;
+  font-family: inherit;
+  font-size: 16px;
+  color: var(--c-text-primary);
+}
+
+.ap-sum {
+  display: block;
+  padding: 10px 12px;
+}
+
+/* Action bar sits on the page tint, not white */
+.builder-actions.ap-actions {
+  margin-top: 20px;
+  background: var(--c-tile-bg);
+  border-top: 0;
+}
+
+/* Agency footer */
+.ap-footer {
+  margin-top: 40px;
+  padding: 22px 0;
+  background: var(--c-hairline);
+  border-top: 1px solid var(--c-border);
+  font-size: 16px;
+}
+
+.ap-footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 28px;
+  color: var(--c-text-secondary);
+}
+
+.ap-footer__name {
+  font-weight: 700;
+  color: var(--c-text-primary);
+}
+
+@media (max-width: 900px) {
+  .ap-steps__label { display: none; }
+  .ap-steps__item.is-current .ap-steps__label { display: block; white-space: nowrap; }
+  .ap-row { grid-template-columns: 1fr; gap: 0; }
+  .ap-agency__links > span:first-child,
+  .ap-agency__links > span:first-child + .app-header__divider { display: none; }
+}
