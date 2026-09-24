@@ -1400,7 +1400,7 @@ a.stat:focus-visible {
 /* Red — Cancel in a modal, and destructive actions (Delete Account) */
 .btn--cancel,
 .btn--danger {
-  background: #d54309;
+  background: #d83933;
   color: #fff;
 }
 
@@ -2012,11 +2012,11 @@ a.stat:focus-visible {
 /* Error variant — the validation summary that scrolls into view on Save */
 .info-notice--error {
   background: #f4e3db;
-  border-left-color: #d54309;
+  border-left-color: #d83933;
 }
 
 .info-notice--error i {
-  color: #d54309;
+  color: #d83933;
 }
 
 /* Warning variant — caution before a destructive action (Close Case) */
