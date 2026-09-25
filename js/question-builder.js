@@ -566,8 +566,8 @@ function initQuestionBuilder() {
       h += '<div class="qb-block__head">' +
         '<span class="qb-block__badge">' + (isQ ? 'Q' + n + ' &middot; ' + esc(b.type) : b.kind === 'section' ? 'Section' : 'Description') + '</span>' +
         '<div class="qb-tools" role="toolbar" aria-label="' + esc(toolName) + ' actions">' +
-          tool('up', 'fa-solid fa-arrow-up', 'Up') +
-          tool('down', 'fa-solid fa-arrow-down', 'Down') +
+          tool('up', 'fa-solid fa-arrow-up', 'Move up') +
+          tool('down', 'fa-solid fa-arrow-down', 'Move down') +
           tool('move', 'fa-solid fa-arrows-up-down', 'Move to…') +
           tool('dup', 'fa-regular fa-copy', 'Duplicate') +
           (locked
@@ -610,10 +610,13 @@ function initQuestionBuilder() {
         depText(kids, ctx.nm) + '</p>';
     }
 
+    /* Icon only; the name is the button's label and tooltip, and the icon
+       key above the form spells them all out */
     function tool(key, icon, text, disabled, aria) {
       return '<button type="button" class="qb-tools__btn" data-tool="' + key + '" tabindex="-1"' +
-        (disabled ? ' aria-disabled="true"' : '') + (aria ? ' aria-label="' + esc(aria) + '"' : '') + '>' +
-        '<i class="' + icon + '" aria-hidden="true"></i>' + text + '</button>';
+        (disabled ? ' aria-disabled="true"' : '') + ' aria-label="' + esc(aria || text) + '"' +
+        ' title="' + esc(aria || text) + '">' +
+        '<i class="' + icon + '" aria-hidden="true"></i></button>';
     }
   }
 

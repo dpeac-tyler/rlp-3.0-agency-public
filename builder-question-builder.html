@@ -219,6 +219,20 @@
                   </div>
                 </div>
               </div>
+
+              <button type="button" class="icon-legend-toggle qb-legend-toggle"
+                      aria-expanded="false" aria-controls="qb-legend">
+                What do the icons mean?
+                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+              </button>
+              <div class="icon-legend qb-legend" id="qb-legend" hidden>
+                <div class="icon-legend__item"><span class="qb-legend__chip"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></span> Move up</div>
+                <div class="icon-legend__item"><span class="qb-legend__chip"><i class="fa-solid fa-arrow-down" aria-hidden="true"></i></span> Move down</div>
+                <div class="icon-legend__item"><span class="qb-legend__chip"><i class="fa-solid fa-arrows-up-down" aria-hidden="true"></i></span> Move to&hellip;</div>
+                <div class="icon-legend__item"><span class="qb-legend__chip"><i class="fa-regular fa-copy" aria-hidden="true"></i></span> Duplicate</div>
+                <div class="icon-legend__item"><span class="qb-legend__chip"><i class="fa-regular fa-trash-can" aria-hidden="true"></i></span> Delete</div>
+                <div class="icon-legend__item"><span class="qb-legend__chip qb-legend__chip--locked"><i class="fa-solid fa-lock" aria-hidden="true"></i></span> Can&rsquo;t delete: another question depends on its answer</div>
+              </div>
             </div>
 
             <div class="qb-sheet">
@@ -289,10 +303,12 @@
 
   <script src="js/toolbar.js"></script>
   <script src="js/builder-form.js"></script>
+  <script src="js/icon-legend.js"></script>
   <script src="js/question-builder.js"></script>
   <script>
     initToolbar('#toolbar', { activeKey: 'applications' });
     initQuestionBuilder();
+    initIconLegends();
   </script>
 
 </body>

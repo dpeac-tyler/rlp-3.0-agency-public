@@ -5903,19 +5903,15 @@ kbd {
 .qb-tools__btn {
   display: inline-flex;
   align-items: center;
-  white-space: nowrap;
-  gap: 6px;
-  min-height: 32px;
-  padding: 0 10px;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
   border-radius: var(--r-chip-sm);
-  font-size: 16px;
-  font-weight: 600;
   color: #fff;
 }
 
 .qb-tools__btn i {
-  font-size: 14px;
-  color: var(--c-toolbar-idle);
+  font-size: 15px;
 }
 
 .qb-tools__btn:hover {
@@ -5929,6 +5925,38 @@ kbd {
 
 .qb-tools__btn[aria-disabled="true"]:hover {
   background: none;
+}
+
+/* Icon key under the Build / Preview bar: each tool's icon on the same
+   navy chip it has on the block, with its name */
+.qb-legend-toggle {
+  display: block;
+  margin: 12px 0 0;
+}
+
+.qb-legend {
+  margin: 12px 0 0;
+}
+
+.qb-legend__chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r-chip-sm);
+  background: var(--c-header-navy);
+  font-size: 15px;
+  color: #fff;
+}
+
+.qb-legend__chip--locked {
+  color: var(--c-toolbar-idle);
+}
+
+.qb.is-preview .qb-legend-toggle,
+.qb.is-preview .qb-legend {
+  display: none;
 }
 
 /* A section renders as the constituent's navy block header */
