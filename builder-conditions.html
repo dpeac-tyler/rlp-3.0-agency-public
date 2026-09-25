@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conditions &mdash; RLP Agency Console</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/app.css">
+  <!-- Sets the collapsed-rail class before paint, so it never flashes open -->
+  <script src="js/builder-rail.js"></script>
+  <script src="js/builder-locks.js"></script>
+</head>
+
+<body>
+
+  <div class="app app--builder">
+
+    <!-- Header (shared chrome) -->
+    <header class="app-header">
+      <a class="app-header__brand" href="index.html">
+        <img class="app-header__logo" src="assets/tyler-t.png" alt="Tenant logo">
+        <span class="app-header__brand-name">Name of Agency</span>
+      </a>
+      <nav class="app-header__links" aria-label="Account">
+        <a href="settings.html">Settings</a>
+        <span class="app-header__divider" aria-hidden="true"></span>
+        <a href="search.html">Search</a>
+        <span class="app-header__divider" aria-hidden="true"></span>
+        <a href="#">Help</a>
+        <span class="app-header__divider" aria-hidden="true"></span>
+        <a href="#">Logout</a>
+      </nav>
+    </header>
+
+    <!-- Customizable toolbar (shared chrome, rendered by js/toolbar.js) -->
+    <div id="toolbar"></div>
+
+    <!-- ══ Context bar ═══════════════════════════════════════════════════════
+         Same record band as the Set up steps. The Build / Preview switch sits
+         at the top of the form canvas instead, so the band stays its usual
+         height.
+         ═════════════════════════════════════════════════════════════════════ -->
+    <div class="builder-context">
+      <div class="builder-context__block">
+        <div class="builder-context__eyebrow">Application / Permit Name</div>
+        <div class="builder-context__name">Commercial Fishing Permit: Original (One)</div>
+        <div class="builder-context__meta">
+          <span class="badge badge--gold">Draft</span>
+          <span>Form No. DNR-CF-102 &middot; <span id="saved-note">saved just now</span></span>
+        </div>
+      </div>
+      <div class="builder-context__block">
+        <div class="builder-context__eyebrow">License / Application Type</div>
+        <div class="builder-context__value">Commercial Fishing License : Original (One)</div>
+        <div class="builder-context__tags">
+          <span class="tag tag--muted">Authenticated</span>
+          <span class="tag tag--muted">Individual</span>
+          <span class="tag tag--muted">Signature</span>
+          <span class="tag tag--muted">Document Upload</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ Builder shell ═══════════════════════════════════════════════════
+         Build phase, step 2. Replaces v2's IF / State / Value / DO / Part rule
+         cards with one plain-language rule per trigger question: when it is
+         answered this way, show these items. Rendered by js/conditions.js.
+         ═══════════════════════════════════════════════════════════════════ -->
+    <main class="builder-shell">
+
+      <!-- Phase rail -->
+      <aside class="builder-rail" id="builder-rail">
+        <button type="button" class="builder-rail__toggle" id="rail-toggle"
+                aria-expanded="true" aria-controls="builder-rail" title="Collapse menu">
+          <i class="fa-solid fa-angles-left" aria-hidden="true"></i>
+          <span class="builder-rail__toggle-label" id="rail-toggle-label">Collapse menu</span>
+        </button>
+
+        <div class="builder-rail__progress" style="margin-top: 14px">
+          <div class="builder-rail__progress-row">
+            <span class="builder-rail__eyebrow">Builder progress</span>
+            <span class="builder-rail__pct">72%</span>
+          </div>
+          <div class="builder-rail__track">
+            <div class="builder-rail__fill" style="width: 72%"></div>
+          </div>
+        </div>
+
+        <nav class="builder-phases" aria-label="Builder phases">
+
+          <div class="builder-phase is-done">
+            <a class="builder-phase__row" href="builder-demographic-information.html">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Set up</span>
+                <span class="builder-phase__summary">Details &middot; Applicant info</span>
+              </span>
+            </a>
+          </div>
+
+          <div class="builder-phase is-current">
+            <a class="builder-phase__row" href="builder-question-builder.html" aria-current="step">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Build</span>
+                <span class="builder-phase__summary">Questions &middot; Conditions</span>
+              </span>
+            </a>
+            <ul class="builder-steps">
+              <li class="builder-steps__item is-done"><a href="builder-question-builder.html">Question Builder</a></li>
+              <li class="builder-steps__item is-current"><a href="builder-conditions.html">Conditions</a></li>
+            </ul>
+          </div>
+
+          <div class="builder-phase">
+            <a class="builder-phase__row" href="#">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Rules</span>
+                <span class="builder-phase__summary">Payment &middot; License</span>
+              </span>
+            </a>
+          </div>
+
+          <div class="builder-phase">
+            <a class="builder-phase__row" href="#">
+              <span class="builder-phase__marker" aria-hidden="true"></span>
+              <span>
+                <span class="builder-phase__name">Publish</span>
+                <span class="builder-phase__summary">Preview &middot; Notification</span>
+              </span>
+            </a>
+          </div>
+
+        </nav>
+      </aside>
+
+      <div class="builder-canvas">
+        <div class="builder-canvas__inner">
+
+          <p class="builder-eyebrow">Build &middot; Conditions</p>
+          <h1 class="builder-title">Choose what each answer reveals</h1>
+          <p class="builder-lede">Pick a Yes/No; Either/Or question, choose an answer, then check the items that
+            answer should show.</p>
+
+          <ul class="help-list" style="margin-top: 14px">
+            <li>Anything a condition shows stays hidden until the applicant picks that answer.</li>
+            <li>A question can only reveal items that come after it on the form. To reveal something earlier, move
+              it below the question in Question Builder.</li>
+            <li>Each item can be revealed by one answer only.</li>
+          </ul>
+
+          <div class="info-notice">
+            <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+            <div><strong>Note:</strong> Questions used in conditions are always required, so the form always knows
+              what to show. A revealed question keeps its own Required setting, and it only applies while the
+              question is shown.</div>
+          </div>
+
+          <p class="cond-count" id="cond-count"></p>
+          <ol class="question-cards" id="cond-list"></ol>
+
+          <!-- Wizard action bar: back on the left, advance on the right -->
+          <div class="builder-actions">
+            <a href="builder-question-builder.html" class="btn btn--secondary">
+              <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Question Builder
+            </a>
+            <div class="builder-actions__right">
+              <a href="applications.html?saved=1">Save &amp; exit</a>
+              <a href="#" class="btn btn--primary">
+                Payment <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+    <span id="toast-text"></span>
+  </div>
+
+  <script src="js/toolbar.js"></script>
+  <script src="js/builder-form.js"></script>
+  <script src="js/conditions.js"></script>
+  <script>
+    initToolbar('#toolbar', { activeKey: 'applications' });
+    initConditions();
+  </script>
+
+</body>
+
+</html>
